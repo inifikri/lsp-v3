@@ -1,0 +1,37 @@
+;1;1;1;Buatlah rencana survei kebutuhan pelanggan untuk SPEEBO!
+;1;2;1;Jabarkan situasi persaingan pasar!
+;1;52;1;Buatlah analisis portfolio merek
+;1;53;1;Tentukan spesifikasi produk baru yang akan diluncurkan oleh SPEEBO di Indonesia, sesuai dengan identifikasi dan analisis yang sudah dilakukan. Buatlah gambar rancangan rencana produk baru SPEEBO
+;1;54;1;Tentukan biaya variabel untuk rencana proses produk baru SPEEBO
+;1;55;1;Tentukan jumlah biaya tetap per unit produk dalam proses produksi rencana produk baru SPEEBO
+;1;51;1;Rencanakan elemen strategi pemasaran untuk perusahaan serta pemasaran untuk rencana produk baru SPEEBO
+;1;2;2;Identifikasi profil perusahaan Anda
+;1;2;3;Lakukan analisis industri untuk perusahaan Anda
+;1;53;2;Rancanglah design pengembangan produk yang sesuai dengan perusahaan Anda dengan mempertimbangkan kajian industri dan kebutuhan pelanggan
+;1;54;2;Identifikasi biaya-biaya yang terkandung dalam produk baru tersebut
+;1;51;2;Bentuk strategi pemasaran seperti apa yang akan dilakukan (dilengkapi dengan kajian yang sesuai)
+;1;57;1;Visualisasikan promosi dan prototype rancangan produk baru yang Anda rancang
+;2;5;1;"IK1-Lakukan presentasi anti fraud secara ringkas kepada Direksi dan karyawan PT ANEKAGUNA, yang minimal berisi materi sebagai berikut: a)Pengertian Fraud; b)Teori terjadinya fraud; c)Strategi memberantas fraud; d)Redflag atau warning signs yang perlu diwaspadai; e)nformasi yang diperlukan untuk penerapan sistem anti fraud di PT ANEKAGUNA"
+;2;17;1;"IK2-Lakukan evaluasi atas sistem pengendalian intern PT ANEKAGUNA dan presentasikan hasilnya kepada Direksi dan SPI PT ANEKAGUNA, dengan fokus pemaparan pada hal-hal sebagai berikut: a)Sistem pengendalian intern yang ada; b)Identifikasi titik kritis dan kelemahannya; c)Rekomendasi atau saran perbaikan untuk menghilangkan kelemahan."
+;2;18;1;"IK3-Lakukan evaluasi atas keberadaan sistem anti fraud di PT ANEKAGUNA dan presentasikan hasilnya kepada Direksi dan SPI PT ANEKAGUNA, dengan materi: a)Keberadaan sistem anti fraud di PT ANEKAGUNA; b)Identifikasi kelemahannya; c)Rekomendasi atau saran perbaikan untuk menghilangkan kelemahan"
+;2;19;1;"IK4-Lakukan presentasi rencana yang Anda ajukan untuk melaksanakan kegiatan bimbingan teknis sistem Anti Fraud kepada PT ANEKAGUNA. Poin penting yang perlu disampaikan adalah: a)Analisis kondisi, identifikasi kebutuhan perusahaan, dan konstruksi pengembangan anti fraud nya; b)Identifikasi unit yang akan diberi bimbingan teknis dan diedukasi dalam rangka melaksanakan sistem anti fraud; c)Rencana kerja bimbingan teknis sistem anti fraud yang mencakup pengembangan aspek pencegahan, pendeteksian, dan investigasi fraud."
+;2;20;1;IK5-Lakukan proses penelaahan (penelitian) awal atas indikasi-indikasi yang ada dalam skenario tugas dan tentukan apakah perlu dilakukan audit forensik
+;2;21;1;IK6-Jika perlu dilakukan audit forensik, susunlah audit program serta rencana kebutuhan untuk melaksanakannya berdasar hasil IK-5.
+;2;22;1;IK7-Buatlah daftar bukti dan lakukan evaluasi untuk mengidentifikasi dan merangkai bukti-bukti yang tersedia untuk memaparkan fakta atas kasus yang ada.
+;2;23;1;IK8-Susun daftar temuan hasil audit secara lengkap semua unsur-unsurnya.
+;2;24;1;IK9-Lakukan pemberian keterangan ahli di depan persidangan mengenai hasil temuan dalam IK-8. Sebelum melakukan pemberian keterangan ahli, buatlah daftar pekerjaan dan materi-materi yang harus dipersiapkan sebelum menghadiri persidangan.
+;2;25;1;"IK10-Sebelum melaksanakan penugasan ini Anda mengevaluasi bukti yang diperoleh, yaitu membuat daftar (matriks) untuk mengidentifikasi bukti terkait unsur melawan hukum, dan daftar (matriks) untuk mengidentifikasi bukti terkait unsur kerugian keuangan. a)Buat Daftar (Matriks) untuk Mengidentifikasi Bukti Terkait Unsur Melawan Hukum; b)Buat Daftar (Matriks) untuk Mengidentifikasi Bukti Terkait Unsur Kerugian Keuangan. Selanjutnya identifikasi bukti tambahan (jika ada) yang perlu diperoleh."
+;2;26;1;IK11-Tentukan metode yang tepat untuk menghitung kerugian keuangan yang terjadi, dan buat ringkasan langkah dalam menghitung kerugian tersebut.
+;2;27;1;IK12-Buatlah draft perhitungan kerugian keuangan yang terjadi, yang akan Anda tuangkan dalam laporan. Gunakan notasi Rp.XXX jika tidak ada data angka di dalam soal.
+;2;28;1;IK13-Anda diundang untuk memaparkan hasil penghitungan kerugian tersebut di persidangan. Sebelum melakukan pemaparan sebagai pemberi keterangan ahli, buatlah daftar pekerjaan dan materi-materi yang harus dipersiapkan sebelum menghadiri persidangan.
+;2;29;1;"IK14-Sesudah melakukan serangkaian pekerjaan pengumpulan informasi, Anda mendapatkan hasil sebagaimana tercantum dalam Data #6; Buatlah Daftar Hasil Pengumpulan Informasi yang akan Anda lampirkan di dalam Laporan Kegiatan Pengumpulan Informasi kepada pemberi penugasan."
+;2;30;1;"IK15-Sesudah melakukan serangkaian pekerjaan tukar menukar informasi untuk menelusuri aset tersangka, hasil yang diperoleh sebagaimana tercantum dalam Data#6; Anda tidak menyerahkan informasi apapun sebagai penukar informasi yang Anda terima.Buatlah Daftar Hasil Tukar Menukar Informasi yang akan Anda lampirkan di dalam Laporan Kegiatan Tukar Menukar Informasi kepada pemberi penugasan."
+;2;31;1;IK16-Anda telah melakukan penyitaan aset sebagaimana penugasan yang diberikan dengan hasil sitaan seperti tercantum dalam Data #6. Buatlah Daftar Hasil Inventarisasi dan Verifikasi Aset yang akan Anda lampirkan di dalam Laporan Inventarisasi dan Verifikasi Aset kepada pemberi penugasan.
+;2;32;1;IK17-Anda telah melakukan penelusuran aset sebagaimana penugasan yang diberikan dengan hasil seperti tercantum dalam Data #6Buatlah Daftar Hasil Penelusuran Aset yang akan Anda lampirkan di dalam Laporan Penelusuran Aset kepada pemberi penugasan.
+;3;8;1;Buatlah gambaran Jaringan Rantai Pasok PT KBC!
+;3;15;1;Seperti apa perkembangan implementasi rantai pasok di industri cat yang relevan dengan PT KBC?
+;3;12;1;Tantangan apa yang dihadapi oleh PT KBC?
+;3;11;1;Solusi apa yang tepat diimplementasikan untuk menjawab tantangan tersebut?
+;3;9;1;Cobalah kaji biaya dalam Laporan Biaya Bulanan Tahun 2018 Departemen Plant, usulan perbaikan apa yang dapat anda usulkan?
+;3;43;1;KPI dalam lingkup rantai pasok seperti apa yang dapat anda usulkan untuk membantu memonitor kelancaran dan selaras dengan tantangan yang dihadapi oleh PT KBC?
+;3;46;1;Bagaimana Analisis Risiko dalam rantai pasok (supply chain) yang ada di PT KBC?, Buat Risk Mapping-nya
