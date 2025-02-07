@@ -7,9 +7,9 @@ include "config/class_paging.php";
 include "config/fungsi_rupiah.php";
 include "classes/class.phpmailer.php";
 //include "config/fungsi_thumb.php";
-// ini_set('display_errors',1); 
+ini_set('display_errors',1); 
 
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 // UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 if (!function_exists('base_url')) {
@@ -9258,10 +9258,11 @@ keluaran yang telah ditetapkan.</li>
 			<?php 
 			$nounitkom=1;
 				for($i=0;$i < count($unit_kompetensi);++$i){
-					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`=3");
+					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jd[id_skemakkni]'");
 					
 					while($uk01 = $unit_kompetensi01->fetch_assoc()){
 			?>
+
 				<td><?= $nounitkom++; ?></td>
 				<td><?= $uk01['kode_unit']?></td>
 				<td><?= $uk01['judul']?></td>
@@ -9270,8 +9271,8 @@ keluaran yang telah ditetapkan.</li>
 					}
 			}?>
 		<tr>
-			<td><?= $cta['content1']?></td>
-			<td colspan="3"><?= $cta['content']?></td>
+			<td><?= $cta['content']?></td>
+			<td colspan="3"><?= $cta['content1']?></td>
 		</tr>
 		<?php
 			if($cta['content2']){
