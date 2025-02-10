@@ -9023,8 +9023,6 @@ elseif ($_GET['module'] == 'form-ia-04A') {
 			}
 		}
 		$sqlcektandatanganasesor = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$asr[no_ktp]' AND id_jadwal='$_GET[idj]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
-
-		// var_dump("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$asr[no_ktp]' AND id_jadwal='$_GET[idj]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 		$cektandatanganasesor = $conn->query($sqlcektandatanganasesor);
 		$ttdasesor = $cektandatanganasesor->fetch_assoc();
 		$noregasesor = $asr['no_induk'];
@@ -9087,7 +9085,7 @@ elseif ($_GET['module'] == 'form-ia-04A') {
 				$iddokumen = md5($url);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$jd[id_skemakkni]','$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip','$_GET[idj]')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$jd[id_skemakkni]','$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip')";
 				$conn->query($sqlinputdigisign);
 				// input tanggapan pendukung observasi
 				$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -9159,7 +9157,7 @@ elseif ($_GET['module'] == 'form-ia-04A') {
 				$iddokumen = md5($url);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]'	,'$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip','$_GET[idj]')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]'	,'$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip')";
 				$conn->query($sqlinputdigisign);
 				// input tanggapan pendukung observasi
 				$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -9488,7 +9486,7 @@ if (isset($_REQUEST['simpan'])) {
 			$iddokumen = md5($url);
 			$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 			$alamatip = $_SERVER['REMOTE_ADDR'];
-			$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip', '$_GET[idj]')";
+			$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip')";
 			$conn->query($sqlinputdigisign);
 			echo "<div class='alert alert-success alert-dismissible'>
 			<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
