@@ -4058,7 +4058,7 @@ if( isset( $_REQUEST['aktifkan'] ))
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=unitkompetensi&skema=$pm[id]'>Lihat/ Tambah Unit Kompetensi</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-02&skema=$pm[id]' title='Input/Ubah Tugas Praktek Demonstrasi (FR-IA-02)'>Lihat/ Tambah Tugas FR-IA-02</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-04a&skema=$pm[id]' title='Input/Ubah Pertanyaan Pendukung Observasi (FR-IA-04A)'>Lihat/ Tambah Soal FR-IA-04A</a>";
-					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-04b&skema=$pm[id]' title='Input/Ubah Pertanyaan Pendukung Observasi (FR-IA-04B)'>Lihat/ Tambah Soal FR-IA-04B</a>";
+					    	// echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-04b&skema=$pm[id]' title='Input/Ubah Pertanyaan Pendukung Observasi (FR-IA-04B)'>Lihat/ Tambah Soal FR-IA-04B</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-05&skema=$pm[id]' title='Input/Ubah Pertanyaan Tertulis Pilihan Ganda (FR-IA-05)'>Lihat/ Tambah Soal FR-IA-05</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-06&skema=$pm[id]' title='Input/Ubah Pertanyaan Tertulis Esai (FR-IA-06)'>Lihat/ Tambah Soal FR-IA-06</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-07&skema=$pm[id]' title='Input/Ubah Pertanyaan Lisan (FR-IA-07)'>Lihat/ Tambah Soal FR-IA-07</a>";
@@ -28829,9 +28829,9 @@ elseif ($_GET['module']=='ubah-fr-ia-04a'){
 					<input type='hidden' name='iduk' class='form-control' value='$_GET[iduk]'>
 					<div class='col-md-12'>
 					<div class='form-group'>
-							<label>Unit Kompetensi</label>
+							<label>Unit Kompetensi<font style='color:red;'>*</font></label>
 							<select class='form-control select2' name='kode_unit[]' multiple='multiple' data-placeholder='Select a Unit Kompetensi'
-									style='width: 100%;'>";
+									style='width: 100%;' required>";
 							while($guk=$getunitkompetensi->fetch_assoc()){ 
 								echo "<option value='$guk[kode_unit]'";
 								$i=0;
@@ -28878,7 +28878,7 @@ elseif ($_GET['module']=='ubah-fr-ia-04a'){
 	</div></section>";
 }
 // Bagian PERTANYAAN UNTUK MENDUKUNG OBSERVASI LSP ==========================================================================================================
-elseif ($_GET['module']=='fr-ia-04a'){
+elseif ($_GET['module']=='fr-ia-04b'){
 	// Cek Hak Akses Modul
 	$sessionidlogin=md5($_SESSION['namauser']);
 	$urlmodul="?module=".$_GET['module'];
