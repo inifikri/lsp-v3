@@ -7,9 +7,9 @@ include "config/class_paging.php";
 include "config/fungsi_rupiah.php";
 include "classes/class.phpmailer.php";
 //include "config/fungsi_thumb.php";
-// ini_set('display_errors',1); 
+ini_set('display_errors',1); 
 
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 // UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 if (!function_exists('base_url')) {
@@ -1359,7 +1359,6 @@ elseif ($_GET['module'] == 'tukjarakjauh') {
 	$iddokumen = md5($url);
 	// Update @FHM 24 Juli 2023 : Cek data asesmen
 	$cekasesiasesmen = $conn->query("SELECT * FROM asesi_tukjarakjauh WHERE asesi_id='$_SESSION[namauser]' AND skema_id='$_GET[ids]' AND jadwal_id='$_GET[idj]'")->fetch_assoc();
-
 	// UPDATE @FHM-PPM 31 JULY 2023 : Query manggil data skema persyaratan
 	$sqllsp = "SELECT * FROM `persyaratan_tukjarakjauh` ORDER BY `id` ASC";
 	$lsp = $conn->query($sqllsp);
@@ -1567,31 +1566,31 @@ elseif ($_GET['module'] == 'tukjarakjauh') {
 				$dari .= "Content-type: text/html\r\n";
 			}
 			// Kirim email ke member
-			$sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
-			$getsmtp = $conn->query($sqlgetsmtp);
-			$gsmtp = $getsmtp->fetch_assoc();
-			date_default_timezone_set("Asia/Jakarta");
-			$mail = new PHPMailer;
-			$mail->IsSMTP();
-			$mail->SMTPSecure = $gsmtp['protokol'];
-			$mail->Host = $gsmtp['host']; //host masing2 provider email
-			$mail->SMTPDebug = 0;
-			$mail->Port = $gsmtp['port'];
-			$mail->SMTPAuth = true;
-			$mail->Username = $gsmtp['username']; //user email
-			$mail->Password = $gsmtp['password']; //password email 
-			//Set who the message is to be sent from
-			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
-			//Set an alternative reply-to address
-			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
-			$mail->Subject = $subjek; //subyek email
-			$mail->AddAddress($email, $namanya);  //tujuan email
-			$mail->MsgHTML($pesan);
-			if ($mail->Send()) {
-				echo "";
-			} else {
-				echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
-			}
+			// $sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
+			// $getsmtp = $conn->query($sqlgetsmtp);
+			// $gsmtp = $getsmtp->fetch_assoc();
+			// date_default_timezone_set("Asia/Jakarta");
+			// $mail = new PHPMailer;
+			// $mail->IsSMTP();
+			// $mail->SMTPSecure = $gsmtp['protokol'];
+			// $mail->Host = $gsmtp['host']; //host masing2 provider email
+			// $mail->SMTPDebug = 0;
+			// $mail->Port = $gsmtp['port'];
+			// $mail->SMTPAuth = true;
+			// $mail->Username = $gsmtp['username']; //user email
+			// $mail->Password = $gsmtp['password']; //password email 
+			// //Set who the message is to be sent from
+			// $mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+			// //Set an alternative reply-to address
+			// $mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+			// $mail->Subject = $subjek; //subyek email
+			// $mail->AddAddress($email, $namanya);  //tujuan email
+			// $mail->MsgHTML($pesan);
+			// if ($mail->Send()) {
+			// 	echo "";
+			// } else {
+			// 	echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
+			// }
 
 			$folderPath = "foto_tandatangan/";
 			if (empty($_POST['signed'])) {
@@ -1609,7 +1608,8 @@ elseif ($_GET['module'] == 'tukjarakjauh') {
 				file_put_contents($file, $image_base64);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[ids]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$rowAgen[nama]','$file','$alamatip')";
+				// $sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`,`id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[ids]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$rowAgen[nama]','$file','$alamatip','$_GET[idj]')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`,`id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[ids]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$rowAgen[nama]','$file','$alamatip','$_GET[idj]')";
 				$conn->query($sqlinputdigisign);
 				header('location:$base_url/media.php?module=tukjarakjauh&id=$_GET[id]&ida=$_SESSION[namauser]');
 				echo "<div class='alert alert-success alert-dismissible'>
@@ -9085,7 +9085,7 @@ elseif ($_GET['module'] == 'form-ia-04A') {
 				$iddokumen = md5($url);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$jd[id_skemakkni]','$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`,`id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$jd[id_skemakkni]','$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip','$jd[id_skemakkni]')";
 				$conn->query($sqlinputdigisign);
 				// input tanggapan pendukung observasi
 				$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -9157,7 +9157,7 @@ elseif ($_GET['module'] == 'form-ia-04A') {
 				$iddokumen = md5($url);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]'	,'$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$jd[id_skemakkni]','$escaped_url','FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA','$rowAgen[nama]','$file','$alamatip')";
 				$conn->query($sqlinputdigisign);
 				// input tanggapan pendukung observasi
 				$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -9258,10 +9258,11 @@ keluaran yang telah ditetapkan.</li>
 			<?php 
 			$nounitkom=1;
 				for($i=0;$i < count($unit_kompetensi);++$i){
-					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`=3");
+					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jd[id_skemakkni]'");
 					
 					while($uk01 = $unit_kompetensi01->fetch_assoc()){
 			?>
+
 				<td><?= $nounitkom++; ?></td>
 				<td><?= $uk01['kode_unit']?></td>
 				<td><?= $uk01['judul']?></td>
@@ -9270,8 +9271,8 @@ keluaran yang telah ditetapkan.</li>
 					}
 			}?>
 		<tr>
-			<td><?= $cta['content1']?></td>
-			<td colspan="3"><?= $cta['content']?></td>
+			<td><?= $cta['content']?></td>
+			<td colspan="3"><?= $cta['content1']?></td>
 		</tr>
 		<?php
 			if($cta['content2']){
@@ -9547,41 +9548,45 @@ presentasi</li>
 						<tr>
 							<td><b>No.</b></td>
 							<td><b>Lingkup Penyajian proyek atau kegiatan terstruktur lainnya</b></td>
-							<td><b>Lingkup Penyajian proyek atau kegiatan terstruktur lainnya</b></td>
+							<td><b>Daftar Pertanyaan</b></td>
 							<td><b>Kesesuaian dengan standar kompetensi kerja (unit/elemen/KUK)</b></td>
 						</tr>
 					</thead>
 				<tbody>";
 				$noglk=1;
 				$countfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
-						WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
-					$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC ");
-					
-					while ($gp = $getpertanyaanIA04B->fetch_assoc()){
-							$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
-						WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' AND a.id_pertanyaan='$gp[idpertanyaan]'");
+					WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
+					// $getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC ");
+					$getlingkupkegiatanIA04B =$conn->query("SELECT * FROM lingkupkegiatan_formIA04B WHERE id_skemakkni='$sk[id]'");
+					while ($gp = $getlingkupkegiatanIA04B->fetch_assoc()){
+						$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
+						WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' AND a.id_pertanyaan='$gp[id]'");
 						$gfr=$getfria04B->fetch_assoc();
-							// while($gfr = $getfria04B->fetch_assoc()){
+							$getpertanyaanIA04B =$conn->query("SELECT * FROM skema_pertanyaania04B WHERE id_lingkupkegiatan='$gp[id]'");
+							$gc=$getfria04B->fetch_assoc();
 							echo "<tr>
 									<td>$noglk</td>
-									<td>$gp[lingkupkegiatan]</td>
-									<td>
-										$gp[pertanyaan]<br><br>
-										<b>Tanggapan :</b><br>
-										$gfr[tanggapan]
-									</td>
-									<td>$gfr[standar_kompetensikerja]</td>"; ?>
+									<td>$gp[lingkupkegiatan]</td>";
+										if($gc['id']){
+											echo "<td>$gc[id]</td>";
+										}
+									echo "
+									<td></td>
+									<td>"; 
+									// while ($gc = $getpertanyaanIA04B->fetch_assoc()){
+									?>
 									<td>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="pencapaian<?= $gp['idpertanyaan'] ?>" id="flexRadioDefault<?= $gp['idpertanyaan']?>" value="Ya" <?php if($gfr['pencapaian'] == 'Ya'){ echo "checked"; }else{ echo "disabled"; }?>>
+											<input class="form-check-input" type="radio" name="pencapaian<?= $gp['id'] ?>" id="flexRadioDefault<?= $gp['id']?>" value="Ya" <?php if($gfr['pencapaian'] == 'Ya'){ echo "checked"; }?>>
 										</div>
 									</td>
 									<td>
 										<div class='form-check'>
-											<input class="form-check-input" type="radio" name="pencapaian<?= $gp['idpertanyaan'] ?>" id="flexRadioDefault<?= $gp['idpertanyaan'] ?>" value="Tidak" <?php if($gfr['pencapaian'] == 'Tidak'){ echo "checked"; }else{ echo "disabled"; }?>>
+											<input class="form-check-input" type="radio" name="pencapaian<?= $gp['id'] ?>" id="flexRadioDefault<?= $gp['id'] ?>" value="Tidak" <?php if($gfr['pencapaian'] == 'Tidak'){ echo "checked"; }?>>
 										</div>
 									</td>
 							<?php
+									// }
 								echo "</tr>";
 							// }
 						$noglk++;

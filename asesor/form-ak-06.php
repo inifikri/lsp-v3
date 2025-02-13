@@ -362,12 +362,19 @@ if ($ak06['rekomdimensi1']==1){
 }
 $write->easyCell('Seluruh dimensi kompetensi sudah tergali pada perangkat asesmen unit kompetensi yang diases', 'align:L; border:R;');
 $write->printRow();
-if ($ak06['rekomdimensi1']==1){
+if ($ak06['rekomdimensi2']==1){
 	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:T; border:LB;');
 }else{
 	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; valign:T; border:LB;');
 }
-$write->easyCell('Dimensi kompetensi : TMS / CMS / JRES belum tergali pada perangkat asesmen unit kompetensi yang diases, sehingga harus diperbaiki untuk pelaksanaan selanjutnya.', 'align:L; border:BR;');
+if($ak06['rekomdimensi2a'] == 1){
+	$rekomendasi22 = 'TMS';
+}elseif($ak06['rekomdimensi2b'] == 1){
+	$rekomendasi22 = 'CMS';
+}else{
+	$rekomendasi22 = 'JRES';
+}
+$write->easyCell('Dimensi kompetensi :'.$rekomendasi22.' belum tergali pada perangkat asesmen unit kompetensi yang diases, sehingga harus diperbaiki untuk pelaksanaan selanjutnya.', 'align:L; border:BR;');
 $write->printRow();
 $write->endTable(5);
 $sqlgetak01b="SELECT * FROM `asesmen_ak06` WHERE `id_asesor`='$asr[id]' AND `id_jadwal`='$_GET[idj]'";
@@ -425,7 +432,7 @@ $sqlidentitas="SELECT * FROM `identitas`";
 $identitas=$conn->query($sqlidentitas);
 $iden=$identitas->fetch_assoc();
 $urltandatanganas=$iden['url_domain']."/asesor/media.php?module=form-fr-ak-06&amp;idj=".$jdq['id'];
-$sqlcekttdasesiapl01as="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.06. MENINJAU PROSES ASESMEN' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganas' ORDER BY `id` DESC";
+$sqlcekttdasesiapl01as="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.06. MENINJAU PROSES ASESMEN' AND `penandatangan`='$asr[nama]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 $cekttdasesiapl01as=$conn->query($sqlcekttdasesiapl01as);
 $jumttdasesias=$cekttdasesiapl01as->num_rows;
 $ttdasas=$cekttdasesiapl01as->fetch_assoc();

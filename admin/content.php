@@ -4058,7 +4058,7 @@ if( isset( $_REQUEST['aktifkan'] ))
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=unitkompetensi&skema=$pm[id]'>Lihat/ Tambah Unit Kompetensi</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-02&skema=$pm[id]' title='Input/Ubah Tugas Praktek Demonstrasi (FR-IA-02)'>Lihat/ Tambah Tugas FR-IA-02</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-04a&skema=$pm[id]' title='Input/Ubah Pertanyaan Pendukung Observasi (FR-IA-04A)'>Lihat/ Tambah Soal FR-IA-04A</a>";
-					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-04b&skema=$pm[id]' title='Input/Ubah Pertanyaan Pendukung Observasi (FR-IA-04B)'>Lihat/ Tambah Soal FR-IA-04B</a>";
+					    	// echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-04b&skema=$pm[id]' title='Input/Ubah Pertanyaan Pendukung Observasi (FR-IA-04B)'>Lihat/ Tambah Soal FR-IA-04B</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-05&skema=$pm[id]' title='Input/Ubah Pertanyaan Tertulis Pilihan Ganda (FR-IA-05)'>Lihat/ Tambah Soal FR-IA-05</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-06&skema=$pm[id]' title='Input/Ubah Pertanyaan Tertulis Esai (FR-IA-06)'>Lihat/ Tambah Soal FR-IA-06</a>";
 					    	echo "<a class='btn btn-success btn-xs btn-block' href='media.php?module=fr-ia-07&skema=$pm[id]' title='Input/Ubah Pertanyaan Lisan (FR-IA-07)'>Lihat/ Tambah Soal FR-IA-07</a>";
@@ -28730,21 +28730,7 @@ elseif ($_GET['module']=='tambah-fr-ia-04a'){
 			<form name='frm' method='POST' role='form' enctype='multipart/form-data'>
 					<input type='hidden' name='id_skemakkni' class='form-control' value='$unk[id_skemakkni]'>
 					<input type='hidden' name='iduk' class='form-control' value='$_GET[iduk]'>
-					<div class='col-md-6'>
-						<div class='form-group'>
-							<label>Nama Kelompok</label>
-							<textarea id='editor5' name='kelompok' placeholder='Nama Kelompok'></textarea>
-						</div>
-						<div class='form-group'>
-							<label>Content 1</label>
-							<textarea id='editor1' class='textarea' placeholder='Place some text here' name='content'></textarea>
-						</div>
-						<div class='form-group'>
-							<label>Content 1.2</label>
-							<textarea id='editor2' class='textarea' placeholder='Place some text here' name='content1'></textarea>
-						</div>
-					</div>
-					<div class='col-md-6'>
+					<div class='col-md-12'>
 						<div class='form-group'>
 							<label>Unit Kompetensi</label>
 							<select class='form-control select2' name='kode_unit[]' multiple='multiple' data-placeholder='Select a Unit Kompetensi'
@@ -28755,12 +28741,22 @@ elseif ($_GET['module']=='tambah-fr-ia-04a'){
 							echo "</select>
 						</div>
 						<div class='form-group'>
-							<label>Content 2</label>
-							<textarea id='editor3' class='textarea' placeholder='Place some text here' name='content2'></textarea>
+							<label>Nama Kelompok</label>
+							<textarea id='summernote' name='kelompok' placeholder='Nama Kelompok'></textarea>
+						</div>
+						<h3><b>Content 1</b></h3>
+						<div class='form-group'>
+							<textarea id='summernote1' class='textarea' placeholder='Hal yang harus disiapkan atau dilakukan atau dihasilkan untuk suatu proyek singkat/ kegiatan terstruktur lainnya' name='content'></textarea>
 						</div>
 						<div class='form-group'>
-							<label>Content 2.1</label>
-							<textarea id='editor4' class='textarea' placeholder='Place some text here' name='content3'></textarea>
+							<textarea id='summernote2' class='textarea' placeholder='Isi Konten' name='content1'></textarea>
+						</div>
+						<h3><b>Content 2</b></h3>
+						<div class='form-group'>
+							<textarea id='summernote3' class='textarea' placeholder='Hal yang perlu didemonstrasikan/dipresentasikan' name='content2'></textarea>
+						</div>
+						<div class='form-group'>
+							<textarea id='summernote4' class='textarea' placeholder='Isi Konten' name='content3'></textarea>
 						</div>
 					</div>
 					<div class='col-md-12'>
@@ -28797,12 +28793,13 @@ elseif ($_GET['module']=='ubah-fr-ia-04a'){
 			$id_skemakkni=$_POST['id_skemakkni'];
 			$kode_unit=$_POST['kode_unit'];
 			$implode_kode=implode(",",$kode_unit);
-				$sqlinput="UPDATE `content_ia04A` SET `kode_unit`='$implode_kode', kelompok='$_POST[kelompok]', content='$_POST[content]', content='$_POST[content1]', content='$_POST[content2]', content='$_POST[content3]' WHERE `id`='$_GET[idcontent]'";
-				echo "<div class='alert alert-success alert-dismissible'>
+			$sqlinput="UPDATE `content_ia04A` SET `kode_unit`='$implode_kode', content='$_POST[content]', content1='$_POST[content1]', content2='$_POST[content2]', content3='$_POST[content3]',kelompok='$_POST[kelompok]' WHERE `id`='$_GET[idcontent]'";
+			$conn->query($sqlinput);
+			echo "<div class='alert alert-success alert-dismissible'>
 			<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
 			<h4><i class='icon fa fa-check'></i> Ubah Data DIT Sukses</h4>
 			Anda Telah Berhasil Mengubah Data DIT</div>
-			<script>window.location = 'media.php?module=fr-ia-04a&skema=$_GET[skema]'</script>";
+			<script>window.location = 'media.php?module=fr-ia-04a&skema=$gck[id_skemakkni]'</script>";
 		}
 }
 	echo "
@@ -28830,25 +28827,11 @@ elseif ($_GET['module']=='ubah-fr-ia-04a'){
 			<form name='frm' method='POST' role='form' enctype='multipart/form-data'>
 					<input type='hidden' name='id_skemakkni' class='form-control' value='$unk[id_skemakkni]'>
 					<input type='hidden' name='iduk' class='form-control' value='$_GET[iduk]'>
-					<div class='col-md-6'>
-						<div class='form-group'>
-							<label>Nama Kelompok</label>
-							<textarea id='editor5' name='kelompok' placeholder='Nama Kelompok'>$gck[kelompok]</textarea>
-						</div>
-						<div class='form-group'>
-							<label>Content 1</label>
-							<textarea id='editor1' class='textarea' placeholder='Place some text here' name='content'>$gck[content]</textarea>
-						</div>
-						<div class='form-group'>
-							<label>Content 1.2</label>
-							<textarea id='editor2' class='textarea' placeholder='Place some text here' name='content1'>$gck[content1]</textarea>
-						</div>
-					</div>
-					<div class='col-md-6'>
-						<div class='form-group'>
-							<label>Unit Kompetensi</label>
+					<div class='col-md-12'>
+					<div class='form-group'>
+							<label>Unit Kompetensi<font style='color:red;'>*</font></label>
 							<select class='form-control select2' name='kode_unit[]' multiple='multiple' data-placeholder='Select a Unit Kompetensi'
-									style='width: 100%;'>";
+									style='width: 100%;' required>";
 							while($guk=$getunitkompetensi->fetch_assoc()){ 
 								echo "<option value='$guk[kode_unit]'";
 								$i=0;
@@ -28864,18 +28847,28 @@ elseif ($_GET['module']=='ubah-fr-ia-04a'){
 							echo "</select>
 						</div>
 						<div class='form-group'>
-							<label>Content 2</label>
-							<textarea id='editor3' class='textarea' placeholder='Place some text here' name='content2'>$gck[content2]</textarea>
+							<label>Nama Kelompok</label>
+							<textarea id='summernote' name='kelompok' placeholder='Nama Kelompok'>$gck[kelompok]</textarea>
+						</div>
+						<h3><b>Content 1</b></h3>
+						<div class='form-group'>
+							<textarea id='summernote1' class='textarea' placeholder='Place some text here' name='content'>$gck[content]</textarea>
 						</div>
 						<div class='form-group'>
-							<label>Content 2.1</label>
-							<textarea id='editor4' class='textarea' placeholder='Place some text here' name='content3'>$gck[content3]</textarea>
+							<textarea id='summernote2' class='textarea' placeholder='Place some text here' name='content1'>$gck[content1]</textarea>
+						</div>
+						<h3><b>Content 2</b></h3>
+						<div class='form-group'>
+							<textarea id='summernote3' class='textarea' placeholder='Place some text here' name='content2'>$gck[content2]</textarea>
+						</div>
+						<div class='form-group'>
+							<textarea id='summernote4' class='textarea' placeholder='Place some text here' name='content3'>$gck[content3]</textarea>
 						</div>
 					</div>
 					<div class='col-md-12'>
 						<div class='form-group'>
 							<input type='submit' name='ubahdata' class='btn btn-primary' value='Simpan'>
-							<a href='?module=fr-ia-04a&skema=$_GET[skema]' class='btn btn-default'>Kembali</a>
+							<a href='?module=fr-ia-04a&skema=$gck[id_skemakkni]' class='btn btn-default'>Kembali</a>
 						</div>
 					</div>
 				</form>
@@ -28885,7 +28878,7 @@ elseif ($_GET['module']=='ubah-fr-ia-04a'){
 	</div></section>";
 }
 // Bagian PERTANYAAN UNTUK MENDUKUNG OBSERVASI LSP ==========================================================================================================
-elseif ($_GET['module']=='fr-ia-04a'){
+elseif ($_GET['module']=='fr-ia-04b'){
 	// Cek Hak Akses Modul
 	$sessionidlogin=md5($_SESSION['namauser']);
 	$urlmodul="?module=".$_GET['module'];
