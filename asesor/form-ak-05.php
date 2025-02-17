@@ -580,7 +580,8 @@ $iden = $identitas->fetch_assoc();
 
 $urltandatanganas = $iden['url_domain'] . "/asesor/media.php?module=form-fr-ak-05&amp;idj=" . $jdq['id'];
 
-$sqlcekttdasesiapl01as = "SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.05. LAPORAN ASESMEN' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganas' ORDER BY `id` DESC";
+// $sqlcekttdasesiapl01as = "SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.05. LAPORAN ASESMEN' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganas' ORDER BY `id` DESC";
+$sqlcekttdasesiapl01as = "SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.05. LAPORAN ASESMEN' AND `penandatangan`='$asr[nama]' AND `id_jadwal`='$_GET[idj]' ORDER BY `id` DESC";
 
 $cekttdasesiapl01as = $conn->query($sqlcekttdasesiapl01as);
 
