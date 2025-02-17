@@ -3,13 +3,15 @@ ob_start();
 include 'fpdf-easytable-master/fpdf.php';
 include 'fpdf-easytable-master/exfpdf.php';
 include 'fpdf-easytable-master/easyTable.php';
+include 'fpdf-easytable-master/html2exfpdf.php';
 include "../config/koneksi.php";
 include "../config/library.php";
 include "../config/fungsi_indotgl.php";
 
-ini_set('display_errors',1); 
+ini_set('display_errors',0); 
 
 error_reporting(E_ALL);
+
 
 $sqlasesi="SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
 $asesi=$conn->query($sqlasesi);
@@ -50,7 +52,6 @@ $sqlwil3b="SELECT * FROM `data_wilayah` WHERE `id_wil`='$wil2b[id_induk_wilayah]
 $wilayah3b=$conn->query($sqlwil3b);
 $wil3b=$wilayah3b->fetch_assoc();
 
-
 $pdf=new exFPDF();
 $pdf->AddPage();
 $pdf->SetFont('Arial','',10);
@@ -60,7 +61,6 @@ $pdf->AddFont('FontUTF8','I','Arimo-Italic.php');
 $pdf->AddFont('FontUTF8','BI','Arimo-BoldItalic.php');
 
 // kop LSP ======================================================
-
 //tampilan Form
 $id_wilayah=trim($wil1['nm_wil']);
 $id_wilayah2=trim($wil2['nm_wil']).", ".trim($wil3['nm_wil']);
@@ -89,7 +89,7 @@ $write->endTable(5);
 //===============================================================
 
 $write=new easyTable($pdf, 1, 'width:190;  font-style:B; font-size:12;font-family:arial;');
-$write->easyCell('FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA', 'align:L;');
+$write->easyCell('FR.IA.04A. DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)', 'align:L;');
 $write->printRow();
 $write->endTable(5);
 
@@ -159,43 +159,45 @@ $write->printRow();
 $write->endTable(0);
 $write=new easyTable($pdf, '{10,180}', 'width:190; align:L; font-family:arial; font-size:12');
 $write->easyCell(chr(149), 'align:C; border:L;');
-$write->easyCell('Tentukan proyek singkat atau kegiatan terstruktur lainnya yang harus dipersiapkan dan dipresentasikan oleh asesi.', 'align:L; border:R;');
+$write->easyCell('Tentukan proyek singkat atau kegiatan terstruktur lainnya yang harus dipersiapkan dan dipresentasikan oleh asesi', 'align:L; border:R;');
 $write->printRow();
 $write->easyCell(chr(149), 'align:C; border:L;');
-$write->easyCell('Proyek singkat atau kegiatan terstruktur lainnya dibuat untuk keseluruhan unit kompetensi dalam Skema Sertifikasi atau untuk masing-masing kelompok pekerjaan.', 'align:L; border:R;');
+$write->easyCell('Proyek singkat atau kegiatan terstruktur lainnya dibuat untuk keseluruhan unit kompetensi dalam Skema Sertifikasi atau untuk masing-masing kelompok pekerjaan.)', 'align:L; border:R;');
 $write->printRow();
 $write->easyCell(chr(149), 'align:C; border:LB;');
-$write->easyCell('Kumpulkan hasil proyek singkat atau kegiatan terstruktur lainnya sesuai dengan hasil keluaran yang telah ditetapkan.', 'align:L; border:BR;');
+$write->easyCell('Kumpulkan hasil proyek singkat atau kegiatan terstruktur lainnya sesuai dengan hasil keluaran yang telah ditetapkan.', 'align:L; border:RB;'); 
 $write->printRow();
 $write->endTable(5);
+
 
 // Konten
 $contentasesmenIA04=$conn->query("SELECT * FROM content_ia04A WHERE `id_skemakkni`='$jdq[id_skemakkni]'");
 while ($cta = $contentasesmenIA04->fetch_assoc()) {
+	$unit_kompetensi=explode(',',$cta['kode_unit']);
+	$rowspan=1+count($unit_kompetensi);
 	$kelompok = strip_tags($cta['kelompok']);
 	$content = strip_tags($cta['content']);
-	$content1 = $pdf->WriteHTML($cta['content1']);
+	$content1 = strip_tags($cta['content1']);
 	$content2 = strip_tags($cta['content2']);
 	$content3 = strip_tags($cta['content3']);
 	$write=new easyTable($pdf, '{60,30,60,100}', 'width:190; align:L; font-family:arial; font-size:12');
-	$write->easyCell($kelompok,'align:C; rowspan:4; border:LTBR; font-style:B;');
+	$write->easyCell($kelompok,'align:C; rowspan:'.$rowspan.'; border:LTBR; font-style:B;');
 	$write->easyCell('No', 'align:L; border:LTBR; font-style:B;');
 	$write->easyCell('Kode Unit', 'align:L; border:LTBR; font-style:B;');
 	$write->easyCell('Judul Unit', 'align:L; border:LTBR; font-style:B;');
 	$write->printRow();
-	$write->easyCell('1', 'align:L; border:LTBR;');
-	$write->easyCell('Kode Unit', 'align:L; border:LTBR;');
-	$write->easyCell('Judul Unit', 'align:L; border:LTBR;');
-	$write->printRow();
-	$write->easyCell('2 ', 'align:L; border:LTBR;');
-	$write->easyCell('Kode Unit', 'align:L; border:LTBR;');
-	$write->easyCell('Judul Unit', 'align:L; border:LTBR;');
-	$write->printRow();
-	$write->easyCell('3', 'align:L; border:LTBR;');
-	$write->easyCell('Kode Unit', 'align:L; border:LTBR;');
-	$write->easyCell('Judul Unit', 'align:L; border:LTBR;');
-	$write->printRow();
+	$no = 1;
+	for($i=0;$i < count($unit_kompetensi);++$i){
+		$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jdq[id_skemakkni]'");
+			while($uk01 = $unit_kompetensi01->fetch_assoc()){
+				$write->easyCell($no++, 'align:L; border:LTBR;');
+				$write->easyCell($uk01['kode_unit'], 'align:L; border:LTBR;');
+				$write->easyCell($uk01['judul'], 'align:L; border:LTBR;');
+				$write->printRow();
+			}
+	}
 	$write->endTable(0);
+
 	$write=new easyTable($pdf, '{100,100}', 'width:190; align:L; font-family:arial; font-size:12');
 	$write->easyCell($content, 'align:L; border:LTBR;');
 	$write->easyCell($content1, 'align:L; border:LTBR;');
@@ -206,9 +208,8 @@ while ($cta = $contentasesmenIA04->fetch_assoc()) {
 }
 // End Konten
 
-
 //output file pdf
-$fileoutputnya="FR-IA-04B-".$skemakkni."-".$_GET['idj']."-".$_GET['ida'].".pdf";
+$fileoutputnya="FR-IA-04A-".$skemakkni."-".$_GET['idj']."-".$_GET['ida'].".pdf";
 $pdf->Output($fileoutputnya,'I');
  
 ob_end_flush();

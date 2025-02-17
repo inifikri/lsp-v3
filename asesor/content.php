@@ -9477,6 +9477,7 @@ keluaran yang telah ditetapkan.</li>
 		?>
 		<table id='example9' class='table table-bordered table-striped'>
 		<tr>
+		<?php echo $rowspan ?>
 			<td rowspan="<?php echo $rowspan ?>" valign="middle"><?= $cta['kelompok']?> </td>
 			<td><b>No.</b></td>
 			<td><b>Kode Unit</b></td>
