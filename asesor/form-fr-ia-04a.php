@@ -1,15 +1,11 @@
 <?php
 ob_start();
-include 'fpdf-easytable-master/fpdf.php';
-include 'fpdf-easytable-master/exfpdf.php';
-include 'fpdf-easytable-master/easyTable.php';
-include 'fpdf-easytable-master/html2exfpdf.php';
+require_once('tcpdf/tcpdf.php');
 include "../config/koneksi.php";
 include "../config/library.php";
 include "../config/fungsi_indotgl.php";
 
-ini_set('display_errors',0); 
-
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 
@@ -52,13 +48,13 @@ $sqlwil3b="SELECT * FROM `data_wilayah` WHERE `id_wil`='$wil2b[id_induk_wilayah]
 $wilayah3b=$conn->query($sqlwil3b);
 $wil3b=$wilayah3b->fetch_assoc();
 
-$pdf=new exFPDF();
+
+$pdf = new TCPDF();
+// $pdf->SetAutoPageBreak(TRUE, 10);
 $pdf->AddPage();
-$pdf->SetFont('Arial','',10);
-$pdf->AddFont('FontUTF8','','Arimo-Regular.php'); 
-$pdf->AddFont('FontUTF8','B','Arimo-Bold.php');
-$pdf->AddFont('FontUTF8','I','Arimo-Italic.php');
-$pdf->AddFont('FontUTF8','BI','Arimo-BoldItalic.php');
+$pdf->SetFont('Helvetica', '', 10);
+// $pdf->setPrintHeader(true);
+
 
 // kop LSP ======================================================
 //tampilan Form
@@ -71,146 +67,197 @@ $telpemail="Telp./Fax.: ".$lq['telepon']." / ".$lq['fax']." Email : ".$lq['email
 $tampilperiode="Periode ".$jdq['periode']." Tahun ".$jdq['tahun']." Gelombang ".$jdq['gelombang'];
 $nomorlisensi="Nomor Lisensi : ".$lq['no_lisensi'];
 
+
 $alamatlsptampil=$alamatlsp." ".$alamatlsp2." ".$telpemail;
-//$pdf->Cell(0, 5, '', '0', 1, 'C');
+
+
+
 $pdf->Ln();
-$write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
-$write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
-$write->printRow();
-$write->easyCell($nomorlisensi, 'align:C; font-size:10;');
-$write->printRow();
-$write->easyCell($alamatlsptampil, 'align:C; font-size:8;');
-$write->printRow();
-$write->endTable(5);
+
+$html = '
+<table border="0" cellpadding="2" cellspacing="0" style="width:190mm; font-family: Arial;">
+    <tr>
+        <td rowspan="3" style="width:30mm; text-align:center;">
+            <img src="../images/logolsp.jpg" width="25" height="25">
+        </td>
+        <td style="width:130mm; text-align:center; font-size:14px; font-weight:bold;">' . $namalsp . '</td>
+        <td rowspan="3" style="width:30mm; text-align:center;">
+            <img src="../images/logo-bnsp.jpg" width="25" height="25">
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:center; font-size:10px;">' . $nomorlisensi . '</td>
+    </tr>
+    <tr>
+        <td style="text-align:center; font-size:8px;">' . $alamatlsptampil . '</td>
+    </tr>
+</table>
+';
+$pdf->writeHTML($html, true, false, true, false, '');
+$pdf->Ln(5);
 
 
-//===============================================================
+$html = '
+<table border="0" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px; font-weight:bold;">
+    <tr>
+        <td style="text-align:left;">FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)</td>
+    </tr>
+</table>
+';
+$pdf->writeHTML($html, true, false, true, false, '');
+$pdf->Ln(5);
 
-$write=new easyTable($pdf, 1, 'width:190;  font-style:B; font-size:12;font-family:arial;');
-$write->easyCell('FR.IA.04A. DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)', 'align:L;');
-$write->printRow();
-$write->endTable(5);
 
-$write=new easyTable($pdf, '{50, 20, 5, 115}', 'width:190; align:L; font-style:B; font-family:arial; font-size:12');
-$write->easyCell('Skema Sertifikasi (KKNI/Okupasi/Klaster)', 'align:L; rowspan:2; border:LTBR');
-$write->easyCell('Judul', 'align:L; font-size:10; border:LTBR');
-$write->easyCell(':', 'align:C; font-size:10; border:LTBR');
-$write->easyCell($skemakkni, 'align:L; font-size:10; border:LTBR');
-$write->printRow();
-$write->easyCell('Nomor', 'align:L; font-size:10; border:LTBR');
-$write->easyCell(':', 'align:C; font-size:10; border:LTBR');
-$write->easyCell($sq['kode_skema'], 'align:L; font-size:10; border:LTBR');
-$write->printRow();
-$write->easyCell('TUK', 'align:L; font-size:10; colspan:2; border:LTBR');
-$write->easyCell(':', 'align:C; font-size:10; border:LTBR');
 $sqlgetjenistuk="SELECT * FROM `tuk_jenis` WHERE `id`='$tq[jenis_tuk]'";
 $getjenistuk=$conn->query($sqlgetjenistuk);
 $jnstuk=$getjenistuk->fetch_assoc();
-$write->easyCell($jnstuk['jenis_tuk'], 'align:L; font-size:10; border:LTBR');
-$write->printRow();
 
-	$noasr=1;
-	$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
-	while ($gas=$getasesor->fetch_assoc()){
-		$sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
-		$asesor=$conn->query($sqlasesor);
-		$asr=$asesor->fetch_assoc();
-		if (!empty($asr['gelar_depan'])){
-			if (!empty($asr['gelar_blk'])){
-				$namaasesor=$asr['gelar_depan']." ".$asr['nama'].", ".$asr['gelar_blk'];
-			}else{
-				$namaasesor=$asr['gelar_depan']." ".$asr['nama'];
-			}
-		}else{
-			if (!empty($asr['gelar_blk'])){
-				$namaasesor=$asr['nama'].", ".$asr['gelar_blk'];
-			}else{
-				$namaasesor=$asr['nama'];
-			}
-		}
-		$noregasesor=$asr['no_induk'];
-		$namaasesor=$noasr.'. '.$namaasesor;
-		$noregasesor=$noasr.'. '.$noregasesor;
+$noasr=1;
+$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
+while ($gas=$getasesor->fetch_assoc()){
+    $sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
+    $asesor=$conn->query($sqlasesor);
+    $asr=$asesor->fetch_assoc();
+    if (!empty($asr['gelar_depan'])){
+        if (!empty($asr['gelar_blk'])){
+            $namaasesor=$asr['gelar_depan']." ".$asr['nama'].", ".$asr['gelar_blk'];
+        }else{
+            $namaasesor=$asr['gelar_depan']." ".$asr['nama'];
+        }
+    }else{
+        if (!empty($asr['gelar_blk'])){
+            $namaasesor=$asr['nama'].", ".$asr['gelar_blk'];
+        }else{
+            $namaasesor=$asr['nama'];
+        }
+    }
+    $noregasesor=$asr['no_induk'];
+    $namaasesor=$noasr.'. '.$namaasesor;
+    $noregasesor=$noasr.'. '.$noregasesor;
 
-		$noasr++;
+    $noasr++;
 
-	}
-
-
-$write->easyCell('Nama Asesor', 'align:L; font-size:10; colspan:2; border:LTBR');
-$write->easyCell(':', 'align:C; font-size:10; border:LTBR');
-$write->easyCell($namaasesor, 'align:L; font-size:10; border:LTBR');
-$write->printRow();
-$write->easyCell('Nama Asesi', 'align:L; font-size:10; colspan:2; border:LTBR');
-$write->easyCell(':', 'align:C; font-size:10; border:LTBR');
-$write->easyCell($as['nama'], 'align:L; font-size:10; border:LTBR');
-$write->printRow();
-$write->easyCell('Tanggal', 'align:L; font-size:10; colspan:2; border:LTBR');
-$write->easyCell(':', 'align:C; font-size:10; border:LTBR');
-$write->easyCell($tgl_cetak, 'align:L; font-size:10; border:LTBR');
-$write->printRow();
-$write->endTable(5);
-
-$write=new easyTable($pdf, '{190}', 'width:190; align:L; font-family:arial; font-size:12');
-$write->easyCell('PANDUAN BAGI ASESOR', 'align:L; border:LTBR; bgcolor:#C6C6C6; font-style:B;');
-$write->printRow();
-$write->endTable(0);
-$write=new easyTable($pdf, '{10,180}', 'width:190; align:L; font-family:arial; font-size:12');
-$write->easyCell(chr(149), 'align:C; border:L;');
-$write->easyCell('Tentukan proyek singkat atau kegiatan terstruktur lainnya yang harus dipersiapkan dan dipresentasikan oleh asesi', 'align:L; border:R;');
-$write->printRow();
-$write->easyCell(chr(149), 'align:C; border:L;');
-$write->easyCell('Proyek singkat atau kegiatan terstruktur lainnya dibuat untuk keseluruhan unit kompetensi dalam Skema Sertifikasi atau untuk masing-masing kelompok pekerjaan.)', 'align:L; border:R;');
-$write->printRow();
-$write->easyCell(chr(149), 'align:C; border:LB;');
-$write->easyCell('Kumpulkan hasil proyek singkat atau kegiatan terstruktur lainnya sesuai dengan hasil keluaran yang telah ditetapkan.', 'align:L; border:RB;'); 
-$write->printRow();
-$write->endTable(5);
-
-
-// Konten
-$contentasesmenIA04=$conn->query("SELECT * FROM content_ia04A WHERE `id_skemakkni`='$jdq[id_skemakkni]'");
-while ($cta = $contentasesmenIA04->fetch_assoc()) {
-	$unit_kompetensi=explode(',',$cta['kode_unit']);
-	$rowspan=1+count($unit_kompetensi);
-	$kelompok = strip_tags($cta['kelompok']);
-	$content = strip_tags($cta['content']);
-	$content1 = strip_tags($cta['content1']);
-	$content2 = strip_tags($cta['content2']);
-	$content3 = strip_tags($cta['content3']);
-	$write=new easyTable($pdf, '{60,30,60,100}', 'width:190; align:L; font-family:arial; font-size:12');
-	$write->easyCell($kelompok,'align:C; rowspan:'.$rowspan.'; border:LTBR; font-style:B;');
-	$write->easyCell('No', 'align:L; border:LTBR; font-style:B;');
-	$write->easyCell('Kode Unit', 'align:L; border:LTBR; font-style:B;');
-	$write->easyCell('Judul Unit', 'align:L; border:LTBR; font-style:B;');
-	$write->printRow();
-	$no = 1;
-	for($i=0;$i < count($unit_kompetensi);++$i){
-		$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jdq[id_skemakkni]'");
-			while($uk01 = $unit_kompetensi01->fetch_assoc()){
-				$write->easyCell($no++, 'align:L; border:LTBR;');
-				$write->easyCell($uk01['kode_unit'], 'align:L; border:LTBR;');
-				$write->easyCell($uk01['judul'], 'align:L; border:LTBR;');
-				$write->printRow();
-			}
-	}
-	$write->endTable(0);
-
-	$write=new easyTable($pdf, '{100,100}', 'width:190; align:L; font-family:arial; font-size:12');
-	$write->easyCell($content, 'align:L; border:LTBR;');
-	$write->easyCell($content1, 'align:L; border:LTBR;');
-	$write->printRow();
-	$write->easyCell('Umpan Balik :', 'align:L; colspan:2; border:LTBR;');
-	$write->printRow();
-	$write->endTable(5);
 }
-// End Konten
 
-//output file pdf
-$fileoutputnya="FR-IA-04A-".$skemakkni."-".$_GET['idj']."-".$_GET['ida'].".pdf";
-$pdf->Output($fileoutputnya,'I');
- 
+
+$html = '
+<table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
+    <tr>
+        <td rowspan="2" style="width:50mm; font-weight:bold;">Skema Sertifikasi (KKNI/Okupasi/Klaster)</td>
+        <td style="width:20mm;">Judul</td>
+        <td style="width:5mm;">:</td>
+        <td style="width:115mm;">' . $skemakkni . '</td>
+    </tr>
+    <tr>
+        <td>Nomor</td>
+        <td>:</td>
+        <td>' . $sq['kode_skema'] . '</td>
+    </tr>
+    <tr>
+        <td colspan="2">TUK</td>
+        <td>:</td>
+        <td>' . $jnstuk['jenis_tuk'] . '</td>
+    </tr>
+    <tr>
+        <td colspan="2">Nama Asesor</td>
+        <td>:</td>
+        <td>' . $namaasesor . '</td>
+    </tr>
+    <tr>
+        <td colspan="2">Nama Asesi</td>
+        <td>:</td>
+        <td>' . $as['nama'] . '</td>
+    </tr>
+    <tr>
+        <td colspan="2">Tanggal</td>
+        <td>:</td>
+        <td>' . $tgl_cetak . '</td>
+    </tr>
+</table>
+';
+$pdf->writeHTML($html, true, false, true, false, '');
+$pdf->Ln(5);
+
+
+$html = '
+<table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
+    <tr style="background-color:#C6C6C6;">
+        <td style="font-weight:bold;">PANDUAN BAGI ASESOR</td>
+    </tr>
+</table>
+<table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
+    <tr>
+        <td style="width:10mm; text-align:center;">•</td>
+        <td style="width:180mm;">Tentukan proyek singkat atau kegiatan terstruktur lainnya yang harus dipersiapkan dan dipresentasikan oleh asesi.</td>
+    </tr>
+    <tr>
+        <td style="text-align:center;">•</td>
+        <td>Proyek singkat atau kegiatan terstruktur lainnya dibuat untuk keseluruhan unit kompetensi dalam Skema Sertifikasi atau untuk masing-masing kelompok pekerjaan.</td>
+    </tr>
+    <tr>
+        <td style="text-align:center;">•</td>
+        <td>Kumpulkan hasil proyek singkat atau kegiatan terstruktur lainnya sesuai dengan hasil keluaran yang telah ditetapkan.</td>
+    </tr>
+</table>
+';
+$pdf->writeHTML($html, true, false, true, false, '');
+$pdf->Ln(5);
+
+$contentasesmenIA04 = $conn->query("SELECT * FROM content_ia04A WHERE `id_skemakkni`='$jdq[id_skemakkni]'");
+
+while ($cta = $contentasesmenIA04->fetch_assoc()) {
+    $unit_kompetensi = explode(',', $cta['kode_unit']);
+    $rowspan = 1 + count($unit_kompetensi);
+    $kelompok = strip_tags($cta['kelompok']);
+    $content = strip_tags($cta['content']);
+    $content1 = strip_tags($cta['content1']);
+
+   
+    $html = '
+    <table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
+        <tr>
+            <td rowspan="' . $rowspan . '" style="width:40mm; text-align:center; font-weight:bold;">' . $kelompok . '</td>
+            <td style="width:20mm; font-weight:bold;">No. </td>
+            <td style="width:40mm; font-weight:bold;">Kode Unit</td>
+            <td style="width:90mm; font-weight:bold;">Judul Unit</td>
+        </tr>';
+
+    $no = 1;
+    for ($i = 0; $i < count($unit_kompetensi); ++$i) {
+        $unit_kompetensi01 = $conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jdq[id_skemakkni]'");
+        while ($uk01 = $unit_kompetensi01->fetch_assoc()) {
+            $html .= '
+            <tr>
+                <td>' . $no++ . '</td>
+                <td>' . $uk01['kode_unit'] . '</td>
+                <td>' . $uk01['judul'] . '</td>
+            </tr>';
+        }
+    }
+
+    $html .= '</table>';
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Ln(2);
+
+  
+    $html = '
+    <table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
+        <tr>
+            <td style="width:90mm;">' . $content . '</td>
+            <td style="width:100mm;">' . $content1 . '</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="font-weight:bold;">Umpan Balik :</td>
+        </tr>
+    </table>';
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Ln(5);
+}
+
+
+// Output file PDF
+$fileoutputnya = "FR-IA-04A-" . $skemakkni . "-" . $idj . "-" . $ida . ".pdf";
+$pdf->Output($fileoutputnya, 'I');
+
 ob_end_flush();
 ?>
