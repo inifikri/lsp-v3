@@ -7,7 +7,6 @@ include 'fpdf-easytable-master/html2exfpdf.php';
 include "../config/koneksi.php";
 include "../config/library.php";
 include "../config/fungsi_indotgl.php";
-
 ini_set('display_errors',0); 
 
 error_reporting(E_ALL);
