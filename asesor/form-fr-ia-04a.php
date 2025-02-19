@@ -17,6 +17,10 @@ $jadwal=$conn->query($sqljadwal);
 $jdq=$jadwal->fetch_assoc();
 $tgl_cetak = tgl_indo($jdq['tgl_asesmen']);
 
+$sqlgetasesordata = "SELECT * FROM `asesor` WHERE `no_ktp`='$_GET[asr]'";
+$getasesordata = $conn->query($sqlgetasesordata);
+$asr = $getasesordata->fetch_assoc();
+
 $sqltuk="SELECT * FROM `tuk` WHERE `id`='$jdq[tempat_asesmen]'";
 $tuk=$conn->query($sqltuk);
 $tq=$tuk->fetch_assoc();
@@ -48,9 +52,19 @@ $sqlwil3b="SELECT * FROM `data_wilayah` WHERE `id_wil`='$wil2b[id_induk_wilayah]
 $wilayah3b=$conn->query($sqlwil3b);
 $wil3b=$wilayah3b->fetch_assoc();
 
+// TTD Asesor
+$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$asr[no_ktp]' AND `penandatangan`='$asr[nama]' AND id_jadwal='$_GET[idj]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+$cektandatangan = $conn->query($sqlcektandatangan);
+$ttdx = $cektandatangan->fetch_assoc();
+
+// TTD Asesi
+$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$as[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
+$ttdasesi = $sqlcektandatanganasesi->fetch_assoc();
 
 $pdf = new TCPDF();
 // $pdf->SetAutoPageBreak(TRUE, 10);
+$pdf->setPrintHeader(false); // Pastikan header dimatikan
+$pdf->setPrintFooter(false); // Matikan footer jika tidak diperlukan
 $pdf->AddPage();
 $pdf->SetFont('Helvetica', '', 10);
 // $pdf->setPrintHeader(true);
@@ -70,26 +84,22 @@ $nomorlisensi="Nomor Lisensi : ".$lq['no_lisensi'];
 
 $alamatlsptampil=$alamatlsp." ".$alamatlsp2." ".$telpemail;
 
-
-
-$pdf->Ln();
-
 $html = '
 <table border="0" cellpadding="2" cellspacing="0" style="width:190mm; font-family: Arial;">
     <tr>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="../images/logolsp.jpg" width="25" height="25">
+            <img src="http://localhost/php7/lsp-v3/images/logolsp.png" width="400px"/>
         </td>
         <td style="width:130mm; text-align:center; font-size:14px; font-weight:bold;">' . $namalsp . '</td>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="../images/logo-bnsp.jpg" width="25" height="25">
+            <img src="http://localhost/php7/lsp-v3/images/logobnsp.jpeg" width="400px"/>
         </td>
     </tr>
     <tr>
         <td style="text-align:center; font-size:10px;">' . $nomorlisensi . '</td>
     </tr>
     <tr>
-        <td style="text-align:center; font-size:8px;">' . $alamatlsptampil . '</td>
+        <td style="text-align:center; font-size:10px;">' . $alamatlsptampil . '</td>
     </tr>
 </table>
 ';
@@ -208,15 +218,15 @@ $contentasesmenIA04 = $conn->query("SELECT * FROM content_ia04A WHERE `id_skemak
 while ($cta = $contentasesmenIA04->fetch_assoc()) {
     $unit_kompetensi = explode(',', $cta['kode_unit']);
     $rowspan = 1 + count($unit_kompetensi);
-    $kelompok = strip_tags($cta['kelompok']);
-    $content = strip_tags($cta['content']);
-    $content1 = strip_tags($cta['content1']);
+    // $kelompok = strip_tags($cta['kelompok']);
+    // $content = strip_tags($cta['content']);
+    // $content1 = strip_tags($cta['content1']);
 
    
     $html = '
     <table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
         <tr>
-            <td rowspan="' . $rowspan . '" style="width:40mm; text-align:center; font-weight:bold;">' . $kelompok . '</td>
+            <td rowspan="' . $rowspan . '" style="width:40mm; text-align:center; font-weight:bold;">' . $cta['kelompok'] . '</td>
             <td style="width:20mm; font-weight:bold;">No. </td>
             <td style="width:40mm; font-weight:bold;">Kode Unit</td>
             <td style="width:90mm; font-weight:bold;">Judul Unit</td>
@@ -243,16 +253,70 @@ while ($cta = $contentasesmenIA04->fetch_assoc()) {
     $html = '
     <table border="1" cellpadding="3" cellspacing="0" style="width:190mm; font-family: Arial; font-size:12px;">
         <tr>
-            <td style="width:90mm;">' . $content . '</td>
-            <td style="width:100mm;">' . $content1 . '</td>
+            <td style="width:90mm;">' . $cta['content'] . '</td>
+            <td style="width:100mm;">' . $cta['content1'] . '</td>
         </tr>
         <tr>
             <td colspan="2" style="font-weight:bold;">Umpan Balik :</td>
         </tr>
-    </table>';
+    </table>
+    ';
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Ln(5);
-}
+} 
+$html = '
+    <table border="1" cellpadding="3" cellspacing="0" style="font-family: Arial; font-size:12px;">
+        <tr>
+            <td align="center">Tanda Tangan Asesi<br><img src="../'.$ttdasesi['file'].'" width="400px"/></td>
+            <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
+            <td align="center">Nama dan Tanda Tangan Supervisor (Jika ada)</td>
+        </tr>
+    </table>
+    <p style="font-family: Arial; font-size:8px;">*) Apabila asesi pada Level 4 ke atas, berikan tugas proyek yang meliputi tentang pemecahan masalah dan analisa</p>
+    ';
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Ln(5);
+
+    $html = '
+    <h3>PENYUSUN DAN VALIDATOR</h3>
+    <table border="1" cellpadding="3" cellspacing="0" style="font-family: Arial; font-size:12px;">
+        <tr>
+            <td align="center" style="font-weight:bold;">STATUS</td>
+            <td align="center" style="font-weight:bold;">NO</td>
+            <td align="center" style="font-weight:bold;">NAMA</td>
+            <td align="center" style="font-weight:bold;">NOMOR MET</td>
+            <td align="center" style="font-weight:bold;">TANDA TANGAN DAN TANGGAL</td>
+        </tr>
+        <tr>
+            <td rowspan="2">PENYUSUN</td>
+            <td>1</td>
+            <td>MARTDIAN RATNA SARI </td>
+            <td>MET.000.004268 2018</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td rowspan="2">VALIDATOR</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    ';
+    $pdf->writeHTML($html, true, false, true, false, '');
+    $pdf->Ln(5);
 
 
 // Output file PDF

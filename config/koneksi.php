@@ -2,7 +2,7 @@
 $server = "localhost";
 $username = "root";
 $password = "";
-$database = "lsp_new";
+$database = "lsp_db";
 // Create connection
 $conn = new mysqli($server, $username, $password, $database);
 // Check connection

@@ -4143,7 +4143,7 @@
 																<li><a href='form-fr-ia-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' target='_blank'>Unduh Formulir FR-IA-01</a></li>
 																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Unduh Formulir FR-IA-02</a></li>
 																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Input Formulir FR-IA-04A</a></li>
-																<li><a href='form-fr-ia-04A.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
+																<li><a href='form-fr-ia-04A.php?asr=$_SESSION[namauser]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
 																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Input Formulir FR-IA-04B</a></li>
 																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Unduh Formulir FR-IA-04B</a></li>
 																<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Formulir FR-IA-05</a></li>
