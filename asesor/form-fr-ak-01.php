@@ -186,12 +186,18 @@ if ($jjw['DPT']=='1'){
 }else{
 	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LT;');
 }
-$write->easyCell('T : Hasil Tes Tulis', 'align:L; valign:M; font-size:11; border:TR; colspan:3;');
-$write->printRow();
+$write->easyCell('T : Hasil Tes Tulis', 'align:L; valign:M; font-size:11; border:TBR;');
 if ($jjw['DPL']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:L;');
+	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LTB;');
 }else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:L;');
+	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LTB;');
+}
+$write->easyCell('L : Kegiatan Terstruktur (DIT)', 'align:L; valign:M; font-size:11; border:TBR;');
+$write->printRow();
+if ($jjw['DIT']=='1'){
+	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LT;');
+}else{
+	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LT;');
 }
 $write->easyCell('L : Hasil Tes Lisan', 'align:L; valign:M; font-size:11; border:R; colspan:3;');
 $write->printRow();

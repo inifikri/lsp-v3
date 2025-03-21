@@ -1,7 +1,7 @@
 <?php
 $server = "localhost";
-$username = "root";
-$password = "";
+$username = "ppm-lsp";
+$password = "P4ssw0rd321#.,";
 $database = "lsp_db";
 // Create connection
 $conn = new mysqli($server, $username, $password, $database);

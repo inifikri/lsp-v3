@@ -8,7 +8,7 @@
 	include "../config/class_paging.php";
 	include "../config/fungsi_rupiah.php";
 	include "../classes/class.phpmailer.php";
-	ini_set('display_errors', 1);
+	ini_set('display_errors', 0);
 	// UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 	if (!function_exists('base_url')) {
 		function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
@@ -2972,6 +2972,57 @@
 			$sqlgetasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$asd[asesi_id]'";
 			$getasesi = $conn->query($sqlgetasesi);
 			$asi = $getasesi->fetch_assoc();
+			//Kirim Email ke Asesi-----------------------------------
+			$email = $asi['email'];
+			$namanya = $asi['nama'];
+			$no_hp = $asi['nohp'];
+			// Kirim email dalam format HTML ke Pendaftar
+			$pesan = "Dokumen Anda telah Disetujui<br /><br />  
+									ID Asesi: $asi[no_pendaftaran] <br />
+									Nama: $namanya <br />
+									Nomor Handphone: $asi[nohp] <br />
+						Dokumen: $asd[nama_doc]<br />
+							<br /><br />Telah dinyatakan disetujui. Silahkan lihat di laman Dashboard Anda.<br /><br />";
+			$subjek = "Selamat, Dokumen Asesi di SILSP Telah disetujui";
+			$dari = "From: noreply@" . $urldomain . "\r\n";
+			$dari .= "Content-type: text/html\r\n";
+			// Kirim email ke member
+			$sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
+			$getsmtp = $conn->query($sqlgetsmtp);
+			$gsmtp = $getsmtp->fetch_assoc();
+			$sqlidentitas = "SELECT * FROM `identitas`";
+			$identitas = $conn->query($sqlidentitas);
+			$iden = $identitas->fetch_assoc();
+			date_default_timezone_set("Asia/Jakarta");
+			$mail = new PHPMailer;
+			$mail->IsSMTP();
+			$mail->SMTPSecure = $gsmtp['protokol'];
+			$mail->Host = $gsmtp['host']; //host masing2 provider email
+			$mail->SMTPDebug = 0;
+			$mail->Port = $gsmtp['port'];
+			$mail->SMTPAuth = true;
+			$mail->Username = $gsmtp['username']; //user email
+			$mail->Password = $gsmtp['password']; //password email 
+			//Set who the message is to be sent from
+			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+			//Set an alternative reply-to address
+			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+			$mail->Subject = $subjek; //subyek email
+			$mail->AddAddress($email, $namanya);  //tujuan email
+			$mail->MsgHTML($pesan);
+			if ($mail->Send()) {
+				echo "";
+			} else {
+				echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
+			}
+			//mail($email,$subjek,$pesan,$dari);
+			//SMS Pendaftar
+			$isisms = "Yth. $namanya Dokumen $asd[nama_doc] Anda telah disetujui, lihat info di laman http://" . $urldomain . ".";
+			if (strlen($no_hp) > 8) {
+				$sqloutbox = "INSERT INTO `outbox` (`DestinationNumber`, `TextDecoded`, `Coding`,`SenderID`,`CreatorID`) VALUES ('$no_hp','$isisms','Default_No_Compression','MyPhone1','MyPhone1')";
+				$outbox = $conn->query($sqloutbox);
+			}
+			//-----------------------------------------------------
 			if ($result->num_rows != 0) {
 				$conn->query("UPDATE `tukjarakjauh_doc` SET `status`='A', `catatan_asesor`='$_POST[catatan_asesor]' WHERE `id`='$_POST[id_doc]'");
 				echo "<div class='alert alert-success alert-dismissible'>
@@ -2990,55 +3041,55 @@
 			$getasesi = $conn->query($sqlgetasesi);
 			$asi = $getasesi->fetch_assoc();
 			//Kirim Email ke Asesi-----------------------------------
-			// $email = $asi['email'];
-			// $namanya = $asi['nama'];
-			// $no_hp = $asi['nohp'];
-			// // Kirim email dalam format HTML ke Pendaftar
-			// $pesan = "Dokumen Anda Ditolak<br /><br />  
-			// 						ID Asesi: $asi[no_pendaftaran] <br />
-			// 						Nama: $namanya <br />
-			// 						Nomor Handphone: $asi[nohp] <br />
-			// 			Dokumen: $asd[nama_doc]<br />
-			// 				<br /><br />Telah dinyatakan ditolak. Silahkan lihat di laman Dashboard Anda.<br /><br />";
-			// $subjek = "Maaf, Dokumen Asesi di SILSP ditolak";
-			// $dari = "From: noreply@" . $urldomain . "\r\n";
-			// $dari .= "Content-type: text/html\r\n";
-			// // Kirim email ke member
-			// $sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
-			// $getsmtp = $conn->query($sqlgetsmtp);
-			// $gsmtp = $getsmtp->fetch_assoc();
-			// $sqlidentitas = "SELECT * FROM `identitas`";
-			// $identitas = $conn->query($sqlidentitas);
-			// $iden = $identitas->fetch_assoc();
-			// date_default_timezone_set("Asia/Jakarta");
-			// $mail = new PHPMailer;
-			// $mail->IsSMTP();
-			// $mail->SMTPSecure = $gsmtp['protokol'];
-			// $mail->Host = $gsmtp['host']; //host masing2 provider email
-			// $mail->SMTPDebug = 0;
-			// $mail->Port = $gsmtp['port'];
-			// $mail->SMTPAuth = true;
-			// $mail->Username = $gsmtp['username']; //user email
-			// $mail->Password = $gsmtp['password']; //password email 
-			// //Set who the message is to be sent from
-			// $mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
-			// //Set an alternative reply-to address
-			// $mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
-			// $mail->Subject = $subjek; //subyek email
-			// $mail->AddAddress($email, $namanya);  //tujuan email
-			// $mail->MsgHTML($pesan);
-			// if ($mail->Send()) {
-			// 	echo "";
-			// } else {
-			// 	echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
-			// }
-			// //mail($email,$subjek,$pesan,$dari);
-			// //SMS Pendaftar
-			// $isisms = "Yth. $namanya Dokumen $asd[nama_doc] Anda telah ditolak, lihat info di laman http://" . $urldomain . ".";
-			// if (strlen($no_hp) > 8) {
-			// 	$sqloutbox = "INSERT INTO `outbox` (`DestinationNumber`, `TextDecoded`, `Coding`,`SenderID`,`CreatorID`) VALUES ('$no_hp','$isisms','Default_No_Compression','MyPhone1','MyPhone1')";
-			// 	$outbox = $conn->query($sqloutbox);
-			// }
+			$email = $asi['email'];
+			$namanya = $asi['nama'];
+			$no_hp = $asi['nohp'];
+			// Kirim email dalam format HTML ke Pendaftar
+			$pesan = "Dokumen Anda Ditolak<br /><br />  
+									ID Asesi: $asi[no_pendaftaran] <br />
+									Nama: $namanya <br />
+									Nomor Handphone: $asi[nohp] <br />
+						Dokumen: $asd[nama_doc]<br />
+							<br /><br />Telah dinyatakan ditolak. Silahkan lihat di laman Dashboard Anda.<br /><br />";
+			$subjek = "Maaf, Dokumen Asesi di SILSP ditolak";
+			$dari = "From: noreply@" . $urldomain . "\r\n";
+			$dari .= "Content-type: text/html\r\n";
+			// Kirim email ke member
+			$sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
+			$getsmtp = $conn->query($sqlgetsmtp);
+			$gsmtp = $getsmtp->fetch_assoc();
+			$sqlidentitas = "SELECT * FROM `identitas`";
+			$identitas = $conn->query($sqlidentitas);
+			$iden = $identitas->fetch_assoc();
+			date_default_timezone_set("Asia/Jakarta");
+			$mail = new PHPMailer;
+			$mail->IsSMTP();
+			$mail->SMTPSecure = $gsmtp['protokol'];
+			$mail->Host = $gsmtp['host']; //host masing2 provider email
+			$mail->SMTPDebug = 0;
+			$mail->Port = $gsmtp['port'];
+			$mail->SMTPAuth = true;
+			$mail->Username = $gsmtp['username']; //user email
+			$mail->Password = $gsmtp['password']; //password email 
+			//Set who the message is to be sent from
+			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+			//Set an alternative reply-to address
+			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+			$mail->Subject = $subjek; //subyek email
+			$mail->AddAddress($email, $namanya);  //tujuan email
+			$mail->MsgHTML($pesan);
+			if ($mail->Send()) {
+				echo "";
+			} else {
+				echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
+			}
+			//mail($email,$subjek,$pesan,$dari);
+			//SMS Pendaftar
+			$isisms = "Yth. $namanya Dokumen $asd[nama_doc] Anda telah ditolak, lihat info di laman http://" . $urldomain . ".";
+			if (strlen($no_hp) > 8) {
+				$sqloutbox = "INSERT INTO `outbox` (`DestinationNumber`, `TextDecoded`, `Coding`,`SenderID`,`CreatorID`) VALUES ('$no_hp','$isisms','Default_No_Compression','MyPhone1','MyPhone1')";
+				$outbox = $conn->query($sqloutbox);
+			}
 			//-----------------------------------------------------
 			if ($result->num_rows != 0) {
 				$conn->query("UPDATE `tukjarakjauh_doc` SET `status`='R',`catatan_asesor`='$_POST[catatan_asesor]' WHERE `id`='$_POST[id_doc]'");
@@ -3074,7 +3125,6 @@
 		}
 		if (isset($_REQUEST['setujuiasesmen'])) {
 			$tgl_daftar = date("Y-m-d");
-			$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 			$querycek = "SELECT * FROM `asesi_tukjarakjauh` WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]' AND `status`='A'";
 			$resultc = $conn->query($querycek);
 			$row_cnt = $resultc->num_rows;
@@ -3096,65 +3146,66 @@
 				$iddokumen = md5($url);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 				$conn->query($sqlinputdigisign);
 			}
 			// end digital signature process =================================================
 			if ($row_cnt == 0) {
+				$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 				$conn->query($querydas);
 				//Notifikasi Email dan SMS====================================================
 				$sqlgetskema = "SELECT * FROM `skema_kkni` WHERE `id`='$_GET[id]'";
 				$getskema = $conn->query($sqlgetskema);
 				$gs = $getskema->fetch_assoc();
-				// $email = $as['email'];
-				// $namanya = $as['nama'];
-				// $no_hp = $as['nohp'];
-				// // Kirim email dalam format HTML ke Pendaftar
-				// $pesan = "Pendaftaran Asesmen Skema $gs[kode_skema] - $gs[judul]<br /><br />  
-				// 					ID Asesi: $as[no_pendaftaran] <br />
-				// 					Nama: $namanya <br />
-				// 					Nomor Handphone: $as[nohp] <br />
-				// 		Skema: $gs[kode_skema] - $gs[judul]<br />
-				// 			<br /><br />Telah dinyatakan disetujui. Silahkan lihat jadwal asesmen di laman Dashboard Anda.<br /><br />";
-				// $subjek = "Pendaftaran Asesmen di SILSP Telah disetujui";
-				// $dari = "From: noreply@" . $urldomain . "\r\n";
-				// $dari .= "Content-type: text/html\r\n";
-				// // Kirim email ke member
-				// $sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
-				// $getsmtp = $conn->query($sqlgetsmtp);
-				// $gsmtp = $getsmtp->fetch_assoc();
-				// $sqlidentitas = "SELECT * FROM `identitas`";
-				// $identitas = $conn->query($sqlidentitas);
-				// $iden = $identitas->fetch_assoc();
-				// date_default_timezone_set("Asia/Jakarta");
-				// $mail = new PHPMailer;
-				// $mail->IsSMTP();
-				// $mail->SMTPSecure = $gsmtp['protokol'];
-				// $mail->Host = $gsmtp['host']; //host masing2 provider email
-				// $mail->SMTPDebug = 0;
-				// $mail->Port = $gsmtp['port'];
-				// $mail->SMTPAuth = true;
-				// $mail->Username = $gsmtp['username']; //user email
-				// $mail->Password = $gsmtp['password']; //password email 
-				// //Set who the message is to be sent from
-				// $mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
-				// //Set an alternative reply-to address
-				// $mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
-				// $mail->Subject = $subjek; //subyek email
-				// $mail->AddAddress($email, $namanya);  //tujuan email
-				// $mail->MsgHTML($pesan);
-				// if ($mail->Send()) {
-				// 	echo "";
-				// } else {
-				// 	echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
-				// }
-				// //mail($email,$subjek,$pesan,$dari);
-				// //SMS Pendaftar
-				// $isisms = "Yth. $namanya Pendaftaran Asesmen Skema $gs[kode_skema]-$gs[judul] Anda telah disetujui, lihat jadwal di laman http://" . $urldomain . ".";
-				// if (strlen($no_hp) > 8) {
-				// 	$sqloutbox = "INSERT INTO `outbox` (`DestinationNumber`, `TextDecoded`, `Coding`,`SenderID`,`CreatorID`) VALUES ('$no_hp','$isisms','Default_No_Compression','MyPhone1','MyPhone1')";
-				// 	$outbox = $conn->query($sqloutbox);
-				// }
+				$email = $as['email'];
+				$namanya = $as['nama'];
+				$no_hp = $as['nohp'];
+				// Kirim email dalam format HTML ke Pendaftar
+				$pesan = "Pendaftaran Asesmen Skema $gs[kode_skema] - $gs[judul]<br /><br />  
+									ID Asesi: $as[no_pendaftaran] <br />
+									Nama: $namanya <br />
+									Nomor Handphone: $as[nohp] <br />
+						Skema: $gs[kode_skema] - $gs[judul]<br />
+							<br /><br />Telah dinyatakan disetujui. Silahkan lihat jadwal asesmen di laman Dashboard Anda.<br /><br />";
+				$subjek = "Pendaftaran Asesmen di SILSP Telah disetujui";
+				$dari = "From: noreply@" . $urldomain . "\r\n";
+				$dari .= "Content-type: text/html\r\n";
+				// Kirim email ke member
+				$sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
+				$getsmtp = $conn->query($sqlgetsmtp);
+				$gsmtp = $getsmtp->fetch_assoc();
+				$sqlidentitas = "SELECT * FROM `identitas`";
+				$identitas = $conn->query($sqlidentitas);
+				$iden = $identitas->fetch_assoc();
+				date_default_timezone_set("Asia/Jakarta");
+				$mail = new PHPMailer;
+				$mail->IsSMTP();
+				$mail->SMTPSecure = $gsmtp['protokol'];
+				$mail->Host = $gsmtp['host']; //host masing2 provider email
+				$mail->SMTPDebug = 0;
+				$mail->Port = $gsmtp['port'];
+				$mail->SMTPAuth = true;
+				$mail->Username = $gsmtp['username']; //user email
+				$mail->Password = $gsmtp['password']; //password email 
+				//Set who the message is to be sent from
+				$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+				//Set an alternative reply-to address
+				$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->Subject = $subjek; //subyek email
+				$mail->AddAddress($email, $namanya);  //tujuan email
+				$mail->MsgHTML($pesan);
+				if ($mail->Send()) {
+					echo "";
+				} else {
+					echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
+				}
+				//mail($email,$subjek,$pesan,$dari);
+				//SMS Pendaftar
+				$isisms = "Yth. $namanya Pendaftaran Asesmen Skema $gs[kode_skema]-$gs[judul] Anda telah disetujui, lihat jadwal di laman http://" . $urldomain . ".";
+				if (strlen($no_hp) > 8) {
+					$sqloutbox = "INSERT INTO `outbox` (`DestinationNumber`, `TextDecoded`, `Coding`,`SenderID`,`CreatorID`) VALUES ('$no_hp','$isisms','Default_No_Compression','MyPhone1','MyPhone1')";
+					$outbox = $conn->query($sqloutbox);
+				}
 				//============================================================================
 				echo "<div class='alert alert-success alert-dismissible'>
 			<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -3209,7 +3260,7 @@
 				$iddokumen = md5($url);
 				$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 				$alamatip = $_SERVER['REMOTE_ADDR'];
-				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip')";
+				$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 				$conn->query($sqlinputdigisign);
 			}
 			if ($row_cnt == 0) {
@@ -3330,7 +3381,7 @@
 					$iddokumen = md5($url);
 					$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 					$alamatip = $_SERVER['REMOTE_ADDR'];
-					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`,`id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip')";
+					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`,`id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 				}
 				// end digital signature process =================================================
@@ -3679,7 +3730,7 @@
 																										$querycekasesmen2 = "SELECT * FROM `tukjarakjauh_doc` WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 																										$cekasesmen2 = $conn->query($querycekasesmen2)->fetch_assoc();
 																										// UPDATE @FHM-Pusti 12 Jul 2023 : Query Panggil Persyaratan Skema
-																										$qsyaratskema = $conn->query("SELECT * FROM persyaratan_tukjarakjauh a");
+																										$qsyaratskema = $conn->query("SELECT * FROM persyaratan_tukjarakjauh a WHERE a.id_skemakkni='$_GET[id]'");
 																										// while($ss = $qsyaratskema->fetch_assoc()){
 																										// 	echo $ss['id'];
 																										// 	echo $ss['persyaratan'];
@@ -3698,7 +3749,7 @@
 																										$qasesiasesmen = $conn->query("SELECT * FROM asesi_tukjarakjauh WHERE `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'")->fetch_assoc();
 																										$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 																										$iddokumen = md5($url);
-																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' ORDER BY `id` DESC";
+																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 																										$cektandatangan = $conn->query($sqlcektandatangan);
 																										$jumttd = $cektandatangan->num_rows;
 																										$ttdx = $cektandatangan->fetch_assoc();
@@ -3834,7 +3885,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$pm0[id_skemakkni]','$_SESSION[namauser]','$escaped_url','FORM CEKLIST VERIFIKASI TUK','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$pm0[id_skemakkni]','$_SESSION[namauser]','$escaped_url','FORM CEKLIST VERIFIKASI TUK','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 				<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -4092,7 +4143,7 @@
 																<li><a href='form-fr-ia-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' target='_blank'>Unduh Formulir FR-IA-01</a></li>
 																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Unduh Formulir FR-IA-02</a></li>
 																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Input Formulir FR-IA-04A</a></li>
-																<li><a href='form-fr-ia-04A.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
+																<li><a href='form-fr-ia-04A.php?asr=$_SESSION[namauser]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
 																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Input Formulir FR-IA-04B</a></li>
 																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Unduh Formulir FR-IA-04B</a></li>
 																<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Formulir FR-IA-05</a></li>
@@ -4725,7 +4776,7 @@
 																											$iddokumen = md5($url);
 																											$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																											$alamatip = $_SERVER['REMOTE_ADDR'];
-																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]', '$_SESSION[namauser]','$escaped_url','FR.APL.02. ASESMEN MANDIRI','$_SESSION[namalengkap]','$file','$alamatip')";
+																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]', '$_SESSION[namauser]','$escaped_url','FR.APL.02. ASESMEN MANDIRI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																											$conn->query($sqlinputdigisign);
 																											echo "<div class='alert alert-success alert-dismissible'>
 				<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -5265,7 +5316,7 @@
 																											$iddokumen = md5($url);
 																											$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																											$alamatip = $_SERVER['REMOTE_ADDR'];
-																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI','$rowAgen[nama]','$file','$alamatip')";
+																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI','$rowAgen[nama]','$file','$alamatip','$_GET[idj]')";
 																											$conn->query($sqlinputdigisign);
 																											echo "<div class='alert alert-success alert-dismissible'>
 				<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -6607,6 +6658,11 @@
 																												} else {
 																													$postPW = "0";
 																												}
+																												if (isset($_POST['checkboxDIT'])) {
+																													$postDIT = $_POST['checkboxDIT'];
+																												} else {
+																													$postDIT = "0";
+																												}
 																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											} else {
@@ -6620,7 +6676,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.01.FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.01.FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -6653,6 +6709,11 @@
 																												} else {
 																													$postPW = "0";
 																												}
+																												if (isset($_POST['checkboxDIT'])) {
+																													$postDIT = $_POST['checkboxDIT'];
+																												} else {
+																													$postDIT = "0";
+																												}
 																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											}
@@ -6677,7 +6738,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.01.FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.01.FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -6708,6 +6769,11 @@
 																													$postPW = $_POST['checkboxPW'];
 																												} else {
 																													$postPW = "0";
+																												}
+																												if (isset($_POST['checkboxDIT'])) {
+																													$postDIT = $_POST['checkboxDIT'];
+																												} else {
+																													$postDIT = "0";
 																												}
 																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
@@ -6759,6 +6825,11 @@
 																												$postPW = $_POST['checkboxPW'];
 																											} else {
 																												$postPW = "0";
+																											}
+																											if (isset($_POST['checkboxDIT'])) {
+																												$postDIT = $_POST['checkboxDIT'];
+																											} else {
+																												$postDIT = "0";
 																											}
 																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
@@ -6813,6 +6884,11 @@
 																											} else {
 																												$postPW = "0";
 																											}
+																											if (isset($_POST['checkboxDIT'])) {
+																												$postDIT = $_POST['checkboxDIT'];
+																											} else {
+																												$postDIT = "0";
+																											}
 																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										}
@@ -6857,7 +6933,7 @@
 																									echo "> L : Observasi Langsung";
 																									echo "</td>
 							</tr>
-							<tr><td colspan='2'>";
+							<tr><td>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
 																									if ($jjw['DPT'] == "1") {
 																										echo "checked";
@@ -6865,8 +6941,17 @@
 																										echo "";
 																									}
 																									echo "> T : Hasil Tes Tulis";
-																									echo "</td>
-							</tr>
+																									echo "</td><td>";
+																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
+																									if ($jjw['DIT'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> L : Kegiatan Terstruktur (DIT)";
+																									echo "</td>";
+																									
+							echo "</tr>
 							<tr><td colspan='2'>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPL' id='optionsDPL' value='1'";
 																									if ($jjw['DPL'] == "1") {
@@ -7127,7 +7212,7 @@
 																											$iddokumen = md5($url);
 																											$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																											$alamatip = $_SERVER['REMOTE_ADDR'];
-																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI','$_SESSION[namalengkap]','$file','$alamatip')";
+																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																											$conn->query($sqlinputdigisign);
 																											//unit kompetensi
 																											$sqlgetunitkompetensi0 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -7481,7 +7566,8 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`,'id_jadwal') VALUES ('$iddokumen','$jd[id_skemakkni]','$_SESSION[namauser]','$escaped_url','FR.AK.05. LAPORAN ASESMEN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+								
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$jd[id_skemakkni]','$_SESSION[namauser]','$escaped_url','FR.AK.05. LAPORAN ASESMEN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -7512,7 +7598,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi`url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$jd[id_skemakkni]','$_SESSION[namauser]','$escaped_url','FR.AK.05. LAPORAN ASESMEN','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi`url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$jd[id_skemakkni]','$_SESSION[namauser]','$escaped_url','FR.AK.05. LAPORAN ASESMEN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -7658,6 +7744,8 @@
 																									// cek tandatangan digital
 																									$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 																									$iddokumen = md5($url);
+																									// $idj = "SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'"; 
+																									// var_dump($idj);
 																									$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_skema`='$jd[id_skemakkni]' AND `id_asesi`='$_SESSION[namauser]' AND nama_dokumen='FR.AK.05. LAPORAN ASESMEN' ORDER BY `id` DESC";
 																									$cektandatangan = $conn->query($sqlcektandatangan);
 																									$jumttd = $cektandatangan->num_rows;
@@ -7903,7 +7991,9 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, `id_skema`, `id_asesi`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`,`id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.06. MENINJAU PROSES ASESMEN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.06. MENINJAU PROSES ASESMEN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+																												// var_dump($sqlinputdigisign);
+																												// die;
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -7934,7 +8024,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi,`url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.06. MENINJAU PROSES ASESMEN','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi,`url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.06. MENINJAU PROSES ASESMEN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -8456,7 +8546,7 @@
 																											$iddokumen = md5($url);
 																											$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																											$alamatip = $_SERVER['REMOTE_ADDR'];
-																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI','$_SESSION[namalengkap]','$file','$alamatip')";
+																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																											$conn->query($sqlinputdigisign);
 																											echo "<div class='alert alert-success alert-dismissible'>
 				<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -8962,7 +9052,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.03. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.03. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input tanggapan pendukung observasi
 																												$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -9047,7 +9137,7 @@
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.03. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.03. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input tanggapan pendukung observasi
 																												$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -9280,8 +9370,9 @@ elseif ($_GET['module'] == 'form-fr-ia-04A') {
 	$cektandatangan = $conn->query($sqlcektandatangan);
 	$jumttd = $cektandatangan->num_rows;
 	$ttdx = $cektandatangan->fetch_assoc();
-	$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND id_jadwal='$_GET[idj]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
+	$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 	$ttdasesi = $sqlcektandatanganasesi->fetch_assoc();
+	// var_dump("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND id_jadwal='$_GET[idj]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 	while ($gas = $getasesor->fetch_assoc()) {
 		$sqlasesor = "SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
 		$asesor = $conn->query($sqlasesor);
@@ -9477,7 +9568,6 @@ keluaran yang telah ditetapkan.</li>
 		?>
 		<table id='example9' class='table table-bordered table-striped'>
 		<tr>
-		<?php echo $rowspan ?>
 			<td rowspan="<?php echo $rowspan ?>" valign="middle"><?= $cta['kelompok']?> </td>
 			<td><b>No.</b></td>
 			<td><b>Kode Unit</b></td>
@@ -9732,20 +9822,20 @@ keluaran yang telah ditetapkan.</li>
 					$iddokumen = md5($url);
 					$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 					$alamatip = $_SERVER['REMOTE_ADDR'];
-					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip')";
+					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-					// $sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
-					$sqlgetlingkupkegiatan04B = "SELECT * FROM lingkupkegiatan_formIA04B WHERE id_skemakkni='$sk[id]' ORDER BY b.id ASC";
-					$getlingkup04B = $conn->query($sqlgetlingkupkegiatan04B);
-						while ($gpp04B = $getlingkup04B->fetch_assoc()) {
-							// $posttanggapan = 'tanggapan' . $gpp04B['id'];
-							$postpencapaian = 'pencapaian' . $gpp04B['id'];
-							$sqlinputia04b = "INSERT INTO `asesmen_ia04B`(`id_asesi`, id_jadwal, id_pertanyaan, `tanggapan`, `waktu`, `standar_kompetensikerja`, `id_skemakkni`, `pencapaian`) VALUES ('$_GET[ida]','$_GET[idj]','$gpp04B[id]','','','$_POST[standar_kompetensikerja]','$jd[id_skemakkni]','$_POST[$postpencapaian]')";
-							// $sqlinputia04b = "UPDATE `asesmen_ia04B` SET `tanggapan`='" . $_POST[$posttanggapan] . "', `rekomendasi`='" . $_POST[$postrekomendasi] . "' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]' AND `id_pertanyaan`='$gpp04B[id]'";
+					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
+						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
+							//if (!empty($gpp2['pertanyaan'])){
+							$posttanggapan = 'tanggapan' . $gpp04B['idpertanyaan'];
+							$postrekomendasi = 'rekomendasi' . $gpp04B['idpertanyaan'];
+							$sqlinputia04b = "UPDATE `asesmen_ia04B` SET `tanggapan`='" . $_POST[$posttanggapan] . "', `rekomendasi`='" . $_POST[$postrekomendasi] . "' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]' AND `id_pertanyaan`='$gpp04B[id]'";
 							$conn->query($sqlinputia04b);
+							//}
 						}
-					// $sqlinputak01b = "UPDATE `asesi_asesmen` SET `umpan_balik_ia03`='$_POST[umpan_balik_ia03]' WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
+					$sqlinputak01b = "UPDATE `asesi_asesmen` SET `umpan_balik_ia03`='$_POST[umpan_balik_ia03]' WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
 					$conn->query($sqlinputak01b);
 					echo "<div class='alert alert-success alert-dismissible'>
 					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
@@ -9761,7 +9851,7 @@ keluaran yang telah ditetapkan.</li>
 				$folderPath = "../foto_tandatangan/";
 				if (empty($_POST['signed'])) {
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9805,20 +9895,18 @@ keluaran yang telah ditetapkan.</li>
 					$iddokumen = md5($url);
 					$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 					$alamatip = $_SERVER['REMOTE_ADDR'];
-					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`,`id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-						// $sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
-						$getlingkupkegiatanIA04B =$conn->query("SELECT * FROM lingkupkegiatan_formIA04B WHERE id_skemakkni='$sk[id]'");
-						// $getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
-						while ($gpp04B = $getlingkupkegiatanIA04B->fetch_assoc()) {
-							$posttanggapan = 'tanggapan' . $gpp04B['id'];
-							$postkompetensikerja = 'standar_kompetensikerja' . $gpp04B['id'];
-							$postpencapaian = 'pencapaian' . $gpp04B['id'];
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
+						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
+						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
+							$posttanggapan = 'tanggapan' . $gpp04B['idpertanyaan'];
+							$postkompetensikerja = 'standar_kompetensikerja' . $gpp04B['idpertanyaan'];
+							$postpencapaian = 'pencapaian' . $gpp04B['idpertanyaan'];
 
-							$sqlinputia04B = "INSERT INTO `asesmen_ia04B`(`id_asesi`, `id_jadwal`, `id_pertanyaan`,`tanggapan`, `standar_kompetensikerja`, `id_skemakkni`, `pencapaian`) VALUES ('$_GET[ida]','$_GET[idj]','$gpp04B[id]','" . $_POST[$posttanggapan] . "','" . $_POST[$postkompetensikerja] . "','$sk[id]','" . $_POST[$postpencapaian] . "')";
+							$sqlinputia04B = "INSERT INTO `asesmen_ia04B`(`id_asesi`, `id_jadwal`, `id_pertanyaan`,`tanggapan`, `standar_kompetensikerja`, `id_skemakkni`, `pencapaian`) VALUES ('$_GET[ida]','$_GET[idj]','$gpp04B[idpertanyaan]','" . $_POST[$posttanggapan] . "','" . $_POST[$postkompetensikerja] . "','$sk[id]','" . $_POST[$postpencapaian] . "')";
 							$conn->query($sqlinputia04B);
-
 						}
 					$sqlinputak01b = "UPDATE `asesi_asesmen` SET `rekomendasi_IA04B`='$_POST[rekomendasi]' WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
 					$conn->query($sqlinputak01b);	
@@ -9888,42 +9976,58 @@ presentasi</li>
 						<tbody>";
 						$noglk=1;
 						$countfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
-					WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
-					// $getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC ");
-					$getlingkupkegiatanIA04B =$conn->query("SELECT * FROM lingkupkegiatan_formIA04B WHERE id_skemakkni='$sk[id]'");
-					while ($gp = $getlingkupkegiatanIA04B->fetch_assoc()){
-						$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
-						WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' AND a.id_pertanyaan='$gp[id]'");
-						$gfr=$getfria04B->fetch_assoc();
-							$getpertanyaanIA04B =$conn->query("SELECT * FROM skema_pertanyaania04B WHERE id_lingkupkegiatan='$gp[id]'");
-							$gc=$getfria04B->fetch_assoc();
-							echo "<tr>
+								WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
+							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC");
+							while ($gp = $getpertanyaanIA04B->fetch_assoc()){
+								if($countfria04B > 0){
+									$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
+								WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' AND a.id_pertanyaan='$gp[idpertanyaan]'");
+								$gfr=$getfria04B->fetch_assoc();
+									// while($gfr = $getfria04B->fetch_assoc()){
+									echo "<tr>
+											<td>$noglk</td>
+											<td>$gp[lingkupkegiatan]</td>
+											<td>
+												$gp[pertanyaan]
+												<input class='form form-control' name='tanggapan$gp[idpertanyaan]' placeholder='Tanggapan' value='$gfr[tanggapan]'></input>
+											</td>
+											<td><textarea name='standar_kompetensikerja$gp[idpertanyaan]' class='form form-control'>$gfr[standar_kompetensikerja]</textarea></td>"; ?>
+											<td>
+												<div class="form-check">
+													<input class="form-check-input" type="radio" name="pencapaian<?= $gp['idpertanyaan'] ?>" id="flexRadioDefault<?= $gp['idpertanyaan']?>" value="Ya" <?php if($gfr['pencapaian'] == 'Ya'){ echo "checked"; }?>>
+												</div>
+											</td>
+											<td>
+												<div class='form-check'>
+													<input class="form-check-input" type="radio" name="pencapaian<?= $gp['idpertanyaan'] ?>" id="flexRadioDefault<?= $gp['idpertanyaan'] ?>" value="Tidak" <?php if($gfr['pencapaian'] == 'Tidak'){ echo "checked"; }?>>
+												</div>
+											</td>
+									<?php
+										echo "</tr>";
+									// }
+								}else{
+									echo "<tr>
 									<td>$noglk</td>
-									<td>$gp[lingkupkegiatan]</td>";
-										if($gc['id']){
-											echo "<td></td>";
-										}
-									echo "
-									<td></td>
-									<td>"; 
-									// while ($gc = $getpertanyaanIA04B->fetch_assoc()){
-									?>
+									<td>$gp[lingkupkegiatan]</td>
 									<td>
-										<div class="form-check">
-											<input class="form-check-input" type="radio" name="pencapaian<?= $gp['id'] ?>" id="flexRadioDefault<?= $gp['id']?>" value="Ya" <?php if($gfr['pencapaian'] == 'Ya'){ echo "checked"; }?>>
+										$gp[pertanyaan]
+										<input class='form form-control' name='tanggapan$gp[idpertanyaan]' placeholder='Tanggapan'></input>
+									</td>
+									<td><textarea name='standar_kompetensikerja$gp[idpertanyaan]' class='form form-control'></textarea></td>
+									<td>
+										<div class='form-check'>
+											<input class='form-check-input' type='radio' name='pencapaian$gp[idpertanyaan]' id='flexRadioDefault$gp[idpertanyaan]' value='Ya'>
 										</div>
 									</td>
 									<td>
 										<div class='form-check'>
-											<input class="form-check-input" type="radio" name="pencapaian<?= $gp['id'] ?>" id="flexRadioDefault<?= $gp['id'] ?>" value="Tidak" <?php if($gfr['pencapaian'] == 'Tidak'){ echo "checked"; }?>>
+											<input class='form-check-input' type='radio' name='pencapaian$gp[idpertanyaan]' id='flexRadioDefault$gp[idpertanyaan]' value='Tidak'>
 										</div>
-									</td>
-							<?php
-									// }
-								echo "</tr>";
-							// }
-						$noglk++;
-					}
+										</td>
+									</tr>";
+								}
+								$noglk++;
+							}
 						echo "</tbody></table>
 						<table id='example9' class='table table-bordered table-striped'>
 							<tr>
@@ -10009,7 +10113,7 @@ presentasi</li>
 									<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 							</div>
 							<div class='col-md-4 col-sm-12 col-xs-12'>
-									<a href='form-fr-ia-04b.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+									<a href='form-fr-ia-03.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
 							</div>";
 																									if ($jumttd == 0) {
 																										echo "<div class='col-md-4 col-sm-12 col-xs-12'>
@@ -10129,7 +10233,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.06. PERTANYAAN TERTULIS ESAI','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.06. PERTANYAAN TERTULIS ESAI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input jawaban pendukung observasi
 																												$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -10413,7 +10517,7 @@ presentasi</li>
 																											$iddokumen = md5($url);
 																											$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																											$alamatip = $_SERVER['REMOTE_ADDR'];
-																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.07. PERTANYAAN LISAN','$_SESSION[namalengkap]','$file','$alamatip')";
+																											$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.07. PERTANYAAN LISAN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																											$conn->query($sqlinputdigisign);
 																											// input jawaban pendukung observasi
 																											$sqlgetunitkompetensib2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -10767,7 +10871,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.08. CEKLIS VERIFIKASI PORTOFOLIO','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.08. CEKLIS VERIFIKASI PORTOFOLIO','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]'";
 																												$conn->query($sqlinputdigisign);
 																												// input jawaban ceklist portfolio
 																												//$sqlgetunitkompetensib2="SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -10932,7 +11036,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.08. CEKLIS VERIFIKASI PORTOFOLIO','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.08. CEKLIS VERIFIKASI PORTOFOLIO','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input jawaban ceklist portfolio
 																												//$sqlgetunitkompetensib2="SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -11404,7 +11508,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input jawaban ceklist portfolio
 																												//$sqlgetunitkompetensib2="SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -11491,7 +11595,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input jawaban ceklist portfolio
 																												//$sqlgetunitkompetensib2="SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -11791,7 +11895,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input ceklis meninjau instrumen asesmen
 																												/* $sqlgetunitkompetensib2="SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
@@ -11858,7 +11962,7 @@ presentasi</li>
 																												$iddokumen = md5($url);
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												$alamatip = $_SERVER['REMOTE_ADDR'];
-																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip')";
+																												$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.09. PERTANYAAN WAWANCARA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 																												$conn->query($sqlinputdigisign);
 																												// input ceklis meninjau instrumen asesmen
 																												/* $sqlgetunitkompetensib2="SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
