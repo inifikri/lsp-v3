@@ -8,7 +8,7 @@
 	include "../config/class_paging.php";
 	include "../config/fungsi_rupiah.php";
 	include "../classes/class.phpmailer.php";
-	ini_set('display_errors', 0);
+	ini_set('display_errors', 1);
 	// UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 	if (!function_exists('base_url')) {
 		function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
@@ -2972,56 +2972,6 @@
 			$sqlgetasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$asd[asesi_id]'";
 			$getasesi = $conn->query($sqlgetasesi);
 			$asi = $getasesi->fetch_assoc();
-			//Kirim Email ke Asesi-----------------------------------
-			$email = $asi['email'];
-			$namanya = $asi['nama'];
-			$no_hp = $asi['nohp'];
-			// Kirim email dalam format HTML ke Pendaftar
-			$pesan = "Dokumen Anda telah Disetujui<br /><br />  
-									ID Asesi: $asi[no_pendaftaran] <br />
-									Nama: $namanya <br />
-									Nomor Handphone: $asi[nohp] <br />
-						Dokumen: $asd[nama_doc]<br />
-							<br /><br />Telah dinyatakan disetujui. Silahkan lihat di laman Dashboard Anda.<br /><br />";
-			$subjek = "Selamat, Dokumen Asesi di SILSP Telah disetujui";
-			$dari = "From: noreply@" . $urldomain . "\r\n";
-			$dari .= "Content-type: text/html\r\n";
-			// Kirim email ke member
-			$sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
-			$getsmtp = $conn->query($sqlgetsmtp);
-			$gsmtp = $getsmtp->fetch_assoc();
-			$sqlidentitas = "SELECT * FROM `identitas`";
-			$identitas = $conn->query($sqlidentitas);
-			$iden = $identitas->fetch_assoc();
-			date_default_timezone_set("Asia/Jakarta");
-			$mail = new PHPMailer;
-			$mail->IsSMTP();
-			$mail->SMTPSecure = $gsmtp['protokol'];
-			$mail->Host = $gsmtp['host']; //host masing2 provider email
-			$mail->SMTPDebug = 0;
-			$mail->Port = $gsmtp['port'];
-			$mail->SMTPAuth = true;
-			$mail->Username = $gsmtp['username']; //user email
-			$mail->Password = $gsmtp['password']; //password email 
-			//Set who the message is to be sent from
-			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
-			//Set an alternative reply-to address
-			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
-			$mail->Subject = $subjek; //subyek email
-			$mail->AddAddress($email, $namanya);  //tujuan email
-			$mail->MsgHTML($pesan);
-			if ($mail->Send()) {
-				echo "";
-			} else {
-				echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
-			}
-			//mail($email,$subjek,$pesan,$dari);
-			//SMS Pendaftar
-			$isisms = "Yth. $namanya Dokumen $asd[nama_doc] Anda telah disetujui, lihat info di laman http://" . $urldomain . ".";
-			if (strlen($no_hp) > 8) {
-				$sqloutbox = "INSERT INTO `outbox` (`DestinationNumber`, `TextDecoded`, `Coding`,`SenderID`,`CreatorID`) VALUES ('$no_hp','$isisms','Default_No_Compression','MyPhone1','MyPhone1')";
-				$outbox = $conn->query($sqloutbox);
-			}
 			//-----------------------------------------------------
 			if ($result->num_rows != 0) {
 				$conn->query("UPDATE `tukjarakjauh_doc` SET `status`='A', `catatan_asesor`='$_POST[catatan_asesor]' WHERE `id`='$_POST[id_doc]'");
@@ -3040,50 +2990,6 @@
 			$sqlgetasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$asd[asesi_id]'";
 			$getasesi = $conn->query($sqlgetasesi);
 			$asi = $getasesi->fetch_assoc();
-			//Kirim Email ke Asesi-----------------------------------
-			$email = $asi['email'];
-			$namanya = $asi['nama'];
-			$no_hp = $asi['nohp'];
-			// Kirim email dalam format HTML ke Pendaftar
-			$pesan = "Dokumen Anda Ditolak<br /><br />  
-									ID Asesi: $asi[no_pendaftaran] <br />
-									Nama: $namanya <br />
-									Nomor Handphone: $asi[nohp] <br />
-						Dokumen: $asd[nama_doc]<br />
-							<br /><br />Telah dinyatakan ditolak. Silahkan lihat di laman Dashboard Anda.<br /><br />";
-			$subjek = "Maaf, Dokumen Asesi di SILSP ditolak";
-			$dari = "From: noreply@" . $urldomain . "\r\n";
-			$dari .= "Content-type: text/html\r\n";
-			// Kirim email ke member
-			$sqlgetsmtp = "SELECT * FROM `smtp` WHERE `aktif`='Y'";
-			$getsmtp = $conn->query($sqlgetsmtp);
-			$gsmtp = $getsmtp->fetch_assoc();
-			$sqlidentitas = "SELECT * FROM `identitas`";
-			$identitas = $conn->query($sqlidentitas);
-			$iden = $identitas->fetch_assoc();
-			date_default_timezone_set("Asia/Jakarta");
-			$mail = new PHPMailer;
-			$mail->IsSMTP();
-			$mail->SMTPSecure = $gsmtp['protokol'];
-			$mail->Host = $gsmtp['host']; //host masing2 provider email
-			$mail->SMTPDebug = 0;
-			$mail->Port = $gsmtp['port'];
-			$mail->SMTPAuth = true;
-			$mail->Username = $gsmtp['username']; //user email
-			$mail->Password = $gsmtp['password']; //password email 
-			//Set who the message is to be sent from
-			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
-			//Set an alternative reply-to address
-			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
-			$mail->Subject = $subjek; //subyek email
-			$mail->AddAddress($email, $namanya);  //tujuan email
-			$mail->MsgHTML($pesan);
-			if ($mail->Send()) {
-				echo "";
-			} else {
-				echo "Notifikasi Email Gagal Terkirim, periksa pengaturan di menu Manajemen, sub menu Pengaturan SMTP";
-			}
-			//mail($email,$subjek,$pesan,$dari);
 			//SMS Pendaftar
 			$isisms = "Yth. $namanya Dokumen $asd[nama_doc] Anda telah ditolak, lihat info di laman http://" . $urldomain . ".";
 			if (strlen($no_hp) > 8) {
@@ -3097,35 +3003,34 @@
 				<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
 				<h4><i class='icon fa fa-times'></i> Penolakan Dokumen Sukses</h4>
 				Anda Telah Berhasil Menolak <b>Dokumen Persyaratan Sertifikasi</b></div>";
-				if ($pupr > 0) {
-					// kirim status ke siki.pu.go.id ======================================
-					$urlnyaxxx = 'https://siki.pu.go.id/siki-api/v1/permohonan-skk/' . $_GET['idpmh'];
-					$curlxxx = curl_init();
-					curl_setopt_array($curlxxx, array(
-						CURLOPT_URL => $urlnyaxxx,
-						CURLOPT_RETURNTRANSFER => true,
-						CURLOPT_ENCODING => '',
-						CURLOPT_MAXREDIRS => 10,
-						CURLOPT_TIMEOUT => 0,
-						CURLOPT_FOLLOWLOCATION => true,
-						CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-						CURLOPT_CUSTOMREQUEST => 'POST',
-						CURLOPT_POSTFIELDS => array('kd_status' => '11', 'keterangan' => 'Dokumen Tidak Lengkap'),
-						CURLOPT_HTTPHEADER => array(
-							'token: ' . $tokennya
-						),
-					));
-					$responsexxx = curl_exec($curlxxx);
-					curl_close($curlxxx);
-					// =================================================================
-				}
+				// if ($pupr > 0) {
+				// 	// kirim status ke siki.pu.go.id ======================================
+				// 	$urlnyaxxx = 'https://siki.pu.go.id/siki-api/v1/permohonan-skk/' . $_GET['idpmh'];
+				// 	$curlxxx = curl_init();
+				// 	curl_setopt_array($curlxxx, array(
+				// 		CURLOPT_URL => $urlnyaxxx,
+				// 		CURLOPT_RETURNTRANSFER => true,
+				// 		CURLOPT_ENCODING => '',
+				// 		CURLOPT_MAXREDIRS => 10,
+				// 		CURLOPT_TIMEOUT => 0,
+				// 		CURLOPT_FOLLOWLOCATION => true,
+				// 		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				// 		CURLOPT_CUSTOMREQUEST => 'POST',
+				// 		CURLOPT_POSTFIELDS => array('kd_status' => '11', 'keterangan' => 'Dokumen Tidak Lengkap'),
+				// 		CURLOPT_HTTPHEADER => array(
+				// 			'token: ' . $tokennya
+				// 		),
+				// 	));
+				// 	$responsexxx = curl_exec($curlxxx);
+				// 	curl_close($curlxxx);
+				// 	// =================================================================
+				// }
 			} else {
 				echo "<script>alert('Maaf Dokumen Persyaratan tersebut Tidak Ditemukan');</script>";
 			}
 		}
 		if (isset($_REQUEST['setujuiasesmen'])) {
 			$tgl_daftar = date("Y-m-d");
-			$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 			$querycek = "SELECT * FROM `asesi_tukjarakjauh` WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]' AND `status`='A'";
 			$resultc = $conn->query($querycek);
 			$row_cnt = $resultc->num_rows;
@@ -3152,6 +3057,7 @@
 			}
 			// end digital signature process =================================================
 			if ($row_cnt == 0) {
+				$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 				$conn->query($querydas);
 				//Notifikasi Email dan SMS====================================================
 				$sqlgetskema = "SELECT * FROM `skema_kkni` WHERE `id`='$_GET[id]'";
@@ -3323,28 +3229,28 @@
 			<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
 			<h4><i class='icon fa fa-check'></i> Permohonan Asesmen Berhasil Ditolak</h4>
 			Anda Telah Berhasil menolak permohonan asesmen Asesi pada skema ini<b></b></div>";
-				if ($pupr > 0) {
-					// kirim status ke siki.pu.go.id ======================================
-					$urlnyaxxx = 'https://siki.pu.go.id/siki-api/v1/permohonan-skk/' . $_GET['idpmh'];
-					$curlxxx = curl_init();
-					curl_setopt_array($curlxxx, array(
-						CURLOPT_URL => $urlnyaxxx,
-						CURLOPT_RETURNTRANSFER => true,
-						CURLOPT_ENCODING => '',
-						CURLOPT_MAXREDIRS => 10,
-						CURLOPT_TIMEOUT => 0,
-						CURLOPT_FOLLOWLOCATION => true,
-						CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-						CURLOPT_CUSTOMREQUEST => 'POST',
-						CURLOPT_POSTFIELDS => array('kd_status' => '90', 'keterangan' => 'Permohonan Ditolak'),
-						CURLOPT_HTTPHEADER => array(
-							'token: ' . $tokennya
-						),
-					));
-					$responsexxx = curl_exec($curlxxx);
-					curl_close($curlxxx);
-					// =================================================================
-				}
+				// if ($pupr > 0) {
+				// 	// kirim status ke siki.pu.go.id ======================================
+				// 	$urlnyaxxx = 'https://siki.pu.go.id/siki-api/v1/permohonan-skk/' . $_GET['idpmh'];
+				// 	$curlxxx = curl_init();
+				// 	curl_setopt_array($curlxxx, array(
+				// 		CURLOPT_URL => $urlnyaxxx,
+				// 		CURLOPT_RETURNTRANSFER => true,
+				// 		CURLOPT_ENCODING => '',
+				// 		CURLOPT_MAXREDIRS => 10,
+				// 		CURLOPT_TIMEOUT => 0,
+				// 		CURLOPT_FOLLOWLOCATION => true,
+				// 		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				// 		CURLOPT_CUSTOMREQUEST => 'POST',
+				// 		CURLOPT_POSTFIELDS => array('kd_status' => '90', 'keterangan' => 'Permohonan Ditolak'),
+				// 		CURLOPT_HTTPHEADER => array(
+				// 			'token: ' . $tokennya
+				// 		),
+				// 	));
+				// 	$responsexxx = curl_exec($curlxxx);
+				// 	curl_close($curlxxx);
+				// 	// =================================================================
+				// }
 			} else {
 				echo "<script>alert('Maaf Asesi sudah ditolak pada skema ini'); window.location = '?module=syarat&id=$_GET[id]&ida=$_GET[ida]'</script>";
 			}
@@ -3749,7 +3655,7 @@
 																										$qasesiasesmen = $conn->query("SELECT * FROM asesi_tukjarakjauh WHERE `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'")->fetch_assoc();
 																										$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 																										$iddokumen = md5($url);
-																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' ORDER BY `id` DESC";
+																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 																										$cektandatangan = $conn->query($sqlcektandatangan);
 																										$jumttd = $cektandatangan->num_rows;
 																										$ttdx = $cektandatangan->fetch_assoc();
@@ -6864,7 +6770,12 @@
 																											} else {
 																												$postPW = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											if (isset($_POST['checkboxDIT'])) {
+																												$postDIT = $_POST['checkboxDIT'];
+																											} else {
+																												$postDIT = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										}
 																									}
@@ -6907,8 +6818,9 @@
 																									}
 																									echo "> L : Observasi Langsung";
 																									echo "</td>
+																									
 							</tr>
-							<tr><td colspan='2'>";
+							<tr><td>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
 																									if ($jjw['DPT'] == "1") {
 																										echo "checked";
@@ -6916,6 +6828,14 @@
 																										echo "";
 																									}
 																									echo "> T : Hasil Tes Tulis";
+																									echo "</td><td>";
+																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
+																									if ($jjw['DIT'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> L : Kegiatan Terstruktur (DIT)";
 																									echo "</td>
 							</tr>
 							<tr><td colspan='2'>";
@@ -6937,7 +6857,7 @@
 																									}
 																									echo "> L : Hasil Wawancara";
 																									echo "</td>
-							</tr>
+							</tr>																	
 						</table>
 						<table id='example9' class='table table-bordered table-striped'>
 							<tr><td rowspan='3' width='25%'>Pelaksanaan asesmen disepakati pada:</td><td>";
@@ -9543,7 +9463,7 @@ keluaran yang telah ditetapkan.</li>
 			<?php 
 			$nounitkom=1;
 				for($i=0;$i < count($unit_kompetensi);++$i){
-					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`=3");
+					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jd[id_skemakkni]'");
 					
 					while($uk01 = $unit_kompetensi01->fetch_assoc()){
 			?>
@@ -9791,7 +9711,7 @@ keluaran yang telah ditetapkan.</li>
 					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9817,7 +9737,7 @@ keluaran yang telah ditetapkan.</li>
 				$folderPath = "../foto_tandatangan/";
 				if (empty($_POST['signed'])) {
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9864,7 +9784,7 @@ keluaran yang telah ditetapkan.</li>
 					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							$posttanggapan = 'tanggapan' . $gpp04B['idpertanyaan'];
@@ -9911,7 +9831,7 @@ keluaran yang telah ditetapkan.</li>
 							<tr><th>PANDUAN BAGI ASESOR</th></tr>
 							<tr><td><ul>
 							<li>Lakukan penilaian pencapaian hasil proyek singkat atau kegiatan terstruktur lainnya melalui presentasi.</li>
-							<li>Penilaian dilakukan sesuai dengan <b>FR IA 04A. DIT. Daftar Instruksi Terstruktur (Penjelasan
+							<li>Penilaian dilakukan sesuai dengan <b>FR IA 04B. DIT. Daftar Instruksi Terstruktur (Penjelasan
 Proyek Singkat/ Kegiatan Terstruktur Lainnya)</b></li>
 							<li>Pertanyaan disampaikan oleh asesor setelah asesi melakukan presentasi proyek singkat/
 kegiatan terstruktur lainnya.</li>
@@ -9943,8 +9863,7 @@ presentasi</li>
 						$noglk=1;
 						$countfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
 								WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
-							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC ");
-							
+							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC");
 							while ($gp = $getpertanyaanIA04B->fetch_assoc()){
 								if($countfria04B > 0){
 									$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
