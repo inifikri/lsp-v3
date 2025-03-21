@@ -33,9 +33,10 @@ if (isset($_REQUEST[$tutupakses])){
 $perbaikanakses='perbaikan';
 if (isset($_REQUEST[$perbaikanakses])){
 	unlink($logdigisign['file']);
-	$hapuslogdigisign="DELETE FROM logdigisign WHERE id_asesi='$_POST[id_asesi]' AND id_skema='$_POST[id_skemakkni]' AND nama_dokumen='FR.AI.05.TES TERTULIS PILIHAN GANDA'";
+	$hapuslogdigisign="DELETE FROM logdigisign WHERE id_asesi='$_POST[id_asesi]' AND id_jadwal='$_POST[id_jadwal]' AND id_skema='$_POST[id_skemakkni]' AND nama_dokumen='FR.AI.05.TES TERTULIS PILIHAN GANDA'";
 	$conn->query($hapuslogdigisign);
-	$sqlupdateakses="UPDATE `asesi_aksessoal` SET `status`='1' WHERE `id_skemakkni`='$_POST[id_skemakkni]' AND `id_asesi`='$_POST[id_asesi]' AND `id_jadwal`='$_POST[id_jadwal]' AND `jenis_soal`='$_POST[jenis_soal]'";
+	// Status 3 > Perbaikan
+	$sqlupdateakses="UPDATE `asesi_aksessoal` SET `status`='3' WHERE `id`='$_POST[id]'";
 	$conn->query($sqlupdateakses);
 	echo "<script>alert('Akses Soal untuk Asesi ini ($_POST[nama_asesi]) telah dibuka untuk perbaikan'); window.location = 'media.php?module=pesertaasesmen&idj=$_POST[id_jadwal]'</script>";
 }
