@@ -3125,6 +3125,7 @@
 		}
 		if (isset($_REQUEST['setujuiasesmen'])) {
 			$tgl_daftar = date("Y-m-d");
+			$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 			$querycek = "SELECT * FROM `asesi_tukjarakjauh` WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]' AND `status`='A'";
 			$resultc = $conn->query($querycek);
 			$row_cnt = $resultc->num_rows;
@@ -3151,7 +3152,6 @@
 			}
 			// end digital signature process =================================================
 			if ($row_cnt == 0) {
-				$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 				$conn->query($querydas);
 				//Notifikasi Email dan SMS====================================================
 				$sqlgetskema = "SELECT * FROM `skema_kkni` WHERE `id`='$_GET[id]'";
@@ -3749,7 +3749,7 @@
 																										$qasesiasesmen = $conn->query("SELECT * FROM asesi_tukjarakjauh WHERE `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'")->fetch_assoc();
 																										$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 																										$iddokumen = md5($url);
-																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
+																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' ORDER BY `id` DESC";
 																										$cektandatangan = $conn->query($sqlcektandatangan);
 																										$jumttd = $cektandatangan->num_rows;
 																										$ttdx = $cektandatangan->fetch_assoc();
@@ -4143,7 +4143,7 @@
 																<li><a href='form-fr-ia-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' target='_blank'>Unduh Formulir FR-IA-01</a></li>
 																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Unduh Formulir FR-IA-02</a></li>
 																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Input Formulir FR-IA-04A</a></li>
-																<li><a href='form-fr-ia-04A.php?asr=$_SESSION[namauser]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
+																<li><a href='form-fr-ia-04A.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
 																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Input Formulir FR-IA-04B</a></li>
 																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Unduh Formulir FR-IA-04B</a></li>
 																<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Formulir FR-IA-05</a></li>
@@ -6658,11 +6658,6 @@
 																												} else {
 																													$postPW = "0";
 																												}
-																												if (isset($_POST['checkboxDIT'])) {
-																													$postDIT = $_POST['checkboxDIT'];
-																												} else {
-																													$postDIT = "0";
-																												}
 																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											} else {
@@ -6708,11 +6703,6 @@
 																													$postPW = $_POST['checkboxPW'];
 																												} else {
 																													$postPW = "0";
-																												}
-																												if (isset($_POST['checkboxDIT'])) {
-																													$postDIT = $_POST['checkboxDIT'];
-																												} else {
-																													$postDIT = "0";
 																												}
 																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
@@ -6770,11 +6760,6 @@
 																												} else {
 																													$postPW = "0";
 																												}
-																												if (isset($_POST['checkboxDIT'])) {
-																													$postDIT = $_POST['checkboxDIT'];
-																												} else {
-																													$postDIT = "0";
-																												}
 																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											}
@@ -6825,11 +6810,6 @@
 																												$postPW = $_POST['checkboxPW'];
 																											} else {
 																												$postPW = "0";
-																											}
-																											if (isset($_POST['checkboxDIT'])) {
-																												$postDIT = $_POST['checkboxDIT'];
-																											} else {
-																												$postDIT = "0";
 																											}
 																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
@@ -6884,11 +6864,6 @@
 																											} else {
 																												$postPW = "0";
 																											}
-																											if (isset($_POST['checkboxDIT'])) {
-																												$postDIT = $_POST['checkboxDIT'];
-																											} else {
-																												$postDIT = "0";
-																											}
 																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										}
@@ -6933,7 +6908,7 @@
 																									echo "> L : Observasi Langsung";
 																									echo "</td>
 							</tr>
-							<tr><td>";
+							<tr><td colspan='2'>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
 																									if ($jjw['DPT'] == "1") {
 																										echo "checked";
@@ -6941,17 +6916,8 @@
 																										echo "";
 																									}
 																									echo "> T : Hasil Tes Tulis";
-																									echo "</td><td>";
-																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
-																									if ($jjw['DIT'] == "1") {
-																										echo "checked";
-																									} else {
-																										echo "";
-																									}
-																									echo "> L : Kegiatan Terstruktur (DIT)";
-																									echo "</td>";
-																									
-							echo "</tr>
+																									echo "</td>
+							</tr>
 							<tr><td colspan='2'>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPL' id='optionsDPL' value='1'";
 																									if ($jjw['DPL'] == "1") {
@@ -7431,7 +7397,7 @@
 																										echo "<li>Tinjauan proses asesmen</li>";
 																									}
 																									echo "</ol></p>
-						<p><b>Asesor :</b>
+						<p><b>Persetujuan/ Tanda Tangan yang telah diberikan : </b>
 						</p>";
 																									// cek tandatangan digital
 																									$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -7440,13 +7406,22 @@
 																									$cektandatangan = $conn->query($sqlcektandatangan);
 																									$jumttd = $cektandatangan->num_rows;
 																									$ttdx = $cektandatangan->fetch_assoc();
+
+																									$sqlcekttdasesi = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI' AND id_jadwal='$_GET[idj]' ORDER BY `waktu` DESC";
+																									$cektandatanganasesi = $conn->query($sqlcekttdasesi);
+																									$jumttdasesi = $cektandatanganasesi->num_rows;
+																									$ttdasesi = $cektandatanganasesi->fetch_assoc();
+
 																									if ($jumttd > 0) {
 																										echo "<div class='col-md-12'>
-									<label class='' for=''>Persetujuan/ Tanda Tangan yang telah Anda berikan:</label>
 									<br/>
+									<b>Asesor : </b> 
 									<img src='$ttdx[file]' width='400px'/>
+									<b>Asesi : </b>
+									<img src='../$ttdasesi[file]' width='400px'/>
 									<br/>
 								</div>";
+								
 																									} else {
 																										echo "<div class='col-md-12'>
 							<label class='' for=''>Tanda Tangan:</label>
@@ -9577,7 +9552,7 @@ keluaran yang telah ditetapkan.</li>
 			<?php 
 			$nounitkom=1;
 				for($i=0;$i < count($unit_kompetensi);++$i){
-					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jd[id_skemakkni]'");
+					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`=3");
 					
 					while($uk01 = $unit_kompetensi01->fetch_assoc()){
 			?>
@@ -9738,10 +9713,21 @@ keluaran yang telah ditetapkan.</li>
 			$noasr = 1;
 			$getasesor = $conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
 
-			$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+			// CEK TANDA TANGAN ASESI
+			$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' AND id_jadwal='$_GET[idj]' ORDER BY `waktu` DESC";
 			$cektandatangan = $conn->query($sqlcektandatangan);
 			$jumttd = $cektandatangan->num_rows;
 			$ttdx = $cektandatangan->fetch_assoc();
+			// var_dump($ttdx);
+
+			// CEK TANDATANGAN ASESOR
+			$sqlcektandatanganasesor = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$asr[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' AND id_jadwal='$_GET[idj]' ORDER BY `waktu` DESC";
+			$cekcektandatanganasesor = $conn->query($sqlcektandatanganasesor);
+			$jumttasesor = $cekcektandatanganasesor->num_rows;
+			$ttdasesor = $cekcektandatanganasesor->fetch_assoc();
+			// var_dump($ttdasesor);
+			
+			
 
 			// QUERY GET DATA ASESI ASESMEN
 			$sqlasesiasesmen =$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_skemakkni='$jd[id_skemakkni]' AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]'");
@@ -9822,10 +9808,10 @@ keluaran yang telah ditetapkan.</li>
 					$iddokumen = md5($url);
 					$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 					$alamatip = $_SERVER['REMOTE_ADDR'];
-					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9851,7 +9837,7 @@ keluaran yang telah ditetapkan.</li>
 				$folderPath = "../foto_tandatangan/";
 				if (empty($_POST['signed'])) {
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9898,7 +9884,7 @@ keluaran yang telah ditetapkan.</li>
 					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							$posttanggapan = 'tanggapan' . $gpp04B['idpertanyaan'];
@@ -9923,6 +9909,8 @@ keluaran yang telah ditetapkan.</li>
 				}
 			}
 			$tanggalasesmen = tgl_indo($jd['tgl_asesmen']);
+			$tanggalttdasesi = tgl_indo($ttdx['waktu']);
+			$tanggalttdasesor = tgl_indo($ttdasesor['waktu']);
 			echo "<!-- Main content -->
 			<section class='content'>
 				<div class='row'>
@@ -9977,7 +9965,8 @@ presentasi</li>
 						$noglk=1;
 						$countfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
 								WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
-							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC");
+							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC ");
+							
 							while ($gp = $getpertanyaanIA04B->fetch_assoc()){
 								if($countfria04B > 0){
 									$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
@@ -10050,19 +10039,23 @@ presentasi</li>
 						<?php		
 								echo "</td>
 							</tr>
-							<tr>
-								<td colspan='3'><b>Asesi :</b> </td>
-							</tr>
-							<tr>
-								<td>Nama </td>
-								<td>:</td>
-								<td>$rowAgen[nama]</td>
-							</tr>
-							<tr>
-								<td>Tanda Tangan/Tanggal </td>
-								<td>:</td>
-								<td></td>
-							</tr>
+						<tr>
+						<td colspan='3'><b>Asesi :</b> </td>
+					</tr>
+					<tr>
+						<td>Nama </td>
+						<td>:</td>
+						<td>$rowAgen[nama]</td>
+					</tr>
+					<tr>
+						<td>Tanda Tangan/Tanggal </td>
+						<td>:</td>";
+					if ($jumttd > 0) {
+						echo "<td>$tanggalttdasesi<br><img src='../$ttdx[file]' width='400px'/></td>";
+					}else{
+						echo "<td></td>";
+					}
+					echo "</tr>
 							<tr>
 								<td colspan='3'><b>Asesor :</b> </td>
 							</tr>
@@ -10082,8 +10075,8 @@ presentasi</li>
 							$sqlgetkeputusan = "SELECT * FROM `asesi_asesmen` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
 							$getkeputusan = $conn->query($sqlgetkeputusan);
 							$getk = $getkeputusan->fetch_assoc();
-							if ($jumttd > 0) {
-							echo	"<td><img src='$ttdx[file]' width='400px'/></td>
+							if ($jumttasesor > 0) {
+							echo	"<td>$tanggalttdasesor<br><img src='$ttdasesor[file]' width='400px'/></td>
 							</tr>
 						</table>";
 					} else {
@@ -10113,7 +10106,7 @@ presentasi</li>
 									<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 							</div>
 							<div class='col-md-4 col-sm-12 col-xs-12'>
-									<a href='form-fr-ia-03.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+									<a href='form-fr-ia-04B.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
 							</div>";
 																									if ($jumttd == 0) {
 																										echo "<div class='col-md-4 col-sm-12 col-xs-12'>
