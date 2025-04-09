@@ -2958,7 +2958,10 @@ elseif ($_GET['module'] == 'updatesyarat') {
 		$iddokumen = md5($url);
 		// $sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_dokumen`='$iddokumen' AND `penandatangan`='$namanya' ORDER BY `waktu` DESC";
 		// UPDATE @FHM-PUSTI 1 AGUSTUS 2023
-		$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$namanya' ORDER BY `waktu` DESC";
+		// $sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$namanya' ORDER BY `waktu` DESC";
+		$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND id_asesi='$_SESSION[namauser]' AND nama_dokumen='FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI' AND `penandatangan`='$namanya' ORDER BY `waktu` DESC";
+		// var_dump($sqlcektandatangan);
+		// tandain
 		$cektandatangan = $conn->query($sqlcektandatangan);
 		$jumttd = $cektandatangan->num_rows;
 		$ttdx = $cektandatangan->fetch_assoc();
