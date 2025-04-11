@@ -9,7 +9,7 @@
  **********************************************************************/
  include 'formatedstring.php';
  class exFPDF extends FPDF{
-   
+
     public function PageBreak(){
        return $this->PageBreakTrigger;
    }

@@ -18852,7 +18852,7 @@ if( isset( $_REQUEST['jadwalujiulangasesmen'] )){
 			if ($usia<91 && $as['pendidikan']>1){
 			echo "<div class='row'>
 		    	<div class='box-body'>
-					<h1>FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI</h1>
+					<h1>FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI++++</h1>
 					<h2>Bagian 1: Rincian Data Pemohon Sertifikasi</h2>
 					<h3>a. Data Pribadi</h3>
 					<div class='row'>

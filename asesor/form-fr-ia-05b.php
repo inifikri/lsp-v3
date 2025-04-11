@@ -692,22 +692,24 @@ if ($skortotal>0){
 }else{
 	$gradenilai=0;
 }
-$write=new easyTable($pdf, '{10,170}', 'width:180; align:C; font-family:arial; font-size:12');
-$write->easyCell('Catatan:', 'align:L; valign:T; colspan:2; font-style:I; font-size:11;');
-$write->printRow();
-$write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
-$write->easyCell('Pertanyaan bisa dalam bentuk benar dan salah, pilihan ganda, dan menjodohkan.', 'align:L; valign:T; font-style:I; font-size:11;');
-$write->printRow();
-$write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
-$write->easyCell('Daftar pertanyaan dapat berisi pertanyaan dari semua dimensi kompetensi. Jika ada pertanyaan yang tidak dijawab, maka dapat dieksplorasi dari menilai melalui pertanyaan verbal.', 'align:L; valign:T; font-style:I; font-size:11;');
-$write->printRow();
-$write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
-$write->easyCell('Pertanyaan juga dapat difokuskan pada akurasi dan presisi yang dapat membantu memberikan rekomendasi tindak lanjut untuk menilai.', 'align:L; valign:T; font-style:I; font-size:11;');
-$write->printRow();
-$write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
-$write->easyCell('Pertanyaan presisi jika tidak dapat dijawab, penilai disarankan untuk menambahkan lebih banyak latihan / bekerja di bawah pengawasan, sedangkan jika pertanyaan akurasi dilewatkan maka penilai direkomendasikan untuk pelatihan ulang.', 'align:L; valign:T; font-style:I; font-size:11;');
-$write->printRow();
-$write->endTable(5);
+
+
+// $write=new easyTable($pdf, '{10,170}', 'width:180; align:C; font-family:arial; font-size:12');
+// $write->easyCell('Catatan:', 'align:L; valign:T; colspan:2; font-style:I; font-size:11;');
+// $write->printRow();
+// $write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->easyCell('Pertanyaan bisa dalam bentuk benar dan salah, pilihan ganda, dan menjodohkan.', 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->printRow();
+// $write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->easyCell('Daftar pertanyaan dapat berisi pertanyaan dari semua dimensi kompetensi. Jika ada pertanyaan yang tidak dijawab, maka dapat dieksplorasi dari menilai melalui pertanyaan verbal.', 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->printRow();
+// $write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->easyCell('Pertanyaan juga dapat difokuskan pada akurasi dan presisi yang dapat membantu memberikan rekomendasi tindak lanjut untuk menilai.', 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->printRow();
+// $write->easyCell(chr(149), 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->easyCell('Pertanyaan presisi jika tidak dapat dijawab, penilai disarankan untuk menambahkan lebih banyak latihan / bekerja di bawah pengawasan, sedangkan jika pertanyaan akurasi dilewatkan maka penilai direkomendasikan untuk pelatihan ulang.', 'align:L; valign:T; font-style:I; font-size:11;');
+// $write->printRow();
+// $write->endTable(5);
 //end while unitkompetensi =============================================
 
 $write=new easyTable($pdf, '{70,120}', 'width:190; align:L; font-family:arial; font-size:12');
