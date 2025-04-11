@@ -9,6 +9,8 @@ ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 
+// Form-FR-IA-04a
+
 $sqlasesi="SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
 $asesi=$conn->query($sqlasesi);
 $as=$asesi->fetch_assoc();
@@ -88,11 +90,11 @@ $html = '
 <table border="0" cellpadding="2" cellspacing="0" style="width:190mm; font-family: Arial;">
     <tr>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="http://localhost/php7/lsp-v3/images/logolsp.png" width="400px"/>
+            <img src="../images/logolsp.png" width="400px"/>
         </td>
         <td style="width:130mm; text-align:center; font-size:14px; font-weight:bold;">' . $namalsp . '</td>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="http://localhost/php7/lsp-v3/images/logobnsp.jpeg" width="400px"/>
+            <img src="../images/logobnsp.jpeg" width="400px"/>
         </td>
     </tr>
     <tr>
@@ -267,7 +269,7 @@ while ($cta = $contentasesmenIA04->fetch_assoc()) {
 $html = '
     <table border="1" cellpadding="3" cellspacing="0" style="font-family: Arial; font-size:12px;">
         <tr>
-            <td align="center">Tanda Tangan Asesi<br><img src="../'.$ttdasesi['file'].'" width="400px"/></td>
+            <td align="center">Tanda Tangan Asesi<br><img src="'.$ttdasesi['file'].'" width="400px"/></td>
             <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
             <td align="center">Nama dan Tanda Tangan Supervisor (Jika ada)</td>
         </tr>
