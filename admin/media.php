@@ -74,16 +74,15 @@ echo "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.or
   <link rel='stylesheet' href='../plugins/timepicker/bootstrap-timepicker.min.css'>
   <!-- Select2 -->
   <link rel='stylesheet' href='../plugins/select2/select2.min.css'>
-  <!-- CKEditor -->
-  <link rel='stylesheet' href='https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css' />
   <!-- Theme style -->
   <link rel='stylesheet' href='../dist/css/AdminLTE.min.css'>
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel='stylesheet' href='../dist/css/skins/_all-skins.min.css'>
+  <link rel='stylesheet' href='https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css' />
   <!-- Script untuk Digital Signature (Tandatangan Digital) -->
    
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script> 
+    <script src='https://code.jquery.com/jquery-3.5.1.min.js' crossorigin='anonymous'></script>
     <link type='text/css' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css' rel='stylesheet'> 
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
    
@@ -333,66 +332,18 @@ include "content.php";
 <script src='../plugins/datatables/dataTables.bootstrap.min.js'></script>
 <!-- Page script -->";
 ?>
-<script type="importmap">
-            {
-                "imports": {
-                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.js",
-                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.3.1/"
-                }
-            }
-        </script>
-
-        <script type="module">
-            import {
-                ClassicEditor,
-                Essentials,
-                Bold,
-                Italic,
-                Font,
-                Paragraph
-            } from 'ckeditor5';
-
-            ClassicEditor
-                .create( document.querySelector( '#editor1' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: [
-                        'undo', 'redo', '|', 'bold', 'italic', '|',
-                        'fontSize'
-                    ],
-                } );
-            ClassicEditor
-                .create( document.querySelector( '#editor2' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: [
-                        'undo', 'redo', '|', 'bold', 'italic', '|',
-                        'fontSize'
-                    ],
-                } );
-            ClassicEditor
-                .create( document.querySelector( '#editor3' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: [
-                        'undo', 'redo', '|', 'bold', 'italic', '|',
-                        'fontSize'
-                    ],
-                } );
-            ClassicEditor
-                .create( document.querySelector( '#editor4' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: [
-                        'undo', 'redo', '|', 'bold', 'italic', '|',
-                        'fontSize'
-                    ],
-                } );
-            ClassicEditor
-                .create( document.querySelector( '#editor5' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: [
-                        'undo', 'redo', '|', 'bold', 'italic', '|',
-                        'fontSize'
-                    ],
-                } );
-        </script>
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+<script>
+  $(document).ready(function() {
+  $('#summernote').summernote();
+  $('#summernote1').summernote();
+  $('#summernote2').summernote();
+  $('#summernote3').summernote();
+  $('#summernote4').summernote();
+});
+</script>
 <script>
   $(function () {
     $('#example1').DataTable();
