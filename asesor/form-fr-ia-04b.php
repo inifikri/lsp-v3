@@ -19,6 +19,11 @@ $jadwal=$conn->query($sqljadwal);
 $jdq=$jadwal->fetch_assoc();
 $tgl_cetak = tgl_indo($jdq['tgl_asesmen']);
 
+// QUERY GET DATA ASESOR
+$queryasesor = "SELECT * FROM asesor WHERE no_ktp='$_GET[asesor]'";
+$qasesor = $conn->query($queryasesor);
+$asesor = $qasesor->fetch_assoc();
+
 $sqltuk="SELECT * FROM `tuk` WHERE `id`='$jdq[tempat_asesmen]'";
 $tuk=$conn->query($sqltuk);
 $tq=$tuk->fetch_assoc();
@@ -50,6 +55,21 @@ $sqlwil3b="SELECT * FROM `data_wilayah` WHERE `id_wil`='$wil2b[id_induk_wilayah]
 $wilayah3b=$conn->query($sqlwil3b);
 $wil3b=$wilayah3b->fetch_assoc();
 
+// GET ASESI ASESMEN
+$getfria04B=$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]'");
+$gtas =$getfria04B->fetch_assoc();
+
+// GET TANDA TANGAN ASESOR
+$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$asesor[no_ktp]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+$cektandatangan = $conn->query($sqlcektandatangan);
+$jumttd = $cektandatangan->num_rows;
+$ttdx = $cektandatangan->fetch_assoc();
+
+// GET TANDA TANGAN ASESI
+$sqlcektandatanganasesi = "SELECT * FROM `logdigisign` WHERE `id_jadwal`='$_GET[idj]' AND id_skema='$jdq[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$as[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+$cektandatanganasesi = $conn->query($sqlcektandatanganasesi);
+$jumttdasesi = $cektandatanganasesi->num_rows;
+$ttdxasesi = $cektandatanganasesi->fetch_assoc();
 
 $pdf=new exFPDF();
 $pdf->AddPage();
@@ -75,9 +95,9 @@ $alamatlsptampil=$alamatlsp." ".$alamatlsp2." ".$telpemail;
 //$pdf->Cell(0, 5, '', '0', 1, 'C');
 $pdf->Ln();
 $write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logobnsp.jpg, w25, h14;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();
@@ -179,7 +199,8 @@ $write->printRow();
 $write->endTable(5);
 
 // QUERY MEMANGGIL DATA LINGKUP KEGIATAN
-$sqllingkupkegiatan="SELECT * FROM `lingkupkegiatan_formIA04B` WHERE `id_skemakkni`='$sq[id]'";
+// $sqllingkupkegiatan="SELECT * FROM `lingkupkegiatan_formIA04B` WHERE `id_skemakkni`='$sq[id]'";
+$sqllingkupkegiatan="SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sq[id] ORDER BY b.id ASC";
 $getlingkupkegiatan=$conn->query($sqllingkupkegiatan);
 
 $write=new easyTable($pdf, '{130,60,40,30,30}', 'width:190; align:L; font-family:arial; font-size:12');
@@ -200,8 +221,8 @@ while ($lk=$getlingkupkegiatan->fetch_assoc()){
 	$gc=$getfria04B->fetch_assoc();
 
 	$write->easyCell($lk['no_urutan'].'. '.$lk['lingkupkegiatan'], 'align:L; border:LTBR;');
-	$write->easyCell('', 'align:L; border:LTBR; font-style:B;');
-	$write->easyCell('', 'align:L; border:LTBR; font-style:B;');
+	$write->easyCell($lk['pertanyaan'].'  Tanggapan :'.$gfr['tanggapan'], 'align:L; border:LTBR;');
+	$write->easyCell($gfr['standar_kompetensikerja'], 'align:L; border:LTBR;');
 	switch ($gfr['pencapaian']){
 		default:
 			$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LTBR;');
@@ -220,10 +241,76 @@ while ($lk=$getlingkupkegiatan->fetch_assoc()){
 }
 $write->endTable(5);
 
+// REKOMENDASI ASESOR
+$write=new easyTable($pdf, '{50,10,130}', 'width:190; align:L; font-family:arial; font-size:12');
+$write->easyCell('Rekomendasi Asesor:', 'valign:T; border:LTR;');
+$write->easyCell("Asesi telah memenuhi/belum memenuhi pencapaian seluruh kriteria unjuk kerja, direkomendasikan:\n", 'valign:T; align:L; border:LTR; colspan:2;');
+$write->printRow();
+$write->easyCell('', 'border:LR;');
+if($gtas['rekomendasi_IA04B'] == 'K'){
+	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:L; border:L;');
+}else{
+	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:L; border:L;');
+}
+$write->easyCell('Kompeten', 'align:L; border:R;');
+$write->printRow();
+$write->easyCell('', 'border:LR;');
+if($gtas['rekomendasi_IA04B'] == 'BK'){
+	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:L; border:L;');
+}else{
+	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:L; border:L;');
+}
+$write->easyCell('Belum Kompeten', 'align:L; border:R;');
+$write->printRow();
+$write->endTable(0);
+$write = new easyTable($pdf, '{190}', 'border:1;font-size:12');
+$write->rowStyle('font-size:10; font-style:B;');
+$write->easyCell('Asesi:', 'align:L; border:LTRB;font-size:12');
+$write->printRow();
+$write->endTable(0);
+$write = new easyTable($pdf, '{50,140}', 'border:1;font-size:12');
+$write->easyCell('Nama', 'border:LTRB;');
+$write->easyCell($as['nama'], 'border:LTRB;');
+$write->printRow();
+$write->easyCell('Tanda tangan / Tanggal', 'border:LTRB;');
+$write->easyCell(tgl_indo($ttdxasesi['waktu']),'img:../'.$ttdxasesi['file'].',h20,border:LTRB;');
+$write->printRow();
+$write->endTable(0);
+
+// Asesor
+$write = new easyTable($pdf, '{190}', 'border:1;font-size:12');
+$write->easyCell('Asesor:', 'align:L; border:LTRB;font-style:B');
+$write->printRow();
+$write->endTable(0);
+
+$write = new easyTable($pdf, '{50,140}', 'border:1;font-size:12');
+$write->easyCell('Nama', 'border:LTRB;');
+$write->easyCell($namaasesor, 'border:LTRB;');
+$write->printRow();
+$write->easyCell('No. Reg', 'border:LTRB;font-size:12');
+$write->easyCell($noregasesor, 'border:LTRB;');
+$write->printRow();
+$write->easyCell('Tanda tangan / Tanggal', 'border:LTRB;');
+$write->easyCell(tgl_indo($ttdx['waktu']),'img:'.$ttdx['file'].',h20,border:LTRB;');
+$write->printRow();
+
+$write->easyCell('Tanda tangan/Tanggal', 'rowspan:2; border:LTRB;font-size:12');
+$write->easyCell(':', 'rowspan:2; border:LTRB;');
+$write->printRow();
+$write->endTable(5);
+
 $write=new easyTable($pdf, '{200}', 'width:190; align:L; font-family:arial; font-size:12');
 $write->easyCell('PENYUSUN DAN VALIDATOR', 'align:L; font-style:B;');
 $write->printRow();
 $write->endTable(0);
+
+// GET QUERY JADWAL ASESOR PENYUSUN
+$queryjadwalpenyusun=$conn->query("SELECT * FROM jadwal_penyusun WHERE id_jadwal='$_GET[idj]'");
+$countjadwalpenyusun=$queryjadwalpenyusun->num_rows;
+
+// GET QUERY JADWAL VERIFIKATOR FORM
+$queryverifikatorform=$conn->query("SELECT * FROM asesor_verifikatorform WHERE id_jadwal='$_GET[idj]'");
+$countverifikatorform=$queryverifikatorform->num_rows;
 
 $write=new easyTable($pdf, '{40,20,60,60,100}', 'width:190; align:L; font-family:arial; font-size:12');
 $write->easyCell('STATUS', 'align:L; border:LTBR; font-style:B;');
@@ -232,28 +319,26 @@ $write->easyCell('NAMA', 'align:L; border:LTBR; font-style:B;');
 $write->easyCell('NOMOR MET', 'align:L; border:LTBR; font-style:B;');
 $write->easyCell('TANDA TANGAN DAN TANGGAL', 'align:L; border:LTBR; font-style:B;');
 $write->printRow();
-$write->easyCell('PENYUSUN', 'align:L; rowspan:2; border:LTBR;');
-$write->easyCell('1', 'align:L; border:LTBR;');
-$write->easyCell('MARTDIAN RATNA SARI', 'align:L; border:LTBR;');
-$write->easyCell('MET.000.004268 2018', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->printRow();
-$write->easyCell('2', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->printRow();
-$write->easyCell('VALIDATOR', 'align:L; rowspan:2; border:LTBR;');
-$write->easyCell('1', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->printRow();
-$write->easyCell('2', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->easyCell('', 'align:L; border:LTBR;');
-$write->printRow();
+$write->easyCell('PENYUSUN','rowspan:'.$countjadwalpenyusun.'; align:L; border:LTBR;');
+while($jps = $queryjadwalpenyusun->fetch_assoc()){
+	$queryasesor=$conn->query("SELECT * FROM asesor WHERE id=$jps[id_asesor]");
+	$fetchasesor=$queryasesor->fetch_assoc();
+	$write->easyCell('1', 'align:L; border:LTBR;');
+	$write->easyCell($fetchasesor['nama'], 'align:L; border:LTBR;');
+	$write->easyCell($fetchasesor['no_induk'], 'align:L; border:LTBR;');
+	$write->easyCell('', 'align:L; border:LTBR;');
+	$write->printRow();
+}	
+$write->easyCell('VERIFIKATOR','rowspan:'.$countverifikatorform.'; align:L; border:LTBR;');
+while($jvf = $queryverifikatorform->fetch_assoc()){
+	$queryasesor=$conn->query("SELECT * FROM asesor WHERE no_induk='$jvf[id_verifikatorform]'");
+	$fetchasesor=$queryasesor->fetch_assoc();
+	$write->easyCell('1', 'align:L; border:LTBR;');
+	$write->easyCell($fetchasesor['nama'], 'align:L; border:LTBR;');
+	$write->easyCell($fetchasesor['no_induk'], 'align:L; border:LTBR;');
+	$write->easyCell('', 'align:L; border:LTBR;');
+	$write->printRow();
+}
 
 $pdf->AliasNbPages();
 $write->endTable(0);

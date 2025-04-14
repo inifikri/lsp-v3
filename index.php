@@ -38,6 +38,7 @@ error_reporting(E_ALL);
 	<meta name="author" content="IT-RAYS">
 
 
+
 	<!-- Mobile Meta -->
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
