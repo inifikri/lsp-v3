@@ -4092,18 +4092,15 @@
 																											$asesi = $conn->query($sqlasesi);
 																											$as = $asesi->fetch_assoc();
 																											echo "<tr class=gradeX><td>$no</td><td>";
-																											echo "<div class='btn-group'>
-								<button type='button' class='btn btn-success'>Aksi</button>
+																											echo "<div class='margin'><div class='btn-group '>
+								<button type='button' class='btn btn-success'>Input</button>
 								<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'>
 									<span class='caret'></span>
 																<span class='sr-only'>Toggle Dropdown</span>
 															</button>
 															<ul class='dropdown-menu' role='menu'>
-																<li><a href='form-checklist.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST'>Unduh Checklist Form</a></li>
-																<!--<li><a href='form-mak01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST MENGASES KOMPETENSI'>Unduh FR-MAK-01</a></li>-->
-																<li><a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Unduh APL-01</a></li>
-																<li><a href='portfolio-asesi.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Unduh Portfolio Asesi</a></li>
-																<li>";
+															<h6 class='dropdown-header'>Input</h6>
+															<li class='divider'></li>";
 																											$sqlcekapl02 = "SELECT * FROM `asesi_apl02` WHERE `verifikasi_asesor1` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' OR `verifikasi_asesor2` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' OR `verifikasi_asesor3` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' OR `verifikasi_asesor4` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]'";
 																											$cekapl02 = $conn->query($sqlcekapl02);
 																											$jumcekapl02 = $cekapl02->num_rows;
@@ -4112,57 +4109,65 @@
 																											$jnsapl02 = $jenisapl02->fetch_assoc();
 																											if ($jnsapl02['apl02'] == 'elemen') {
 																												if ($jumcekapl02 == 0) {
-																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>Input FORM-APL-02</a></li>
-													<li><a href='form-apl-02-el.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>FORM-APL-02</a></li>";
 																												} else {
-																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>
-													<li><a href='form-apl-02-el.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>";
 																												}
 																											} else {
 																												if ($jumcekapl02 == 0) {
-																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>Input FORM-APL-02</a></li>
-													<li><a href='form-apl-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>FORM-APL-02</a></li>";
 																												} else {
-																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>
-													<li><a href='form-apl-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>";
 																												}
 																											}
-																											echo "<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=1' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 1' target='_blank'>Unduh FORM-MAPA-01 Kandidat 1</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=2' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 2' target='_blank'>Unduh FORM-MAPA-01 Kandidat 2</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=3' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 3' target='_blank'>Unduh FORM-MAPA-01 Kandidat 3</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=4' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 4' target='_blank'>Unduh FORM-MAPA-01 Kandidat 4</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=5' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 5' target='_blank'>Unduh FORM-MAPA-01 Kandidat 5</a></li>
-																<li><a href='form-mapa-02.php?idsk=$pm[id_skemakkni]' title='FORMULIR PETA MUK DARI HASIL PENDEKATAN ASESMEN DAN PERENCANAAN ASESMEN' target='_blank'>Unduh FORM-MAPA-02</a></li>
-																<li><a href='?module=form-fr-ak-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN'>Input Formulir FR-AK-01</a></li>
-																<li><a href='form-fr-ak-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN' target='_blank'>Unduh Formulir FR-AK-01</a></li>
-																<li><a href='?module=form-fr-ak-02&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Input Formulir FR-AK-02</a></li>
-															<li><a href='form-fr-ak-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Unduh Formulir FR-AK-02</a></li>
-																<li><a href='form-fr-ak-03.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN' target='_blank'>Unduh Formulir FR-AK-03</a></li>
-																<li><a href='form-fr-ak-04.php?idass=$pm[id]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR BANDING ASESMEN' target='_blank'>Unduh Formulir FR-AK-04</a></li>
-																<li><a href='?module=form-fr-ia-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Input Formulir FR-IA-01</a></li>
-																<li><a href='form-fr-ia-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' target='_blank'>Unduh Formulir FR-IA-01</a></li>
-																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Unduh Formulir FR-IA-02</a></li>
-																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Input Formulir FR-IA-04A</a></li>
-																<li><a href='form-fr-ia-04A.php?asr=$_SESSION[namauser]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
-																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Input Formulir FR-IA-04B</a></li>
-																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Unduh Formulir FR-IA-04B</a></li>
-																<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Formulir FR-IA-05</a></li>
-																<li><a href='form-fr-ia-05b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='JAWABAN PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Jawaban Asesi FR-IA-05</a></li>
-																<li><a href='form-fr-ia-06.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS ESAI' target='_blank'>Unduh Formulir FR-IA-06</a></li>
-																<li><a href='form-fr-ia-06a.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='LEMBAR KUNCI JAWABAN PERTANYAAN TERTULIS ESAI' target='_blank'>Unduh Formulir FR-IA-06.A</a></li>
-																<li><a href='?module=form-fr-ia-06&ida=$pm[id_asesi]&idj=$_GET[idj]' title='KOREKSI JAWABAN PERTANYAAN TERTULIS ESAI'>Input Penilaian Formulir FR-IA-06.B</a></li>
-																<li><a href='form-fr-ia-06b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='LEMBAR JAWABAN PERTANYAAN TERTULIS ESAI' target='_blank'>Unduh Formulir FR-IA-06.B</a></li>
-																<li><a href='?module=form-fr-ia-07&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT JAWABAN PERTANYAAN LISAN ASESI'>Input Penilaian Formulir FR-IA-07</a></li>
-																<li><a href='form-fr-ia-07.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN LISAN' target='_blank'>Unduh Formulir FR-IA-07</a></li>
-																<li><a href='?module=form-fr-ia-08&ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO'>Input Formulir FR-IA-08</a></li>
-																<li><a href='form-fr-ia-08.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO' target='_blank'>Unduh Formulir FR-IA-08</a></li>
-																<li><a href='?module=form-fr-ia-09&ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN WAWANCARA'>Input Formulir FR-IA-09</a></li>
-																<li><a href='form-fr-ia-10.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='KLARIFIKASI BUKTI PIHAK KETIGA' target='_blank'>Unduh Formulir FR-IA-10</a></li>
-																<li><a href='?module=peninjauasesmen' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN'>Input Formulir FR-IA-11</a></li>
-																<li><a href='form-fr-ia-11.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN' target='_blank'>Unduh Formulir FR-IA-11</a></li>
-																<li><a href='form-fr-va.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='MEMBERIKAN KONTRIBUSI DALAM VALIDASI ASESMEN' target='_blank'>Unduh Formulir FR-VA</a></li>
+																											echo "
+																<li><a href='?module=form-fr-ak-02&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Formulir FR-AK-02</a></li>
+																<li><a href='?module=form-fr-ia-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Formulir FR-IA-01</a></li>
+																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Formulir FR-IA-04A</a></li>
+																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Formulir FR-IA-04B</a></li>
+																<li><a href='?module=form-fr-ia-06&ida=$pm[id_asesi]&idj=$_GET[idj]' title='KOREKSI JAWABAN PERTANYAAN TERTULIS ESAI'>Penilaian Formulir FR-IA-06.B</a></li>
+																<li><a href='?module=form-fr-ia-07&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT JAWABAN PERTANYAAN LISAN ASESI'>Penilaian Formulir FR-IA-07</a></li>
+																<li><a href='?module=form-fr-ia-08&ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO'>Formulir FR-IA-08</a></li>
+																<li><a href='?module=form-fr-ia-09&ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN WAWANCARA'>Formulir FR-IA-09</a></li>
+																<li><a href='?module=peninjauasesmen' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN'>Formulir FR-IA-11</a></li>
 															</ul>
 													</div>";
+																											echo "&nbsp;<div class='btn-group'>
+								<button type='button' class='btn btn-info'>Unduh</button>
+								<button type='button' class='btn btn-info dropdown-toggle' data-toggle='dropdown'>
+									<span class='caret'></span>
+																<span class='sr-only'>Toggle Dropdown</span>
+															</button>
+															<ul class='dropdown-menu' role='menu'>
+															<h6 class='dropdown-header'>Unduh</h6>
+															<li class='divider'></li>
+																<li><a href='form-checklist.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST'>Checklist Form</a></li>
+																<!--<li><a href='form-mak01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST MENGASES KOMPETENSI'>FR-MAK-01</a></li>-->
+																<li><a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Form APL-01</a></li>
+																<li><a href='portfolio-asesi.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Portfolio Asesi</a></li>
+																<li>";
+																echo "<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=1' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 1' target='_blank'>FORM-MAPA-01 Kandidat 1</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=2' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 2' target='_blank'>FORM-MAPA-01 Kandidat 2</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=3' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 3' target='_blank'>FORM-MAPA-01 Kandidat 3</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=4' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 4' target='_blank'>FORM-MAPA-01 Kandidat 4</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=5' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 5' target='_blank'>FORM-MAPA-01 Kandidat 5</a></li>
+																<li><a href='form-mapa-02.php?idsk=$pm[id_skemakkni]' title='FORMULIR PETA MUK DARI HASIL PENDEKATAN ASESMEN DAN PERENCANAAN ASESMEN' target='_blank'>FORM-MAPA-02</a></li>
+																<li><a href='form-fr-ak-03.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN' target='_blank'>Formulir FR-AK-03</a></li>
+																<li><a href='form-fr-ak-04.php?idass=$pm[id]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR BANDING ASESMEN' target='_blank'>Formulir FR-AK-04</a></li>
+																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Formulir FR-IA-02</a></li>";
+																if($pm['id_skemakkni'] != 2){
+																	echo "<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Formulir FR-IA-05</a></li>
+																<li><a href='form-fr-ia-05b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='JAWABAN PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Jawaban Asesi FR-IA-05</a></li>";
+																}
+																echo "<li><a href='form-fr-ia-06.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS ESAI' target='_blank'>Formulir FR-IA-06</a></li>
+																<li><a href='form-fr-ia-06a.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='LEMBAR KUNCI JAWABAN PERTANYAAN TERTULIS ESAI' target='_blank'>Formulir FR-IA-06.A</a></li>
+																<li><a href='form-fr-ia-07.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN LISAN' target='_blank'>Formulir FR-IA-07</a></li>
+																<li><a href='form-fr-ia-08.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO' target='_blank'>Formulir FR-IA-08</a></li>
+																<li><a href='form-fr-ia-10.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='KLARIFIKASI BUKTI PIHAK KETIGA' target='_blank'>Formulir FR-IA-10</a></li>
+																<li><a href='form-fr-ia-11.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN' target='_blank'>Formulir FR-IA-11</a></li>
+																<li><a href='form-fr-va.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='MEMBERIKAN KONTRIBUSI DALAM VALIDASI ASESMEN' target='_blank'>Formulir FR-VA</a></li>
+															</ul>
+													</div></div>";
 																											/*echo "<a href='form-checklist.php?ida=$pm[id_asesi]&idj=$_GET[idj]' class='btn btn-primary btn-xs btn-block' title='FORMULIR CHECKLIST'>Unduh Checklist Form</a><br>";
 							echo "<a href='form-mak01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' class='btn btn-primary btn-xs btn-block' title='FORMULIR CHECKLIST MENGASES KOMPETENSI'><span class='badge bg-green'>1</span>Unduh FR-MAK-01</a><br>";
 							echo "<a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' class='btn btn-primary btn-xs btn-block btn-social'><i>2</i>Unduh Formulir APL-01</a><br>";
@@ -4308,6 +4313,7 @@
 																											$hitungskor = "SELECT SUM(`skor`) AS `TotSkor` FROM `asesmen_ia05` WHERE `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$skortotal = $conn->query($hitungskor);
 																											$skorx = $skortotal->fetch_assoc();
+																											if($pm['id_skemakkni'] != 2){
 																											if ($statussoalia05 > 0) {
 																												// hitung skor IA 05
 																												$sqlgetunitkompetensib = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$pm[id_skemakkni]'";
@@ -4352,11 +4358,13 @@
 																											} else {
 																												echo "</br><font color='red'><b>Belum mengerjakan soal pilihan ganda</b></font><br>";
 																											}
+																										}
 																											// cek akses asesi ke soal
 																											$sqlgetaksessoal = "SELECT * FROM `asesi_aksessoal` WHERE `id_skemakkni`='$pm[id_skemakkni]' AND `id_asesi`='$pm[id_asesi]' AND `id_jadwal`='$_GET[idj]' AND `jenis_soal`='FR.IA.05'";
 																											$getaksessoal = $conn->query($sqlgetaksessoal);
 																											$gaso = $getaksessoal->fetch_assoc();
 																											$jgaso = $getaksessoal->num_rows;
+																											if($pm['id_skemakkni'] != 2){
 																											if ($jgaso > 0) {
 																												switch ($gaso['status']) {
 																													case "1":
@@ -4400,6 +4408,7 @@
 								<input type='submit' class='btn btn-success btn-xs' name='bukaaksessoal' value='Buka Akses Soal Pilihan Ganda'>
 								</form>";
 																											}
+																										}
 																											// cek apakah sudah mengerjakan soal ia 06
 																											$sqlcekstatussoalia06 = "SELECT `id_asesi` FROM `asesmen_ia06` WHERE `id_asesi`='$pm[id_asesi]'";
 																											$cekstatussoalia06 = $conn->query($sqlcekstatussoalia06);
@@ -5173,7 +5182,7 @@
 							<br/>
 							<button id='clear'>Hapus Tanda Tangan</button>
 							<textarea id='signature64' name='signed' style='display: none'></textarea>
-					</div>
+					</div><br>
 			<script type='text/javascript'>
 				var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
 				$('#clear').click(function(e) {
@@ -5182,7 +5191,7 @@
 					$('#signature64').val('');
 				});
 			</script>";
-																										echo "<div class='box-footer'>
+																										echo "<br><br><div class='box-footer mt-10'>
 									<div class='col-md-4 col-sm-12 col-xs-12'>
 					<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 			</div>
@@ -6663,7 +6672,7 @@
 																												} else {
 																													$postDIT = "0";
 																												}
-																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postDIT',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											} else {
 																												$image_parts = explode(";base64,", $_POST['signed']);
@@ -6714,7 +6723,7 @@
 																												} else {
 																													$postDIT = "0";
 																												}
-																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											}
 																										} else {
@@ -6725,7 +6734,7 @@
 					<h4><i class='icon fa fa-check'></i> Persetujuan Asesor berhasil disimpan</h4>
 					Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul].</b><br>
 					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>";
-																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
+																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											} else {
 																												$image_parts = explode(";base64,", $_POST['signed']);
@@ -6775,7 +6784,7 @@
 																												} else {
 																													$postDIT = "0";
 																												}
-																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
+																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$postDIT','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											}
 																										}
@@ -6831,7 +6840,7 @@
 																											} else {
 																												$postDIT = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										} else {
 																											// UPDATE @FHM-PUSTI 7 AGUSTUS 2023 : Hapus data logdigisign Asesi
@@ -6889,7 +6898,7 @@
 																											} else {
 																												$postDIT = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										}
 																									}
@@ -9738,13 +9747,20 @@ keluaran yang telah ditetapkan.</li>
 			$noasr = 1;
 			$getasesor = $conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
 
-			$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+			// TANDATANGAN ASESOR
+			$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_jadwal`='$_GET[idj]' AND id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
 			$cektandatangan = $conn->query($sqlcektandatangan);
 			$jumttd = $cektandatangan->num_rows;
 			$ttdx = $cektandatangan->fetch_assoc();
 
+			// TANDATANGAN ASESI
+			$sqlcektandatanganasesi = "SELECT * FROM `logdigisign` WHERE `id_jadwal`='$_GET[idj]' AND id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+			$cektandatanganasesi = $conn->query($sqlcektandatanganasesi);
+			$jumttdasesi = $cektandatanganasesi->num_rows;
+			$ttdxasesi = $cektandatanganasesi->fetch_assoc();
+
 			// QUERY GET DATA ASESI ASESMEN
-			$sqlasesiasesmen =$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_skemakkni='$jd[id_skemakkni]' AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]'");
+			$sqlasesiasesmen =$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]'");
 			$gtas =$sqlasesiasesmen->fetch_assoc();
 			// GET DATA ASESMEN FORM-FR-IA04B
 
@@ -10039,7 +10055,6 @@ presentasi</li>
 										<input class="form-check-input" type="radio" name="rekomendasi" value="K" id="flexRadioDefault1" <?php if($gtas['rekomendasi_IA04B'] == 'K'){ echo 'checked'; }?>>
 										<label class="form-check-label" for="flexRadioDefault1">
 											Kompeten
-										</label>
 									</div>		
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="rekomendasi" value="BK" id="flexRadioDefault2" <?php if($gtas['rekomendasi_IA04B'] == 'BK'){ echo 'checked'; }?>>
@@ -10061,7 +10076,7 @@ presentasi</li>
 							<tr>
 								<td>Tanda Tangan/Tanggal </td>
 								<td>:</td>
-								<td></td>
+								<td>".tgl_indo($ttdxasesi['waktu'])."$ttdxasesi[file]<br><img src='../$ttdxasesi[file]' width='400px'/></td>
 							</tr>
 							<tr>
 								<td colspan='3'><b>Asesor :</b> </td>
@@ -10083,7 +10098,7 @@ presentasi</li>
 							$getkeputusan = $conn->query($sqlgetkeputusan);
 							$getk = $getkeputusan->fetch_assoc();
 							if ($jumttd > 0) {
-							echo	"<td><img src='$ttdx[file]' width='400px'/></td>
+							echo	"<td>".tgl_indo($ttdx['waktu'])."<br><img src='$ttdx[file]' width='400px'/></td>
 							</tr>
 						</table>";
 					} else {
@@ -10113,7 +10128,7 @@ presentasi</li>
 									<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 							</div>
 							<div class='col-md-4 col-sm-12 col-xs-12'>
-									<a href='form-fr-ia-03.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+									<a href='form-fr-ia-04B.php?ida=$_GET[ida]&idj=$_GET[idj]&asesor=$_SESSION[namauser]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
 							</div>";
 																									if ($jumttd == 0) {
 																										echo "<div class='col-md-4 col-sm-12 col-xs-12'>
