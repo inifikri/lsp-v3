@@ -684,6 +684,97 @@ while ($unkb=$getunitkompetensib->fetch_assoc()){
 	}
 	$write->endTable(5);
 
+
+
+$write=new easyTable($pdf, '{30,80,80}', 'width:190; align:L; font-family:arial; font-size:12');
+$write->easyCell('Nama:', 'align:L; valign:M; border:LTRB; rowspan:2');
+$write->easyCell('Asesi:', 'align:L; valign:T;  border:TR;');
+$write->easyCell('Asesor:', 'align:L; valign:T;  border:TR;');
+$write->printRow();
+$write->easyCell($as['nama'], 'align:L; border:LBR; font-style:B;');
+	$noasr=1;
+	$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
+	while ($gas=$getasesor->fetch_assoc()){
+		$sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
+		$asesor=$conn->query($sqlasesor);
+		$asr=$asesor->fetch_assoc();
+		if (!empty($asr['gelar_depan'])){
+			if (!empty($asr['gelar_blk'])){
+				$namaasesor=$asr['gelar_depan']." ".$asr['nama'].", ".$asr['gelar_blk'];
+			}else{
+				$namaasesor=$asr['gelar_depan']." ".$asr['nama'];
+			}
+		}else{
+			if (!empty($asr['gelar_blk'])){
+				$namaasesor=$asr['nama'].", ".$asr['gelar_blk'];
+			}else{
+				$namaasesor=$asr['nama'];
+			}
+		}
+		$namaasesor=$noasr.'. '.$namaasesor;
+		$noasr++;
+
+	}
+$write->easyCell($namaasesor, 'align:L; border:LBR; font-style:B;');
+$write->printRow();
+
+$sqlidentitas="SELECT * FROM `identitas`";
+$identitas=$conn->query($sqlidentitas);
+$iden=$identitas->fetch_assoc();
+
+// tandatangan Asesi
+$namaasesi=$as['nama'];
+$urltandatangan=$iden['url_domain']."/media.php?module=form-ia-01&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
+$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' AND `penandatangan`='$namaasesi' AND `url_ditandatangani`='$urltandatangan' ORDER BY `id` DESC";
+$cekttdasesiapl01=$conn->query($sqlcekttdasesiapl01);
+$jumttdasesi=$cekttdasesiapl01->num_rows;
+$ttdas=$cekttdasesiapl01->fetch_assoc();
+
+// tandatangan Asesor LSP
+$urltandatanganadmin=$iden['url_domain']."/asesor/media.php?module=form-fr-ia-01&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
+$sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganadmin' ORDER BY `id` DESC";
+$cekttdadminapl01=$conn->query($sqlcekttdadminapl01);
+$jumttdadmin=$cekttdadminapl01->num_rows;
+$ttdad=$cekttdadminapl01->fetch_assoc();
+
+//$tglttdasesi=tgl_indo($jjw['tanggal_asesittd']);
+if ($jumttdasesi>0){
+	$write->easyCell('Tanda Tangan dan Tanggal', 'align:L; border:LTBR; rowspan:2');
+	$write->easyCell($tgl_cetak, 'align:L; border:TR; font-style:TB;');
+	if ($jumttdadmin>0){
+		$write->easyCell($tgl_cetak, 'align:L; border:TR;');
+	}else{
+		$write->easyCell('', 'align:L; border:TR;');
+	}
+	$write->printRow();
+	$write->easyCell('', 'img:../'.$ttdas['file'].', h20; align:C; valign:T; font-size:10; font-style:B; border:BR;');
+	if ($jumttdadmin>0){
+		$write->easyCell('', 'img:'.$ttdad['file'].', h20; align:C; valign:T; font-size:10; font-style:B; border:BR;');
+	}else{
+		$write->easyCell('', 'align:L; border:BR;');
+	}
+	$write->printRow();
+}else{
+	$write->easyCell('Tanda Tangan dan Tanggal', 'align:L; border:LTBR; rowspan:2');
+	$write->easyCell($tgl_cetak, 'align:L; border:TR; font-style:TB;');
+	if ($jumttdadmin>0){
+		$write->easyCell($tgl_cetak, 'align:L; border:TR;');
+	}else{
+		$write->rowStyle('min-height:30');
+		$write->easyCell('', 'align:L; border:TR;');
+	}
+	$write->printRow();
+	$write->easyCell('', 'align:L; border:BR;');
+	if ($jumttdadmin>0){
+		$write->easyCell('', 'img:'.$ttdad['file'].', h20; align:C; valign:T; font-size:10; font-style:B; border:BR;');
+	}else{
+		$write->easyCell('', 'align:L; border:BR;');
+	}
+	$write->printRow();
+}
+
+$write->endTable(0);
+
 }
 // GRADE NILAI
 $jumskorfull=$nopp-1;
@@ -692,6 +783,7 @@ if ($skortotal>0){
 }else{
 	$gradenilai=0;
 }
+
 
 
 // $write=new easyTable($pdf, '{10,170}', 'width:180; align:C; font-family:arial; font-size:12');

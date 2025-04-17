@@ -4360,14 +4360,55 @@
 																											if ($jgaso > 0) {
 																												switch ($gaso['status']) {
 																													case "1":
-																														echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
-										<input type='hidden' name='nama_asesi' value='$as[nama]'>
-										<input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
-										<input type='hidden' name='id_jadwal' value='$_GET[idj]'>
-										<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
-										<input type='hidden' name='jenis_soal' value='FR.IA.05'>
-										<input type='submit' class='btn btn-danger btn-xs' name='tutupaksessoal' value='Tutup Akses Soal Pilihan Ganda'>
-										</form>";
+
+																														echo "<input type='button' class='btn btn-danger btn-xs' value='Tutup Akses Soal Pilihan Ganda' data-toggle='modal' data-target='#modalKonfirmasi'>
+
+<div class='modal fade' id='modalKonfirmasi' tabindex='-1' role='dialog' aria-labelledby='modalKonfirmasiLabel'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <form role='form' method='POST' action='aksessoal.php' enctype='multipart/form-data'> 
+        <input type='hidden' name='nama_asesi' value='$as[nama]'>
+        <input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
+        <input type='hidden' name='id_jadwal' value='$_GET[idj]'>
+        <input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+        <input type='hidden' name='jenis_soal' value='FR.IA.05'>
+        <div class='modal-header'>
+          <h4 class='modal-title' id='modalKonfirmasiLabel'>Konfirmasi</h4>
+        </div>
+        <div class='modal-body'>
+         <div class='col-md-12'>
+							<label class='' for=''>Tanda Tangan:</label>
+							<br/>
+							<div id='sig' ></div>
+							<br/>
+							<button id='clear'>Hapus Tanda Tangan</button>
+							<textarea id='signature64' name='signed' style='display: none'></textarea>
+					</div>
+			<script type='text/javascript'>
+				var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
+				$('#clear').click(function(e) {
+					e.preventDefault();
+					sig.signature('clear');
+					$('#signature64').val('');
+				});
+			</script>
+        </div>
+        <div class='modal-footer'>
+          <button type='button' class='btn btn-default' data-dismiss='modal'>Batal</button>
+          <input type='submit' name='tutupaksessoal' class='btn btn-danger' value='Tutup Akses Soal Pilihan Ganda'>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>";
+										// 																				echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
+										// <input type='hidden' name='nama_asesi' value='$as[nama]'>
+										// <input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
+										// <input type='hidden' name='id_jadwal' value='$_GET[idj]'>
+										// <input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+										// <input type='hidden' name='jenis_soal' value='FR.IA.05'>
+										// <input type='submit' class='btn btn-danger btn-xs' name='tutupaksessoal' value='Tutup Akses Soal Pilihan Gandaaaaaa'>
+										// </form>";
 																														break;
 																													case "0":
 																														echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
