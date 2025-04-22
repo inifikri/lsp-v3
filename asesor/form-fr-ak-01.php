@@ -7,12 +7,18 @@ include "../config/koneksi.php";
 include "../config/library.php";
 include "../config/fungsi_indotgl.php";
 
+ini_set('display_errors',1); 
+	error_reporting(E_ALL);
+
 // start a session 
 session_start();
 
 // UPDATE @FHM-PUSTI 7 AGUSTUS 2023 : Get data asesor dari tabel jadwal asesor
 $getjadwalasesor=$conn->query("SELECT * FROM jadwal_asesor WHERE id_jadwal='$_GET[idj]'")->fetch_assoc();
 $getdataasesor=$conn->query("SELECT * FROM asesor WHERE id=$getjadwalasesor[id_asesor]")->fetch_assoc();
+
+// var_dump($_SESSION);
+// die;
 
 $sqlasesor = "SELECT * FROM `asesor` WHERE `no_ktp`='$_SESSION[namauser]'";
 $asesor = $conn->query($sqlasesor);
