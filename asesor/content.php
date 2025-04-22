@@ -1,6 +1,6 @@
 <?php
-	//ini_set('display_errors',1); 
-	//error_reporting(E_ALL);
+	// ini_set('display_errors', 1); 
+	// error_reporting(E_ALL);
 	include "../config/koneksi.php";
 	include "../config/library.php";
 	include "../config/fungsi_indotgl.php";
@@ -4379,13 +4379,13 @@
          <div class='col-md-12'>
 							<label class='' for=''>Tanda Tangan:</label>
 							<br/>
-							<div id='sig' ></div>
+							<div id='sign' ></div>
 							<br/>
 							<button id='clear'>Hapus Tanda Tangan</button>
 							<textarea id='signature64' name='signed' style='display: none'></textarea>
 					</div>
 			<script type='text/javascript'>
-				var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
+				var sign = $('#sign').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
 				$('#clear').click(function(e) {
 					e.preventDefault();
 					sig.signature('clear');
