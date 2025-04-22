@@ -9,6 +9,8 @@ ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 
+// Form-FR-IA-04a
+
 $sqlasesi="SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
 $asesi=$conn->query($sqlasesi);
 $as=$asesi->fetch_assoc();
@@ -58,7 +60,7 @@ $cektandatangan = $conn->query($sqlcektandatangan);
 $ttdx = $cektandatangan->fetch_assoc();
 
 // TTD Asesi
-$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$as[nama]' AND id_jadwal='$_GET[idj]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
+$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$as[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 $ttdasesi = $sqlcektandatanganasesi->fetch_assoc();
 
 $pdf = new TCPDF();
@@ -88,11 +90,11 @@ $html = '
 <table border="0" cellpadding="2" cellspacing="0" style="width:190mm; font-family: Arial;">
     <tr>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="../images/logolsp.jpg" width="400px"/>
+            <img src="../images/logolsp.png" width="400px"/>
         </td>
         <td style="width:130mm; text-align:center; font-size:14px; font-weight:bold;">' . $namalsp . '</td>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="../images/logobnsp.jpg" width="400px"/>
+            <img src="../images/logobnsp.jpeg" width="400px"/>
         </td>
     </tr>
     <tr>
@@ -216,7 +218,6 @@ $pdf->Ln(5);
 $contentasesmenIA04 = $conn->query("SELECT * FROM content_ia04A WHERE `id_skemakkni`='$jdq[id_skemakkni]'");
 
 while ($cta = $contentasesmenIA04->fetch_assoc()) {
-    $getumpanbalik=$conn->query("SELECT * FROM asesmen_ia04A a LEFT JOIN content_ia04A b ON b.id=a.id_pertanyaan WHERE a.id_skemakkni='$jdq[id_skemakkni]' AND a.id_pertanyaan='$cta[id]' AND a.id_jadwal='$_GET[idj]' AND a.id_asesi='$_GET[ida]'");
     $unit_kompetensi = explode(',', $cta['kode_unit']);
     $rowspan = 1 + count($unit_kompetensi);
     // $kelompok = strip_tags($cta['kelompok']);
@@ -256,21 +257,19 @@ while ($cta = $contentasesmenIA04->fetch_assoc()) {
         <tr>
             <td style="width:90mm;">' . $cta['content'] . '</td>
             <td style="width:100mm;">' . $cta['content1'] . '</td>
-        </tr>';
-    while($gu = $getumpanbalik->fetch_assoc()){    
-        $html .= '<tr>
-                <td colspan="2" style="font-weight:bold;">Umpan Balik :'.$gu['umpan_balik'].'</td>
-            </tr>';
-    }
-    $html .= '</table>';
-
+        </tr>
+        <tr>
+            <td colspan="2" style="font-weight:bold;">Umpan Balik :</td>
+        </tr>
+    </table>
+    ';
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Ln(5);
 } 
 $html = '
     <table border="1" cellpadding="3" cellspacing="0" style="font-family: Arial; font-size:12px;">
         <tr>
-            <td align="center">Tanda Tangan Asesi<br><img src="../'.$ttdasesi['file'].'" width="400px"/></td>
+            <td align="center">Tanda Tangan Asesi<br><img src="'.$ttdasesi['file'].'" width="400px"/></td>
             <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
             <td align="center">Nama dan Tanda Tangan Supervisor (Jika ada)</td>
         </tr>
