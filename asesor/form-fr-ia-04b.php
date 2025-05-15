@@ -18,9 +18,10 @@ $sqljadwal="SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'";
 $jadwal=$conn->query($sqljadwal);
 $jdq=$jadwal->fetch_assoc();
 $tgl_cetak = tgl_indo($jdq['tgl_asesmen']);
-
+$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
+$gjas=$getasesor->fetch_assoc();
 // QUERY GET DATA ASESOR
-$queryasesor = "SELECT * FROM asesor WHERE no_ktp='$_GET[asesor]'";
+$queryasesor = "SELECT * FROM asesor WHERE id='$gjas[id_asesor]'";
 $qasesor = $conn->query($queryasesor);
 $asesor = $qasesor->fetch_assoc();
 
@@ -60,7 +61,7 @@ $getfria04B=$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_asesi='$_GET[
 $gtas =$getfria04B->fetch_assoc();
 
 // GET TANDA TANGAN ASESOR
-$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$asesor[no_ktp]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_jadwal='$_GET[idj]' AND id_asesi='$asesor[no_ktp]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
 $cektandatangan = $conn->query($sqlcektandatangan);
 $jumttd = $cektandatangan->num_rows;
 $ttdx = $cektandatangan->fetch_assoc();
@@ -132,7 +133,6 @@ $write->easyCell($jnstuk['jenis_tuk'], 'align:L; font-size:10; border:LTBR');
 $write->printRow();
 
 	$noasr=1;
-	$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
 	while ($gas=$getasesor->fetch_assoc()){
 		$sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
 		$asesor=$conn->query($sqlasesor);

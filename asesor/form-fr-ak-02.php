@@ -99,6 +99,7 @@ $write->endTable(5);
 $write=new easyTable($pdf, '{50, 40,5,5, 100}', 'width:190; align:L; font-family:arial; font-size:12');
 
 	$noasr=1;
+	// GET DATA ASESOR
 	$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]' ORDER BY `id` LIMIT 1");
 	while ($gas=$getasesor->fetch_assoc()){
 		$sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
@@ -277,7 +278,7 @@ $write->endTable(0);
 $write=new easyTable($pdf, '{40,5,60,90}', 'width:190; align:L; font-family:arial; font-size:12');
 // tandatangan Asesi
 $urltandatangan=$iden['url_domain']."/media.php?module=form-fr-ak-02&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
-$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI' AND `penandatangan`='$as[nama]' ORDER BY `id` DESC";
+$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI' AND `penandatangan`='$as[nama]' AND id_skema='$jdq[id_skemakkni]' AND id_asesi='$_GET[ida]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 $cekttdasesiapl01=$conn->query($sqlcekttdasesiapl01);
 $jumttdasesi=$cekttdasesiapl01->num_rows;
 $ttdas=$cekttdasesiapl01->fetch_assoc();
@@ -309,7 +310,7 @@ if ($jumttdasesi>0){
 }
 // tandatangan Asesor LSP
 $urltandatanganadmin=$iden['url_domain']."/asesor/media.php?module=form-fr-ak-02&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
-$sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI' AND `penandatangan`='$asr[nama]' ORDER BY `id` DESC";
+$sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI' AND `penandatangan`='$asr[nama]' AND id_skema='$jdq[id_skemakkni]' AND id_asesi='$asr[no_ktp]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 $cekttdadminapl01=$conn->query($sqlcekttdadminapl01);
 $jumttdadmin=$cekttdadminapl01->num_rows;
 $ttdad=$cekttdadminapl01->fetch_assoc();

@@ -8,7 +8,7 @@
 	include "../config/class_paging.php";
 	include "../config/fungsi_rupiah.php";
 	include "../classes/class.phpmailer.php";
-	ini_set('display_errors', 0);
+	ini_set('display_errors', 1);
 	// UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 	if (!function_exists('base_url')) {
 		function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
@@ -4121,6 +4121,7 @@
 																												}
 																											}
 																											echo "
+																<li><a href='?module=form-fr-ak-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN'>Formulir FR-AK-01</a></li>
 																<li><a href='?module=form-fr-ak-02&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Formulir FR-AK-02</a></li>
 																<li><a href='?module=form-fr-ia-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Formulir FR-IA-01</a></li>
 																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Formulir FR-IA-04A</a></li>
@@ -4146,15 +4147,20 @@
 																<li><a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Form APL-01</a></li>
 																<li><a href='portfolio-asesi.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Portfolio Asesi</a></li>
 																<li>";
-																echo "<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=1' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 1' target='_blank'>FORM-MAPA-01 Kandidat 1</a></li>
+																echo "
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=1' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 1' target='_blank'>FORM-MAPA-01 Kandidat 1</a></li>
 																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=2' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 2' target='_blank'>FORM-MAPA-01 Kandidat 2</a></li>
 																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=3' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 3' target='_blank'>FORM-MAPA-01 Kandidat 3</a></li>
 																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=4' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 4' target='_blank'>FORM-MAPA-01 Kandidat 4</a></li>
 																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=5' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 5' target='_blank'>FORM-MAPA-01 Kandidat 5</a></li>
 																<li><a href='form-mapa-02.php?idsk=$pm[id_skemakkni]' title='FORMULIR PETA MUK DARI HASIL PENDEKATAN ASESMEN DAN PERENCANAAN ASESMEN' target='_blank'>FORM-MAPA-02</a></li>
+																<li><a href='form-fr-ak-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN' target='_blank'>Formulir FR-AK-01</a></li>
+																<li><a href='form-fr-ak-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Formulir FR-AK-02</a></li>
 																<li><a href='form-fr-ak-03.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN' target='_blank'>Formulir FR-AK-03</a></li>
 																<li><a href='form-fr-ak-04.php?idass=$pm[id]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR BANDING ASESMEN' target='_blank'>Formulir FR-AK-04</a></li>
-																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Formulir FR-IA-02</a></li>";
+																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Formulir FR-IA-02</a></li>
+																<li><a href='form-fr-ia-04A.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Formulir FR-IA-04A</a></li>
+																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Formulir FR-IA-04B</a></li>";
 																if($pm['id_skemakkni'] != 2){
 																	echo "<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Formulir FR-IA-05</a></li>
 																<li><a href='form-fr-ia-05b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='JAWABAN PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Jawaban Asesi FR-IA-05</a></li>";
@@ -9381,7 +9387,6 @@ elseif ($_GET['module'] == 'form-fr-ia-04A') {
 	$ttdx = $cektandatangan->fetch_assoc();
 	$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 	$ttdasesi = $sqlcektandatanganasesi->fetch_assoc();
-	// var_dump("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND id_jadwal='$_GET[idj]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 	while ($gas = $getasesor->fetch_assoc()) {
 		$sqlasesor = "SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
 		$asesor = $conn->query($sqlasesor);

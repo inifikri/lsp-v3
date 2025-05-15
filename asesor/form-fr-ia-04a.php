@@ -17,7 +17,10 @@ $jadwal=$conn->query($sqljadwal);
 $jdq=$jadwal->fetch_assoc();
 $tgl_cetak = tgl_indo($jdq['tgl_asesmen']);
 
-$sqlgetasesordata = "SELECT * FROM `asesor` WHERE `no_ktp`='$_GET[asr]'";
+// GET DATA ASESOR
+$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
+$gjas=$getasesor->fetch_assoc();
+$sqlgetasesordata = "SELECT * FROM `asesor` WHERE `id`='$gjas[id_asesor]'";
 $getasesordata = $conn->query($sqlgetasesordata);
 $asr = $getasesordata->fetch_assoc();
 
@@ -267,11 +270,13 @@ while ($cta = $contentasesmenIA04->fetch_assoc()) {
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Ln(5);
 } 
+var_dump($ttdasesi['file']);
+die;
+// <td align="center">Tanda Tangan Asesi<br><img src="../'.$ttdasesi['file'].'" width="400px"/></td>
+//             <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
 $html = '
     <table border="1" cellpadding="3" cellspacing="0" style="font-family: Arial; font-size:12px;">
         <tr>
-            <td align="center">Tanda Tangan Asesi<br><img src="../'.$ttdasesi['file'].'" width="400px"/></td>
-            <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
             <td align="center">Nama dan Tanda Tangan Supervisor (Jika ada)</td>
         </tr>
     </table>
