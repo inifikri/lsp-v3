@@ -8,7 +8,9 @@
 	include "../config/class_paging.php";
 	include "../config/fungsi_rupiah.php";
 	include "../classes/class.phpmailer.php";
-	ini_set('display_errors', 1);
+
+	ini_set('display_errors', 0);
+
 	// UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 	if (!function_exists('base_url')) {
 		function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
@@ -4376,6 +4378,7 @@
 																											if ($jgaso > 0) {
 																												switch ($gaso['status']) {
 																													case "1":
+
 																													
 																														echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
 										<input type='hidden' name='nama_asesi' value='$as[nama]'>
@@ -4489,6 +4492,7 @@
 												</script>
 												';
 												}
+										</form>";
 																														break;
 																												}
 																											} else {
