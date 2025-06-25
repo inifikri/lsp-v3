@@ -724,18 +724,31 @@ $iden=$identitas->fetch_assoc();
 
 // tandatangan Asesi
 $namaasesi=$as['nama'];
-$urltandatangan=$iden['url_domain']."/media.php?module=form-ia-01&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
-$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' AND `penandatangan`='$namaasesi' AND `url_ditandatangani`='$urltandatangan' ORDER BY `id` DESC";
+$urltandatangan=$iden['url_domain']."/media.php?module=form-ia-05&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
+$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AI.05.TES TERTULIS PILIHAN GANDA' AND `penandatangan`='$namaasesi' AND `id_jadwal`='$_GET[idj]' ORDER BY `waktu` DESC LIMIT 1";
 $cekttdasesiapl01=$conn->query($sqlcekttdasesiapl01);
 $jumttdasesi=$cekttdasesiapl01->num_rows;
 $ttdas=$cekttdasesiapl01->fetch_assoc();
 
+
+// var_dump($sqlcekttdasesiapl01);
+// die;
+
+// tandatangan Asesor LSP
+$urltandatanganadmin=$iden['url_domain']."/asesor/media.php?module=form-ia-05&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
+$sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$asr[no_ktp]' AND `penandatangan`='$asr[nama]' AND id_jadwal='$_GET[idj]' AND nama_dokumen='FR.AI.05.TES TERTULIS PILIHAN GANDA' ORDER BY `waktu` DESC LIMIT 1";
 // tandatangan Asesor LSP
 $urltandatanganadmin=$iden['url_domain']."/asesor/media.php?module=form-fr-ia-01&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
 $sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganadmin' ORDER BY `id` DESC";
 $cekttdadminapl01=$conn->query($sqlcekttdadminapl01);
 $jumttdadmin=$cekttdadminapl01->num_rows;
 $ttdad=$cekttdadminapl01->fetch_assoc();
+
+
+// var_dump($sqlcekttdadminapl01);
+// die;
+
+
 
 //$tglttdasesi=tgl_indo($jjw['tanggal_asesittd']);
 if ($jumttdasesi>0){

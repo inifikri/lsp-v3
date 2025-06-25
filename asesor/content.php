@@ -8,7 +8,9 @@
 	include "../config/class_paging.php";
 	include "../config/fungsi_rupiah.php";
 	include "../classes/class.phpmailer.php";
+
 	ini_set('display_errors', 0);
+
 	// UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 	if (!function_exists('base_url')) {
 		function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
@@ -4301,6 +4303,22 @@
 																														break;
 																												}
 																											}
+
+
+																											// Penambahan ttd ia.05a masih belum fix tapi udah ada ttdnya
+																												// $folderPath = "../foto_tandatangan/";
+																												// $image_parts = explode(";base64,", $_POST['signed']);
+																												// // var_dump($image_type_aux);
+																												// $image_type_aux = explode("image/", $image_parts[0]);
+																												// $image_type = $image_type_aux[1];
+																												// $image_base64 = base64_decode($image_parts[1]);
+																												// $file = $folderPath . uniqid() . '.' . $image_type;
+																												// file_put_contents($file, $image_base64);
+																												$url =  "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+																												$iddokumen = md5($url);
+																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+																												// $alamatip = $_SERVER['REMOTE_ADDR'];
+
 																											// cek apakah sudah mengerjakan soal ia 05
 																											$sqlcekstatussoalia05 = "SELECT `id_asesi` FROM `asesmen_ia05` WHERE `id_asesi`='$pm[id_asesi]'";
 																											$cekstatussoalia05 = $conn->query($sqlcekstatussoalia05);
@@ -4361,54 +4379,15 @@
 																												switch ($gaso['status']) {
 																													case "1":
 
-																														echo "<input type='button' class='btn btn-danger btn-xs' value='Tutup Akses Soal Pilihan Ganda' data-toggle='modal' data-target='#modalKonfirmasi'>
-
-<div class='modal fade' id='modalKonfirmasi' tabindex='-1' role='dialog' aria-labelledby='modalKonfirmasiLabel'>
-  <div class='modal-dialog' role='document'>
-    <div class='modal-content'>
-      <form role='form' method='POST' action='aksessoal.php' enctype='multipart/form-data'> 
-        <input type='hidden' name='nama_asesi' value='$as[nama]'>
-        <input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
-        <input type='hidden' name='id_jadwal' value='$_GET[idj]'>
-        <input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
-        <input type='hidden' name='jenis_soal' value='FR.IA.05'>
-        <div class='modal-header'>
-          <h4 class='modal-title' id='modalKonfirmasiLabel'>Konfirmasi</h4>
-        </div>
-        <div class='modal-body'>
-         <div class='col-md-12'>
-							<label class='' for=''>Tanda Tangan:</label>
-							<br/>
-							<div id='sign' ></div>
-							<br/>
-							<button id='clear'>Hapus Tanda Tangan</button>
-							<textarea id='signature64' name='signed' style='display: none'></textarea>
-					</div>
-			<script type='text/javascript'>
-				var sign = $('#sign').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
-				$('#clear').click(function(e) {
-					e.preventDefault();
-					sig.signature('clear');
-					$('#signature64').val('');
-				});
-			</script>
-        </div>
-        <div class='modal-footer'>
-          <button type='button' class='btn btn-default' data-dismiss='modal'>Batal</button>
-          <input type='submit' name='tutupaksessoal' class='btn btn-danger' value='Tutup Akses Soal Pilihan Ganda'>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>";
-										// 																				echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
-										// <input type='hidden' name='nama_asesi' value='$as[nama]'>
-										// <input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
-										// <input type='hidden' name='id_jadwal' value='$_GET[idj]'>
-										// <input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
-										// <input type='hidden' name='jenis_soal' value='FR.IA.05'>
-										// <input type='submit' class='btn btn-danger btn-xs' name='tutupaksessoal' value='Tutup Akses Soal Pilihan Gandaaaaaa'>
-										// </form>";
+																													
+																														echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
+										<input type='hidden' name='nama_asesi' value='$as[nama]'>
+										<input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
+										<input type='hidden' name='id_jadwal' value='$_GET[idj]'>
+										<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+										<input type='hidden' name='jenis_soal' value='FR.IA.05'>
+										<input type='submit' class='btn btn-danger btn-xs' name='tutupaksessoal' value='Tutup Akses Soal Pilihan Ganda'>
+										</form>";
 																														break;
 																													case "0":
 																														echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
@@ -4428,6 +4407,91 @@
 										<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
 										<input type='hidden' name='jenis_soal' value='FR.IA.05'>
 										<input type='submit' class='btn btn-danger btn-xs' name='perbaikan' value='Buka Akses Perbaikan Soal Pilihan Ganda'>
+										</form>
+										
+										";
+
+										$sqlcektandatangan = "SELECT COUNT(*) as total FROM logdigisign WHERE id_skema = '$pm[id_skemakkni]' AND id_asesi = '$_SESSION[namauser]' AND penandatangan = '$_SESSION[namalengkap]' AND id_jadwal = '$_GET[idj]' AND nama_dokumen = 'FR.AI.05.TES TERTULIS PILIHAN GANDA'";
+
+										$cektandatangan = $conn->query($sqlcektandatangan);
+										$datattd = $cektandatangan->fetch_assoc();
+										$jumlahTTD = $datattd['total'];
+																					
+
+										 if ($jumlahTTD > 0) {
+												echo "<span class='badge bg-success'>Sudah TTD</span><br>";
+												} else {
+												
+												echo '
+												<button onclick="bukaTTD()" class="btn btn-success btn-xs">Tanda Tangan Soal Pilihan Ganda</button>
+
+												<div id="popupTTD" style="display:none; position:fixed; top:10%; left:20%; width:60%; background:#fff; border:1px solid #ccc; padding:20px; z-index:9999; box-shadow:0 0 10px rgba(0,0,0,0.3)">
+												<form role="form" method="POST" action="aksessoal.php" enctype="multipart/form-data"> 
+
+													<input type="hidden" name="nama_asesi" value="'.$as['nama'].'">
+													<input type="hidden" name="id_asesi" value="'.$pm['id_asesi'].'">
+													<input type="hidden" name="id_jadwal" value="'.$_GET['idj'].'">x
+													<input type="hidden" name="id_skemakkni" value="'.$pm['id_skemakkni'].'">
+													<input type="hidden" name="jenis_soal" value="FR.IA.05">
+													<input type="hidden" name="id_dokumen" value="'.$iddokumen.'">
+													<input type="hidden" name="url_ditandatangani" value="'.$escaped_url.'">
+													<input type="hidden" name="nama_dokumen" value="FR.AI.05.TES TERTULIS PILIHAN GANDA">
+													<input type="hidden" name="penandatangan" value="'.$_SESSION['namalengkap'].'">
+													<input type="hidden" name="id_asesittd" value="'.$_SESSION['namauser'].'">
+													<input type="hidden" name="file" value="'.$file.'">
+													<input type="hidden" name="ip" value="'.$alamatip.'">
+
+													<div>
+													<label>Tanda Tangan:</label>
+													<div id="signTTD" style="border:1px solid #ccc; width:100%; height:200px;"></div>
+													<br>
+													<button type="button" id="clearTTD" class="btn btn-sm btn-secondary">Hapus Tanda Tangan</button>
+													<textarea id="signature64" name="signed" style="display:none"></textarea>
+													</div>
+
+													<br>
+													<div>
+													<button type="submit" name="tandatangan" class="btn btn-danger">Tandatangani</button>
+													<button type="button" class="btn btn-default" onclick="document.getElementById(\'popupTTD\').style.display=\'none\'">Batal</button>
+													</div>
+												</form>
+												</div>
+
+												<br>
+
+												<script type="text/javascript">
+												var sign = $("#signTTD").signature({
+													syncField: "#signature64",
+													syncFormat: "PNG",
+													color: "#58009F"
+												});
+
+												function resizeSignaturePad() {
+												var canvas = $("#signTTD").find("canvas")[0];
+												if (canvas) {
+													canvas.width = $("#signTTD").width();
+													canvas.height = 200;
+
+													// Set warna default manual ke ungu/biru
+													var ctx = canvas.getContext("2d");
+													ctx.strokeStyle = "#58009F";
+												}
+												}
+
+
+												function bukaTTD() {
+													$("#popupTTD").fadeIn(150);
+													setTimeout(resizeSignaturePad, 100);
+												}
+
+												$("#clearTTD").click(function(e) {
+													e.preventDefault();
+													sign.signature("clear");
+													$("#signature64").val("");
+												});
+												</script>
+												';
+												}
 										</form>";
 																														break;
 																												}
