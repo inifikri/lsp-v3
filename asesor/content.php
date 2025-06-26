@@ -1,5 +1,5 @@
 <?php
-	// ini_set('display_errors', 1); 
+	// ini_set('display_errors',1); 
 	// error_reporting(E_ALL);
 	include "../config/koneksi.php";
 	include "../config/library.php";
@@ -8,7 +8,7 @@
 	include "../config/class_paging.php";
 	include "../config/fungsi_rupiah.php";
 	include "../classes/class.phpmailer.php";
-	ini_set('display_errors', 1);
+	ini_set('display_errors', 0);
 	// UPDATE @FHM-PPM 28 JULY 2023 : PENAMBAHAN FUNGSI base_url()
 	if (!function_exists('base_url')) {
 		function base_url($atRoot = FALSE, $atCore = FALSE, $parse = FALSE)
@@ -1435,17 +1435,17 @@
 				date_default_timezone_set("Asia/Jakarta");
 				$mail = new PHPMailer;
 				$mail->IsSMTP();
-				$mail->SMTPSecure = $gsmtp['protokol'];
+				// $mail->SMTPSecure = $gsmtp['protokol'];
 				$mail->Host = $gsmtp['host']; //host masing2 provider email
 				$mail->SMTPDebug = 0;
 				$mail->Port = $gsmtp['port'];
-				$mail->SMTPAuth = true;
-				$mail->Username = $gsmtp['username']; //user email
-				$mail->Password = $gsmtp['password']; //password email 
+				$mail->SMTPAuth = false;
+				// $mail->Username = $gsmtp['username']; //user email
+				// $mail->Password = $gsmtp['password']; //password email 
 				//Set who the message is to be sent from
-				$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				//Set an alternative reply-to address
-				$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				$mail->Subject = $subjek; //subyek email
 				$mail->AddAddress($email, $namanya);  //tujuan email
 				$mail->MsgHTML($pesan);
@@ -1505,17 +1505,17 @@
 				date_default_timezone_set("Asia/Jakarta");
 				$mail = new PHPMailer;
 				$mail->IsSMTP();
-				$mail->SMTPSecure = $gsmtp['protokol'];
+				// $mail->SMTPSecure = $gsmtp['protokol'];
 				$mail->Host = $gsmtp['host']; //host masing2 provider email
 				$mail->SMTPDebug = 0;
 				$mail->Port = $gsmtp['port'];
-				$mail->SMTPAuth = true;
-				$mail->Username = $gsmtp['username']; //user email
-				$mail->Password = $gsmtp['password']; //password email 
+				$mail->SMTPAuth = false;
+				// $mail->Username = $gsmtp['username']; //user email
+				// $mail->Password = $gsmtp['password']; //password email 
 				//Set who the message is to be sent from
-				$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				//Set an alternative reply-to address
-				$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				$mail->Subject = $subjek; //subyek email
 				$mail->AddAddress($email, $namanya);  //tujuan email
 				$mail->MsgHTML($pesan);
@@ -2996,17 +2996,17 @@
 			date_default_timezone_set("Asia/Jakarta");
 			$mail = new PHPMailer;
 			$mail->IsSMTP();
-			$mail->SMTPSecure = $gsmtp['protokol'];
+			// $mail->SMTPSecure = $gsmtp['protokol'];
 			$mail->Host = $gsmtp['host']; //host masing2 provider email
 			$mail->SMTPDebug = 0;
 			$mail->Port = $gsmtp['port'];
-			$mail->SMTPAuth = true;
-			$mail->Username = $gsmtp['username']; //user email
-			$mail->Password = $gsmtp['password']; //password email 
+			$mail->SMTPAuth = false;
+			// $mail->Username = $gsmtp['username']; //user email
+			// $mail->Password = $gsmtp['password']; //password email 
 			//Set who the message is to be sent from
-			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+			$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 			//Set an alternative reply-to address
-			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+			$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 			$mail->Subject = $subjek; //subyek email
 			$mail->AddAddress($email, $namanya);  //tujuan email
 			$mail->MsgHTML($pesan);
@@ -3064,17 +3064,17 @@
 			date_default_timezone_set("Asia/Jakarta");
 			$mail = new PHPMailer;
 			$mail->IsSMTP();
-			$mail->SMTPSecure = $gsmtp['protokol'];
+			// $mail->SMTPSecure = $gsmtp['protokol'];
 			$mail->Host = $gsmtp['host']; //host masing2 provider email
 			$mail->SMTPDebug = 0;
 			$mail->Port = $gsmtp['port'];
-			$mail->SMTPAuth = true;
-			$mail->Username = $gsmtp['username']; //user email
-			$mail->Password = $gsmtp['password']; //password email 
+			$mail->SMTPAuth = false;
+			// $mail->Username = $gsmtp['username']; //user email
+			// $mail->Password = $gsmtp['password']; //password email 
 			//Set who the message is to be sent from
-			$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+			$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 			//Set an alternative reply-to address
-			$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+			$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 			$mail->Subject = $subjek; //subyek email
 			$mail->AddAddress($email, $namanya);  //tujuan email
 			$mail->MsgHTML($pesan);
@@ -3125,7 +3125,6 @@
 		}
 		if (isset($_REQUEST['setujuiasesmen'])) {
 			$tgl_daftar = date("Y-m-d");
-			$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 			$querycek = "SELECT * FROM `asesi_tukjarakjauh` WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]' AND `status`='A'";
 			$resultc = $conn->query($querycek);
 			$row_cnt = $resultc->num_rows;
@@ -3152,6 +3151,7 @@
 			}
 			// end digital signature process =================================================
 			if ($row_cnt == 0) {
+				$querydas = "UPDATE `asesi_tukjarakjauh` SET `status`='A', `asesor_id`='$_SESSION[namauser]', `tgl_verifikasi`='$tgl_daftar' WHERE `id`='$_GET[idas]' AND `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'";
 				$conn->query($querydas);
 				//Notifikasi Email dan SMS====================================================
 				$sqlgetskema = "SELECT * FROM `skema_kkni` WHERE `id`='$_GET[id]'";
@@ -3180,17 +3180,17 @@
 				date_default_timezone_set("Asia/Jakarta");
 				$mail = new PHPMailer;
 				$mail->IsSMTP();
-				$mail->SMTPSecure = $gsmtp['protokol'];
+				// $mail->SMTPSecure = $gsmtp['protokol'];
 				$mail->Host = $gsmtp['host']; //host masing2 provider email
 				$mail->SMTPDebug = 0;
 				$mail->Port = $gsmtp['port'];
-				$mail->SMTPAuth = true;
-				$mail->Username = $gsmtp['username']; //user email
-				$mail->Password = $gsmtp['password']; //password email 
+				$mail->SMTPAuth = false;
+				// $mail->Username = $gsmtp['username']; //user email
+				// $mail->Password = $gsmtp['password']; //password email 
 				//Set who the message is to be sent from
-				$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				//Set an alternative reply-to address
-				$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				$mail->Subject = $subjek; //subyek email
 				$mail->AddAddress($email, $namanya);  //tujuan email
 				$mail->MsgHTML($pesan);
@@ -3292,17 +3292,17 @@
 				date_default_timezone_set("Asia/Jakarta");
 				$mail = new PHPMailer;
 				$mail->IsSMTP();
-				$mail->SMTPSecure = $gsmtp['protokol'];
+				// $mail->SMTPSecure = $gsmtp['protokol'];
 				$mail->Host = $gsmtp['host']; //host masing2 provider email
 				$mail->SMTPDebug = 0;
 				$mail->Port = $gsmtp['port'];
-				$mail->SMTPAuth = true;
-				$mail->Username = $gsmtp['username']; //user email
-				$mail->Password = $gsmtp['password']; //password email 
+				$mail->SMTPAuth = false;
+				// $mail->Username = $gsmtp['username']; //user email
+				// $mail->Password = $gsmtp['password']; //password email 
 				//Set who the message is to be sent from
-				$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				//Set an alternative reply-to address
-				$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				$mail->Subject = $subjek; //subyek email
 				$mail->AddAddress($email, $namanya);  //tujuan email
 				$mail->MsgHTML($pesan);
@@ -3412,17 +3412,17 @@
 				date_default_timezone_set("Asia/Jakarta");
 				$mail = new PHPMailer;
 				$mail->IsSMTP();
-				$mail->SMTPSecure = $gsmtp['protokol'];
+				// $mail->SMTPSecure = $gsmtp['protokol'];
 				$mail->Host = $gsmtp['host']; //host masing2 provider email
 				$mail->SMTPDebug = 0;
 				$mail->Port = $gsmtp['port'];
-				$mail->SMTPAuth = true;
-				$mail->Username = $gsmtp['username']; //user email
-				$mail->Password = $gsmtp['password']; //password email 
+				$mail->SMTPAuth = false;
+				// $mail->Username = $gsmtp['username']; //user email
+				// $mail->Password = $gsmtp['password']; //password email 
 				//Set who the message is to be sent from
-				$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				//Set an alternative reply-to address
-				$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+				$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 				$mail->Subject = $subjek; //subyek email
 				$mail->AddAddress($email, $namanya);  //tujuan email
 				$mail->MsgHTML($pesan);
@@ -3749,7 +3749,7 @@
 																										$qasesiasesmen = $conn->query("SELECT * FROM asesi_tukjarakjauh WHERE `asesi_id`='$_GET[ida]' AND `skema_id`='$_GET[id]' AND `jadwal_id`='$_GET[idj]'")->fetch_assoc();
 																										$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 																										$iddokumen = md5($url);
-																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' ORDER BY `id` DESC";
+																										$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$_GET[id]' AND nama_dokumen='FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH' AND penandatangan='$_SESSION[namalengkap]' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 																										$cektandatangan = $conn->query($sqlcektandatangan);
 																										$jumttd = $cektandatangan->num_rows;
 																										$ttdx = $cektandatangan->fetch_assoc();
@@ -4092,18 +4092,15 @@
 																											$asesi = $conn->query($sqlasesi);
 																											$as = $asesi->fetch_assoc();
 																											echo "<tr class=gradeX><td>$no</td><td>";
-																											echo "<div class='btn-group'>
-								<button type='button' class='btn btn-success'>Aksi</button>
+																											echo "<div class='margin'><div class='btn-group '>
+								<button type='button' class='btn btn-success'>Input</button>
 								<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'>
 									<span class='caret'></span>
 																<span class='sr-only'>Toggle Dropdown</span>
 															</button>
 															<ul class='dropdown-menu' role='menu'>
-																<li><a href='form-checklist.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST'>Unduh Checklist Form</a></li>
-																<!--<li><a href='form-mak01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST MENGASES KOMPETENSI'>Unduh FR-MAK-01</a></li>-->
-																<li><a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Unduh APL-01</a></li>
-																<li><a href='portfolio-asesi.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Unduh Portfolio Asesi</a></li>
-																<li>";
+															<h6 class='dropdown-header'>Input</h6>
+															<li class='divider'></li>";
 																											$sqlcekapl02 = "SELECT * FROM `asesi_apl02` WHERE `verifikasi_asesor1` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' OR `verifikasi_asesor2` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' OR `verifikasi_asesor3` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' OR `verifikasi_asesor4` !='' AND `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]'";
 																											$cekapl02 = $conn->query($sqlcekapl02);
 																											$jumcekapl02 = $cekapl02->num_rows;
@@ -4112,57 +4109,71 @@
 																											$jnsapl02 = $jenisapl02->fetch_assoc();
 																											if ($jnsapl02['apl02'] == 'elemen') {
 																												if ($jumcekapl02 == 0) {
-																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>Input FORM-APL-02</a></li>
-													<li><a href='form-apl-02-el.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>FORM-APL-02</a></li>";
 																												} else {
-																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>
-													<li><a href='form-apl-02-el.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02-el&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>";
 																												}
 																											} else {
 																												if ($jumcekapl02 == 0) {
-																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>Input FORM-APL-02</a></li>
-													<li><a href='form-apl-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>FORM-APL-02</a></li>";
 																												} else {
-																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>
-													<li><a href='form-apl-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' target='_blank'>Unduh Formulir APL-02</a></li>";
+																													echo "<li><a href='?module=form-apl-02&ida=$pm[id_asesi]&idj=$_GET[idj]'>Update APL-02 Terverifikasi $jumcekapl02 item</a></li>";
 																												}
 																											}
-																											echo "<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=1' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 1' target='_blank'>Unduh FORM-MAPA-01 Kandidat 1</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=2' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 2' target='_blank'>Unduh FORM-MAPA-01 Kandidat 2</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=3' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 3' target='_blank'>Unduh FORM-MAPA-01 Kandidat 3</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=4' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 4' target='_blank'>Unduh FORM-MAPA-01 Kandidat 4</a></li>
-																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=5' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 5' target='_blank'>Unduh FORM-MAPA-01 Kandidat 5</a></li>
-																<li><a href='form-mapa-02.php?idsk=$pm[id_skemakkni]' title='FORMULIR PETA MUK DARI HASIL PENDEKATAN ASESMEN DAN PERENCANAAN ASESMEN' target='_blank'>Unduh FORM-MAPA-02</a></li>
-																<li><a href='?module=form-fr-ak-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN'>Input Formulir FR-AK-01</a></li>
-																<li><a href='form-fr-ak-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN' target='_blank'>Unduh Formulir FR-AK-01</a></li>
-																<li><a href='?module=form-fr-ak-02&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Input Formulir FR-AK-02</a></li>
-															<li><a href='form-fr-ak-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Unduh Formulir FR-AK-02</a></li>
-																<li><a href='form-fr-ak-03.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN' target='_blank'>Unduh Formulir FR-AK-03</a></li>
-																<li><a href='form-fr-ak-04.php?idass=$pm[id]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR BANDING ASESMEN' target='_blank'>Unduh Formulir FR-AK-04</a></li>
-																<li><a href='?module=form-fr-ia-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Input Formulir FR-IA-01</a></li>
-																<li><a href='form-fr-ia-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' target='_blank'>Unduh Formulir FR-IA-01</a></li>
-																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Unduh Formulir FR-IA-02</a></li>
-																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Input Formulir FR-IA-04A</a></li>
-																<li><a href='form-fr-ia-04A.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Unduh Formulir FR-IA-04A</a></li>
-																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Input Formulir FR-IA-04B</a></li>
-																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Unduh Formulir FR-IA-04B</a></li>
-																<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Formulir FR-IA-05</a></li>
-																<li><a href='form-fr-ia-05b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='JAWABAN PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Unduh Jawaban Asesi FR-IA-05</a></li>
-																<li><a href='form-fr-ia-06.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS ESAI' target='_blank'>Unduh Formulir FR-IA-06</a></li>
-																<li><a href='form-fr-ia-06a.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='LEMBAR KUNCI JAWABAN PERTANYAAN TERTULIS ESAI' target='_blank'>Unduh Formulir FR-IA-06.A</a></li>
-																<li><a href='?module=form-fr-ia-06&ida=$pm[id_asesi]&idj=$_GET[idj]' title='KOREKSI JAWABAN PERTANYAAN TERTULIS ESAI'>Input Penilaian Formulir FR-IA-06.B</a></li>
-																<li><a href='form-fr-ia-06b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='LEMBAR JAWABAN PERTANYAAN TERTULIS ESAI' target='_blank'>Unduh Formulir FR-IA-06.B</a></li>
-																<li><a href='?module=form-fr-ia-07&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT JAWABAN PERTANYAAN LISAN ASESI'>Input Penilaian Formulir FR-IA-07</a></li>
-																<li><a href='form-fr-ia-07.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN LISAN' target='_blank'>Unduh Formulir FR-IA-07</a></li>
-																<li><a href='?module=form-fr-ia-08&ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO'>Input Formulir FR-IA-08</a></li>
-																<li><a href='form-fr-ia-08.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO' target='_blank'>Unduh Formulir FR-IA-08</a></li>
-																<li><a href='?module=form-fr-ia-09&ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN WAWANCARA'>Input Formulir FR-IA-09</a></li>
-																<li><a href='form-fr-ia-10.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='KLARIFIKASI BUKTI PIHAK KETIGA' target='_blank'>Unduh Formulir FR-IA-10</a></li>
-																<li><a href='?module=peninjauasesmen' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN'>Input Formulir FR-IA-11</a></li>
-																<li><a href='form-fr-ia-11.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN' target='_blank'>Unduh Formulir FR-IA-11</a></li>
-																<li><a href='form-fr-va.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='MEMBERIKAN KONTRIBUSI DALAM VALIDASI ASESMEN' target='_blank'>Unduh Formulir FR-VA</a></li>
+																											echo "
+																<li><a href='?module=form-fr-ak-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN'>Formulir FR-AK-01</a></li>
+																<li><a href='?module=form-fr-ak-02&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Formulir FR-AK-02</a></li>
+																<li><a href='?module=form-fr-ia-01&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Formulir FR-IA-01</a></li>
+																<li><a href='?module=form-fr-ia-04A&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)'>Formulir FR-IA-04A</a></li>
+																<li><a href='?module=form-fr-ia-04B&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT FORMULIR PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA'>Formulir FR-IA-04B</a></li>
+																<li><a href='?module=form-fr-ia-06&ida=$pm[id_asesi]&idj=$_GET[idj]' title='KOREKSI JAWABAN PERTANYAAN TERTULIS ESAI'>Penilaian Formulir FR-IA-06.B</a></li>
+																<li><a href='?module=form-fr-ia-07&ida=$pm[id_asesi]&idj=$_GET[idj]' title='INPUT JAWABAN PERTANYAAN LISAN ASESI'>Penilaian Formulir FR-IA-07</a></li>
+																<li><a href='?module=form-fr-ia-08&ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO'>Formulir FR-IA-08</a></li>
+																<li><a href='?module=form-fr-ia-09&ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN WAWANCARA'>Formulir FR-IA-09</a></li>
+																<li><a href='?module=peninjauasesmen' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN'>Formulir FR-IA-11</a></li>
 															</ul>
 													</div>";
+																											echo "&nbsp;<div class='btn-group'>
+								<button type='button' class='btn btn-info'>Unduh</button>
+								<button type='button' class='btn btn-info dropdown-toggle' data-toggle='dropdown'>
+									<span class='caret'></span>
+																<span class='sr-only'>Toggle Dropdown</span>
+															</button>
+															<ul class='dropdown-menu' role='menu'>
+															<h6 class='dropdown-header'>Unduh</h6>
+															<li class='divider'></li>
+																<li><a href='form-checklist.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST'>Checklist Form</a></li>
+																<!--<li><a href='form-mak01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR CHECKLIST MENGASES KOMPETENSI'>FR-MAK-01</a></li>-->
+																<li><a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Form APL-01</a></li>
+																<li><a href='portfolio-asesi.php?ida=$pm[id_asesi]&idj=$_GET[idj]'>Portfolio Asesi</a></li>
+																<li>";
+																echo "
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=1' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 1' target='_blank'>FORM-MAPA-01 Kandidat 1</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=2' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 2' target='_blank'>FORM-MAPA-01 Kandidat 2</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=3' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 3' target='_blank'>FORM-MAPA-01 Kandidat 3</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=4' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 4' target='_blank'>FORM-MAPA-01 Kandidat 4</a></li>
+																<li><a href='form-mapa-01.php?idsk=$pm[id_skemakkni]&kand=5' title='FORMULIR MERENCANAKAN AKTIVITAS DAN PROSES ASESMEN untuk Kandidat Tipe 5' target='_blank'>FORM-MAPA-01 Kandidat 5</a></li>
+																<li><a href='form-mapa-02.php?idsk=$pm[id_skemakkni]' title='FORMULIR PETA MUK DARI HASIL PENDEKATAN ASESMEN DAN PERENCANAAN ASESMEN' target='_blank'>FORM-MAPA-02</a></li>
+																<li><a href='form-fr-ak-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR PERSETUJUAN ASESMEN DAN KERAHASIAAN' target='_blank'>Formulir FR-AK-01</a></li>
+																<li><a href='form-fr-ak-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR REKAMAN ASESMEN KOMPETENSI' target='_blank'>Formulir FR-AK-02</a></li>
+																<li><a href='form-fr-ak-03.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN' target='_blank'>Formulir FR-AK-03</a></li>
+																<li><a href='form-fr-ak-04.php?idass=$pm[id]&ida=$pm[id_asesi]&idj=$_GET[idj]' title='FORMULIR BANDING ASESMEN' target='_blank'>Formulir FR-AK-04</a></li>
+																<li><a href='form-fr-ia-02.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='TUGAS PRAKTIK DEMONSTRASI' target='_blank'>Formulir FR-IA-02</a></li>
+																<li><a href='form-fr-ia-04A.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='DIT – DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA*)' target='_blank'>Formulir FR-IA-04A</a></li>
+																<li><a href='form-fr-ia-04B.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' target='_blank'>Formulir FR-IA-04B</a></li>";
+																if($pm['id_skemakkni'] != 2){
+																	echo "<li><a href='form-fr-ia-05.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Formulir FR-IA-05</a></li>
+																<li><a href='form-fr-ia-05b.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='JAWABAN PERTANYAAN TERTULIS PILIHAN GANDA' target='_blank'>Jawaban Asesi FR-IA-05</a></li>";
+																}
+																echo "<li><a href='form-fr-ia-06.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN TERTULIS ESAI' target='_blank'>Formulir FR-IA-06</a></li>
+																<li><a href='form-fr-ia-06a.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='LEMBAR KUNCI JAWABAN PERTANYAAN TERTULIS ESAI' target='_blank'>Formulir FR-IA-06.A</a></li>
+																<li><a href='form-fr-ia-07.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='PERTANYAAN LISAN' target='_blank'>Formulir FR-IA-07</a></li>
+																<li><a href='form-fr-ia-08.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS VERIFIKASI PORTOFOLIO' target='_blank'>Formulir FR-IA-08</a></li>
+																<li><a href='form-fr-ia-10.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='KLARIFIKASI BUKTI PIHAK KETIGA' target='_blank'>Formulir FR-IA-10</a></li>
+																<li><a href='form-fr-ia-11.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='CEKLIS MENINJAU INSTRUMEN ASESSMEN' target='_blank'>Formulir FR-IA-11</a></li>
+																<li><a href='form-fr-va.php?ida=$pm[id_asesi]&idj=$_GET[idj]' title='MEMBERIKAN KONTRIBUSI DALAM VALIDASI ASESMEN' target='_blank'>Formulir FR-VA</a></li>
+															</ul>
+													</div></div>";
 																											/*echo "<a href='form-checklist.php?ida=$pm[id_asesi]&idj=$_GET[idj]' class='btn btn-primary btn-xs btn-block' title='FORMULIR CHECKLIST'>Unduh Checklist Form</a><br>";
 							echo "<a href='form-mak01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' class='btn btn-primary btn-xs btn-block' title='FORMULIR CHECKLIST MENGASES KOMPETENSI'><span class='badge bg-green'>1</span>Unduh FR-MAK-01</a><br>";
 							echo "<a href='form-apl-01.php?ida=$pm[id_asesi]&idj=$_GET[idj]' class='btn btn-primary btn-xs btn-block btn-social'><i>2</i>Unduh Formulir APL-01</a><br>";
@@ -4302,8 +4313,7 @@
 																												}
 																											}
 
-
-																											// Penambahan ttd ia.05a masih belum fix tapi udah ada ttdnya
+																													// Penambahan ttd ia.05a masih belum fix tapi udah ada ttdnya
 																												// $folderPath = "../foto_tandatangan/";
 																												// $image_parts = explode(";base64,", $_POST['signed']);
 																												// // var_dump($image_type_aux);
@@ -4317,6 +4327,7 @@
 																												$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 																												// $alamatip = $_SERVER['REMOTE_ADDR'];
 
+
 																											// cek apakah sudah mengerjakan soal ia 05
 																											$sqlcekstatussoalia05 = "SELECT `id_asesi` FROM `asesmen_ia05` WHERE `id_asesi`='$pm[id_asesi]'";
 																											$cekstatussoalia05 = $conn->query($sqlcekstatussoalia05);
@@ -4324,6 +4335,7 @@
 																											$hitungskor = "SELECT SUM(`skor`) AS `TotSkor` FROM `asesmen_ia05` WHERE `id_asesi`='$pm[id_asesi]' AND `id_skemakkni`='$pm[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$skortotal = $conn->query($hitungskor);
 																											$skorx = $skortotal->fetch_assoc();
+																											if($pm['id_skemakkni'] != 2){
 																											if ($statussoalia05 > 0) {
 																												// hitung skor IA 05
 																												$sqlgetunitkompetensib = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$pm[id_skemakkni]'";
@@ -4368,17 +4380,18 @@
 																											} else {
 																												echo "</br><font color='red'><b>Belum mengerjakan soal pilihan ganda</b></font><br>";
 																											}
+																										}
 																											// cek akses asesi ke soal
 																											$sqlgetaksessoal = "SELECT * FROM `asesi_aksessoal` WHERE `id_skemakkni`='$pm[id_skemakkni]' AND `id_asesi`='$pm[id_asesi]' AND `id_jadwal`='$_GET[idj]' AND `jenis_soal`='FR.IA.05'";
 																											$getaksessoal = $conn->query($sqlgetaksessoal);
 																											$gaso = $getaksessoal->fetch_assoc();
 																											$jgaso = $getaksessoal->num_rows;
+																											if($pm['id_skemakkni'] != 2){
 																											if ($jgaso > 0) {
 																												switch ($gaso['status']) {
 																													case "1":
-
-																													
-																														echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
+																											
+										echo "<form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>
 										<input type='hidden' name='nama_asesi' value='$as[nama]'>
 										<input type='hidden' name='id_asesi' value='$pm[id_asesi]'>
 										<input type='hidden' name='id_jadwal' value='$_GET[idj]'>
@@ -4405,10 +4418,7 @@
 										<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
 										<input type='hidden' name='jenis_soal' value='FR.IA.05'>
 										<input type='submit' class='btn btn-danger btn-xs' name='perbaikan' value='Buka Akses Perbaikan Soal Pilihan Ganda'>
-										</form>
-										
-										";
-
+										</form>";
 										$sqlcektandatangan = "SELECT COUNT(*) as total FROM logdigisign WHERE id_skema = '$pm[id_skemakkni]' AND id_asesi = '$_SESSION[namauser]' AND penandatangan = '$_SESSION[namalengkap]' AND id_jadwal = '$_GET[idj]' AND nama_dokumen = 'FR.AI.05.TES TERTULIS PILIHAN GANDA'";
 
 										$cektandatangan = $conn->query($sqlcektandatangan);
@@ -4490,7 +4500,6 @@
 												</script>
 												';
 												}
-										</form>";
 																														break;
 																												}
 																											} else {
@@ -4503,6 +4512,7 @@
 								<input type='submit' class='btn btn-success btn-xs' name='bukaaksessoal' value='Buka Akses Soal Pilihan Ganda'>
 								</form>";
 																											}
+																										}
 																											// cek apakah sudah mengerjakan soal ia 06
 																											$sqlcekstatussoalia06 = "SELECT `id_asesi` FROM `asesmen_ia06` WHERE `id_asesi`='$pm[id_asesi]'";
 																											$cekstatussoalia06 = $conn->query($sqlcekstatussoalia06);
@@ -4934,17 +4944,17 @@
 																											date_default_timezone_set("Asia/Jakarta");
 																											$mail = new PHPMailer;
 																											$mail->IsSMTP();
-																											$mail->SMTPSecure = $gsmtp['protokol'];
+																											// $mail->SMTPSecure = $gsmtp['protokol'];
 																											$mail->Host = $gsmtp['host']; //host masing2 provider email
 																											$mail->SMTPDebug = 0;
 																											$mail->Port = $gsmtp['port'];
-																											$mail->SMTPAuth = true;
-																											$mail->Username = $gsmtp['username']; //user email
-																											$mail->Password = $gsmtp['password']; //password email 
+																											$mail->SMTPAuth = false;
+																											// $mail->Username = $gsmtp['username']; //user email
+																											// $mail->Password = $gsmtp['password']; //password email 
 																											//Set who the message is to be sent from
-																											$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+																											$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 																											//Set an alternative reply-to address
-																											$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+																											$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 																											$mail->Subject = $subjek; //subyek email
 																											$mail->AddAddress($email, $namanya);  //tujuan email
 																											$mail->MsgHTML($pesan);
@@ -4982,17 +4992,17 @@
 																												date_default_timezone_set("Asia/Jakarta");
 																												$mail = new PHPMailer;
 																												$mail->IsSMTP();
-																												$mail->SMTPSecure = $gsmtp['protokol'];
+																												// $mail->SMTPSecure = $gsmtp['protokol'];
 																												$mail->Host = $gsmtp['host']; //host masing2 provider email
 																												$mail->SMTPDebug = 0;
 																												$mail->Port = $gsmtp['port'];
-																												$mail->SMTPAuth = true;
-																												$mail->Username = $gsmtp['username']; //user email
-																												$mail->Password = $gsmtp['password']; //password email 
+																												$mail->SMTPAuth = false;
+																												// $mail->Username = $gsmtp['username']; //user email
+																												// $mail->Password = $gsmtp['password']; //password email 
 																												//Set who the message is to be sent from
-																												$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+																												$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 																												//Set an alternative reply-to address
-																												$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+																												$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 																												$mail->Subject = $subjek; //subyek email
 																												$mail->AddAddress($email, $namanya);  //tujuan email
 																												$mail->MsgHTML($pesan);
@@ -5028,17 +5038,17 @@
 																												date_default_timezone_set("Asia/Jakarta");
 																												$mail = new PHPMailer;
 																												$mail->IsSMTP();
-																												$mail->SMTPSecure = $gsmtp['protokol'];
+																												// $mail->SMTPSecure = $gsmtp['protokol'];
 																												$mail->Host = $gsmtp['host']; //host masing2 provider email
 																												$mail->SMTPDebug = 0;
 																												$mail->Port = $gsmtp['port'];
-																												$mail->SMTPAuth = true;
-																												$mail->Username = $gsmtp['username']; //user email
-																												$mail->Password = $gsmtp['password']; //password email 
+																												$mail->SMTPAuth = false;
+																												// $mail->Username = $gsmtp['username']; //user email
+																												// $mail->Password = $gsmtp['password']; //password email 
 																												//Set who the message is to be sent from
-																												$mail->setFrom("$gsmtp[username]", $iden['nama_lsp']);
+																												$mail->setFrom("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 																												//Set an alternative reply-to address
-																												$mail->addReplyTo("$gsmtp[username]", $iden['nama_lsp']);
+																												$mail->addReplyTo("no-reply@ppm-manajemen.ac.id", $iden['nama_lsp']);
 																												$mail->Subject = $subjek; //subyek email
 																												$mail->AddAddress($email, $namanya);  //tujuan email
 																												$mail->MsgHTML($pesan);
@@ -5276,7 +5286,7 @@
 							<br/>
 							<button id='clear'>Hapus Tanda Tangan</button>
 							<textarea id='signature64' name='signed' style='display: none'></textarea>
-					</div>
+					</div><br>
 			<script type='text/javascript'>
 				var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
 				$('#clear').click(function(e) {
@@ -5285,7 +5295,7 @@
 					$('#signature64').val('');
 				});
 			</script>";
-																										echo "<div class='box-footer'>
+																										echo "<br><br><div class='box-footer mt-10'>
 									<div class='col-md-4 col-sm-12 col-xs-12'>
 					<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 			</div>
@@ -6761,7 +6771,12 @@
 																												} else {
 																													$postPW = "0";
 																												}
-																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																												if (isset($_POST['checkboxDIT'])) {
+																													$postDIT = $_POST['checkboxDIT'];
+																												} else {
+																													$postDIT = "0";
+																												}
+																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postDIT',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											} else {
 																												$image_parts = explode(";base64,", $_POST['signed']);
@@ -6807,7 +6822,12 @@
 																												} else {
 																													$postPW = "0";
 																												}
-																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																												if (isset($_POST['checkboxDIT'])) {
+																													$postDIT = $_POST['checkboxDIT'];
+																												} else {
+																													$postDIT = "0";
+																												}
+																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																												$conn->query($sqlinputak01);
 																											}
 																										} else {
@@ -6818,7 +6838,7 @@
 					<h4><i class='icon fa fa-check'></i> Persetujuan Asesor berhasil disimpan</h4>
 					Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul].</b><br>
 					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>";
-																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
+																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											} else {
 																												$image_parts = explode(";base64,", $_POST['signed']);
@@ -6863,7 +6883,12 @@
 																												} else {
 																													$postPW = "0";
 																												}
-																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
+																												if (isset($_POST['checkboxDIT'])) {
+																													$postDIT = $_POST['checkboxDIT'];
+																												} else {
+																													$postDIT = "0";
+																												}
+																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$postDIT','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											}
 																										}
@@ -6914,7 +6939,12 @@
 																											} else {
 																												$postPW = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											if (isset($_POST['checkboxDIT'])) {
+																												$postDIT = $_POST['checkboxDIT'];
+																											} else {
+																												$postDIT = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										} else {
 																											// UPDATE @FHM-PUSTI 7 AGUSTUS 2023 : Hapus data logdigisign Asesi
@@ -6967,7 +6997,12 @@
 																											} else {
 																												$postPW = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											if (isset($_POST['checkboxDIT'])) {
+																												$postDIT = $_POST['checkboxDIT'];
+																											} else {
+																												$postDIT = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										}
 																									}
@@ -7011,7 +7046,7 @@
 																									echo "> L : Observasi Langsung";
 																									echo "</td>
 							</tr>
-							<tr><td colspan='2'>";
+							<tr><td>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
 																									if ($jjw['DPT'] == "1") {
 																										echo "checked";
@@ -7019,8 +7054,17 @@
 																										echo "";
 																									}
 																									echo "> T : Hasil Tes Tulis";
-																									echo "</td>
-							</tr>
+																									echo "</td><td>";
+																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
+																									if ($jjw['DIT'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> L : Kegiatan Terstruktur (DIT)";
+																									echo "</td>";
+																									
+							echo "</tr>
 							<tr><td colspan='2'>";
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDPL' id='optionsDPL' value='1'";
 																									if ($jjw['DPL'] == "1") {
@@ -7500,7 +7544,7 @@
 																										echo "<li>Tinjauan proses asesmen</li>";
 																									}
 																									echo "</ol></p>
-						<p><b>Persetujuan/ Tanda Tangan yang telah diberikan : </b>
+						<p><b>Asesor :</b>
 						</p>";
 																									// cek tandatangan digital
 																									$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
@@ -7509,22 +7553,13 @@
 																									$cektandatangan = $conn->query($sqlcektandatangan);
 																									$jumttd = $cektandatangan->num_rows;
 																									$ttdx = $cektandatangan->fetch_assoc();
-
-																									$sqlcekttdasesi = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.AK.02. FORMULIR REKAMAN ASESMEN KOMPETENSI' AND id_jadwal='$_GET[idj]' ORDER BY `waktu` DESC";
-																									$cektandatanganasesi = $conn->query($sqlcekttdasesi);
-																									$jumttdasesi = $cektandatanganasesi->num_rows;
-																									$ttdasesi = $cektandatanganasesi->fetch_assoc();
-
 																									if ($jumttd > 0) {
 																										echo "<div class='col-md-12'>
+									<label class='' for=''>Persetujuan/ Tanda Tangan yang telah Anda berikan:</label>
 									<br/>
-									<b>Asesor : </b> 
 									<img src='$ttdx[file]' width='400px'/>
-									<b>Asesi : </b>
-									<img src='../$ttdasesi[file]' width='400px'/>
 									<br/>
 								</div>";
-								
 																									} else {
 																										echo "<div class='col-md-12'>
 							<label class='' for=''>Tanda Tangan:</label>
@@ -7824,7 +7859,8 @@
 																									$iddokumen = md5($url);
 																									// $idj = "SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'"; 
 																									// var_dump($idj);
-																									$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_skema`='$jd[id_skemakkni]' AND `id_asesi`='$_SESSION[namauser]' AND nama_dokumen='FR.AK.05. LAPORAN ASESMEN' ORDER BY `id` DESC";
+																									// update WNP@PPM query ttd
+																									$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_skema`='$jd[id_skemakkni]' AND `id_asesi`='$_SESSION[namauser]' AND nama_dokumen='FR.AK.05. LAPORAN ASESMEN' AND `id_jadwal`='$_GET[idj]' ORDER BY `id` DESC";
 																									$cektandatangan = $conn->query($sqlcektandatangan);
 																									$jumttd = $cektandatangan->num_rows;
 																									$ttdx = $cektandatangan->fetch_assoc();
@@ -9450,7 +9486,8 @@ elseif ($_GET['module'] == 'form-fr-ia-04A') {
 	$ttdx = $cektandatangan->fetch_assoc();
 	$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
 	$ttdasesi = $sqlcektandatanganasesi->fetch_assoc();
-	// var_dump("SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND id_jadwal='$_GET[idj]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
+
+	
 	while ($gas = $getasesor->fetch_assoc()) {
 		$sqlasesor = "SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
 		$asesor = $conn->query($sqlasesor);
@@ -9655,7 +9692,7 @@ keluaran yang telah ditetapkan.</li>
 			<?php 
 			$nounitkom=1;
 				for($i=0;$i < count($unit_kompetensi);++$i){
-					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`=3");
+					$unit_kompetensi01=$conn->query("SELECT * FROM unit_kompetensi WHERE kode_unit='$unit_kompetensi[$i]' AND `id_skemakkni`='$jd[id_skemakkni]'");
 					
 					while($uk01 = $unit_kompetensi01->fetch_assoc()){
 			?>
@@ -9816,24 +9853,20 @@ keluaran yang telah ditetapkan.</li>
 			$noasr = 1;
 			$getasesor = $conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
 
-			// CEK TANDA TANGAN ASESI
-			$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' AND id_jadwal='$_GET[idj]' ORDER BY `waktu` DESC";
+			// TANDATANGAN ASESOR
+			$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_jadwal`='$_GET[idj]' AND id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$asesor[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
 			$cektandatangan = $conn->query($sqlcektandatangan);
 			$jumttd = $cektandatangan->num_rows;
 			$ttdx = $cektandatangan->fetch_assoc();
-			// var_dump($ttdx);
 
-			// CEK TANDATANGAN ASESOR
-			$sqlcektandatanganasesor = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND `penandatangan`='$asr[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' AND id_jadwal='$_GET[idj]' ORDER BY `waktu` DESC";
-			$cekcektandatanganasesor = $conn->query($sqlcektandatanganasesor);
-			$jumttasesor = $cekcektandatanganasesor->num_rows;
-			$ttdasesor = $cekcektandatanganasesor->fetch_assoc();
-			// var_dump($ttdasesor);
-			
-			
+			// TANDATANGAN ASESI
+			$sqlcektandatanganasesi = "SELECT * FROM `logdigisign` WHERE `id_jadwal`='$_GET[idj]' AND id_skema='$jd[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$rowAgen[nama]' AND nama_dokumen='FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC";
+			$cektandatanganasesi = $conn->query($sqlcektandatanganasesi);
+			$jumttdasesi = $cektandatanganasesi->num_rows;
+			$ttdxasesi = $cektandatanganasesi->fetch_assoc();
 
 			// QUERY GET DATA ASESI ASESMEN
-			$sqlasesiasesmen =$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_skemakkni='$jd[id_skemakkni]' AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]'");
+			$sqlasesiasesmen =$conn->query("SELECT * FROM asesi_asesmen a WHERE a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]'");
 			$gtas =$sqlasesiasesmen->fetch_assoc();
 			// GET DATA ASESMEN FORM-FR-IA04B
 
@@ -9911,10 +9944,10 @@ keluaran yang telah ditetapkan.</li>
 					$iddokumen = md5($url);
 					$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
 					$alamatip = $_SERVER['REMOTE_ADDR'];
-					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PERTANYAAN UNTUK MENDUKUNG OBSERVASI','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+					$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9940,7 +9973,7 @@ keluaran yang telah ditetapkan.</li>
 				$folderPath = "../foto_tandatangan/";
 				if (empty($_POST['signed'])) {
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							//if (!empty($gpp2['pertanyaan'])){
@@ -9987,7 +10020,7 @@ keluaran yang telah ditetapkan.</li>
 					$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.IA.04B. PENILAIAN PROYEK SINGKAT ATAU KEGIATAN TERSTRUKTUR LAINNYA','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
 					$conn->query($sqlinputdigisign);
 					// input tanggapan pendukung observasi
-						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
+						$sqlgetpertanyaan04B = "SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.no_urutan ASC";
 						$getpertanyaan04B = $conn->query($sqlgetpertanyaan04B);
 						while ($gpp04B = $getpertanyaan04B->fetch_assoc()) {
 							$posttanggapan = 'tanggapan' . $gpp04B['idpertanyaan'];
@@ -10012,8 +10045,6 @@ keluaran yang telah ditetapkan.</li>
 				}
 			}
 			$tanggalasesmen = tgl_indo($jd['tgl_asesmen']);
-			$tanggalttdasesi = tgl_indo($ttdx['waktu']);
-			$tanggalttdasesor = tgl_indo($ttdasesor['waktu']);
 			echo "<!-- Main content -->
 			<section class='content'>
 				<div class='row'>
@@ -10068,8 +10099,7 @@ presentasi</li>
 						$noglk=1;
 						$countfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
 								WHERE a.id_skemakkni=$jd[id_skemakkni] AND a.id_asesi='$_GET[ida]' AND a.id_jadwal='$_GET[idj]' ORDER BY a.id ASC")->num_rows;
-							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04b` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC ");
-							
+							$getpertanyaanIA04B =$conn->query("SELECT *,a.id as idpertanyaan FROM `skema_pertanyaania04B` a LEFT JOIN lingkupkegiatan_formIA04B b ON b.id=a.id_lingkupkegiatan WHERE b.id_skemakkni=$sk[id] ORDER BY b.id ASC");
 							while ($gp = $getpertanyaanIA04B->fetch_assoc()){
 								if($countfria04B > 0){
 									$getfria04B=$conn->query("SELECT * FROM asesmen_ia04B a
@@ -10131,7 +10161,6 @@ presentasi</li>
 										<input class="form-check-input" type="radio" name="rekomendasi" value="K" id="flexRadioDefault1" <?php if($gtas['rekomendasi_IA04B'] == 'K'){ echo 'checked'; }?>>
 										<label class="form-check-label" for="flexRadioDefault1">
 											Kompeten
-										</label>
 									</div>		
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="rekomendasi" value="BK" id="flexRadioDefault2" <?php if($gtas['rekomendasi_IA04B'] == 'BK'){ echo 'checked'; }?>>
@@ -10142,23 +10171,19 @@ presentasi</li>
 						<?php		
 								echo "</td>
 							</tr>
-						<tr>
-						<td colspan='3'><b>Asesi :</b> </td>
-					</tr>
-					<tr>
-						<td>Nama </td>
-						<td>:</td>
-						<td>$rowAgen[nama]</td>
-					</tr>
-					<tr>
-						<td>Tanda Tangan/Tanggal </td>
-						<td>:</td>";
-					if ($jumttd > 0) {
-						echo "<td>$tanggalttdasesi<br><img src='../$ttdx[file]' width='400px'/></td>";
-					}else{
-						echo "<td></td>";
-					}
-					echo "</tr>
+							<tr>
+								<td colspan='3'><b>Asesi :</b> </td>
+							</tr>
+							<tr>
+								<td>Nama </td>
+								<td>:</td>
+								<td>$rowAgen[nama]</td>
+							</tr>
+							<tr>
+								<td>Tanda Tangan/Tanggal </td>
+								<td>:</td>
+								<td>".tgl_indo($ttdxasesi['waktu'])."<br><img src='../$ttdxasesi[file]' width='400px'/></td>
+							</tr>
 							<tr>
 								<td colspan='3'><b>Asesor :</b> </td>
 							</tr>
@@ -10178,8 +10203,8 @@ presentasi</li>
 							$sqlgetkeputusan = "SELECT * FROM `asesi_asesmen` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
 							$getkeputusan = $conn->query($sqlgetkeputusan);
 							$getk = $getkeputusan->fetch_assoc();
-							if ($jumttasesor > 0) {
-							echo	"<td>$tanggalttdasesor<br><img src='$ttdasesor[file]' width='400px'/></td>
+							if ($jumttd > 0) {
+							echo	"<td>".tgl_indo($ttdx['waktu'])."<br><img src='$ttdx[file]' width='400px'/></td>
 							</tr>
 						</table>";
 					} else {
@@ -10209,7 +10234,7 @@ presentasi</li>
 									<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 							</div>
 							<div class='col-md-4 col-sm-12 col-xs-12'>
-									<a href='form-fr-ia-04B.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+									<a href='form-fr-ia-04B.php?ida=$_GET[ida]&idj=$_GET[idj]&asesor=$_SESSION[namauser]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
 							</div>";
 																									if ($jumttd == 0) {
 																										echo "<div class='col-md-4 col-sm-12 col-xs-12'>

@@ -72,9 +72,9 @@ $alamatlsptampil=$alamatlsp." ".$alamatlsp2." ".$telpemail;
 //$pdf->Cell(0, 5, '', '0', 1, 'C');
 $pdf->Ln();
 $write=new easyTable($pdf, '{30, 120, 30}', 'width:180; align:C; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h14;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();
@@ -684,7 +684,7 @@ while ($unkb=$getunitkompetensib->fetch_assoc()){
 	}
 	$write->endTable(5);
 
-
+}
 
 $write=new easyTable($pdf, '{30,80,80}', 'width:190; align:L; font-family:arial; font-size:12');
 $write->easyCell('Nama:', 'align:L; valign:M; border:LTRB; rowspan:2');
@@ -737,20 +737,13 @@ $ttdas=$cekttdasesiapl01->fetch_assoc();
 // tandatangan Asesor LSP
 $urltandatanganadmin=$iden['url_domain']."/asesor/media.php?module=form-ia-05&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
 $sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$asr[no_ktp]' AND `penandatangan`='$asr[nama]' AND id_jadwal='$_GET[idj]' AND nama_dokumen='FR.AI.05.TES TERTULIS PILIHAN GANDA' ORDER BY `waktu` DESC LIMIT 1";
-// tandatangan Asesor LSP
-$urltandatanganadmin=$iden['url_domain']."/asesor/media.php?module=form-fr-ia-01&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
-$sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.IA.01. CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganadmin' ORDER BY `id` DESC";
 $cekttdadminapl01=$conn->query($sqlcekttdadminapl01);
 $jumttdadmin=$cekttdadminapl01->num_rows;
 $ttdad=$cekttdadminapl01->fetch_assoc();
 
-
 // var_dump($sqlcekttdadminapl01);
 // die;
 
-
-
-//$tglttdasesi=tgl_indo($jjw['tanggal_asesittd']);
 if ($jumttdasesi>0){
 	$write->easyCell('Tanda Tangan dan Tanggal', 'align:L; border:LTBR; rowspan:2');
 	$write->easyCell($tgl_cetak, 'align:L; border:TR; font-style:TB;');
@@ -788,17 +781,6 @@ if ($jumttdasesi>0){
 
 $write->endTable(0);
 
-}
-// GRADE NILAI
-$jumskorfull=$nopp-1;
-if ($skortotal>0){
-	$gradenilai=($skortotal/$jumskorfull)*100;
-}else{
-	$gradenilai=0;
-}
-
-
-
 // $write=new easyTable($pdf, '{10,170}', 'width:180; align:C; font-family:arial; font-size:12');
 // $write->easyCell('Catatan:', 'align:L; valign:T; colspan:2; font-style:I; font-size:11;');
 // $write->printRow();
@@ -816,6 +798,15 @@ if ($skortotal>0){
 // $write->printRow();
 // $write->endTable(5);
 //end while unitkompetensi =============================================
+
+
+// GRADE NILAI
+$jumskorfull=$nopp-1;
+if ($skortotal>0){
+	$gradenilai=($skortotal/$jumskorfull)*100;
+}else{
+	$gradenilai=0;
+}
 
 $write=new easyTable($pdf, '{70,120}', 'width:190; align:L; font-family:arial; font-size:12');
 
