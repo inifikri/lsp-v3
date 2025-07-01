@@ -7037,6 +7037,8 @@
 																									}
 																									echo "> TL : Verifikasi Portfolio";
 																									echo "</td><td>";
+
+
 																									echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
 																									if ($jjw['CL'] == "1") {
 																										echo "checked";
@@ -7055,6 +7057,8 @@
 																									}
 																									echo "> T : Hasil Tes Tulis";
 																									echo "</td><td>";
+
+																									
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
 																									if ($jjw['DIT'] == "1") {
 																										echo "checked";
@@ -7864,6 +7868,8 @@
 																									$cektandatangan = $conn->query($sqlcektandatangan);
 																									$jumttd = $cektandatangan->num_rows;
 																									$ttdx = $cektandatangan->fetch_assoc();
+
+																									// belum fix
 																									if ($jumttd > 0) {
 																										echo "<div class='col-md-12'>
 									<label class='' for=''>Persetujuan/ Tanda Tangan yang telah Anda berikan:</label>
@@ -7879,6 +7885,9 @@
 							<br/>
 							<button id='clear'>Hapus Tanda Tangan</button>
 							<textarea id='signature64' name='signed' style='display: none'></textarea>
+							<div class='col-md-4 col-sm-12 col-xs-12'>
+								<button type='submit' class='btn btn-success form-control' name='simpan'>Simpan Jawaban</button>
+						</div>
 						</div>
 						<script type='text/javascript'>
 							var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
@@ -7895,9 +7904,6 @@
 						</div>
 						<div class='col-md-4 col-sm-12 col-xs-12'>
 								<a href='form-ak-05.php?&idj=$_GET[idj]' class='btn btn-primary form-control'>Unduh Formulir</a>
-						</div>
-						<div class='col-md-4 col-sm-12 col-xs-12'>
-								<button type='submit' class='btn btn-success form-control' name='simpan'>Simpan Jawaban</button>
 						</div>
 					</div>
 				</form>			

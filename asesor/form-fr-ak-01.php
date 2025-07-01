@@ -7,7 +7,7 @@ include "../config/koneksi.php";
 include "../config/library.php";
 include "../config/fungsi_indotgl.php";
 
-ini_set('display_errors',1); 
+ini_set('display_errors',0); 
 	error_reporting(E_ALL);
 
 // start a session 
@@ -173,47 +173,29 @@ $write->printRow();
 $write->endTable(0);
 $write=new easyTable($pdf, '{60, 10, 50, 10, 50}', 'width:180; align:C; font-family:arial; font-size:10');
 $write->easyCell('Bukti yang akan dikumpulkan', 'align:L; valign:M; font-size:11; border:LTBR; rowspan:4');
-if ($jjw['VP']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LTB;');
-}else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LTB;');
 
-}
+$write->easyCell('', 'img:' . ($jjw['VP'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
 $write->easyCell('TL : Verifikasi Portfolio', 'align:L; valign:M; font-size:11; border:TBR;');
-if ($jjw['CL']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LTB;');
-}else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LTB;');
-}
+
+$write->easyCell('', 'img:' . ($jjw['CL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
 $write->easyCell('L : Observasi Langsung', 'align:L; valign:M; font-size:11; border:TBR;');
 $write->printRow();
-if ($jjw['DPT']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LT;');
-}else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LT;');
-}
+
+$write->easyCell('', 'img:' . ($jjw['DPT'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LT;');
 $write->easyCell('T : Hasil Tes Tulis', 'align:L; valign:M; font-size:11; border:TBR;');
-if ($jjw['DPL']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LTB;');
-}else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LTB;');
-}
+
+$write->easyCell('', 'img:' . ($jjw['DIT'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
 $write->easyCell('L : Kegiatan Terstruktur (DIT)', 'align:L; valign:M; font-size:11; border:TBR;');
 $write->printRow();
-if ($jjw['DIT']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:LT;');
-}else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:LT;');
-}
+
+$write->easyCell('', 'img:' . ($jjw['DPL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LT;');
 $write->easyCell('L : Hasil Tes Lisan', 'align:L; valign:M; font-size:11; border:R; colspan:3;');
 $write->printRow();
-if ($jjw['PW']=='1'){
-	$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; border:L;');
-}else{
-	$write->easyCell('', 'img:../images/unchecked.jpg, w5, h5; align:C; border:L;');
-}
+
+$write->easyCell('', 'img:' . ($jjw['PW'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:L;');
 $write->easyCell('L : Hasil Wawancara', 'align:L; valign:M; font-size:11; border:BR; colspan:3;');
 $write->printRow();
+
 $write->endTable(0);
 $write=new easyTable($pdf, '{60, 40, 5, 75}', 'width:180; align:C; font-family:arial; font-size:10');
 $write->easyCell('Pelaksanaan asesmen disepakati pada:', 'align:L; valign:M; font-size:11; border:LTBR; rowspan:3');
