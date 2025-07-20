@@ -6231,7 +6231,9 @@ elseif ($_GET['module'] == 'unggahfile2') {
 		$getasesi = $conn->query($sqlasesi);
 		$as = $getasesi->fetch_assoc();
 		// Update WNP@PPM
-		$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND nama_dokumen='Asesmen Mandiri (FORM-APL-02)' AND `penandatangan`='$as[nama]' AND `id_jadwal`='$_GET[idj]' ORDER BY `waktu` DESC";
+		$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jd[id_skemakkni]' AND id_asesi='$_SESSION[namauser]' AND nama_dokumen='FR.APL.02. ASESMEN MANDIRI' AND `penandatangan`='$as[nama]' AND `id_jadwal`='$_GET[idj]' ORDER BY `waktu` DESC";
+		// var_dump($sqlcektandatangan);
+		// die;
 		$cektandatangan = $conn->query($sqlcektandatangan);
 		$jumttd = $cektandatangan->num_rows;
 		$ttdx = $cektandatangan->fetch_assoc();
@@ -7259,42 +7261,87 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 						</table>
 						<table id='example9' class='table table-bordered table-striped'>
 							<tr><td rowspan='4' width='25%'>Bukti yang akan dikumpulkan</td><td>";
+
 	echo "<input type='checkbox' class='flat-red' name='checkboxVP' id='optionsVP' value='1'";
 	if ($jjw['VP'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> TL : Verifikasi Portfolio";
+	echo " disabled> Hasil Verifikasi Portfolio";
 	echo "</td><td>";
+
 	echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
 	if ($jjw['CL'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> L : Observasi Langsung";
+	echo " disabled> Hasil Reviu Produk";
 	echo "</td>
 							</tr>
 							<tr><td>";
+
+	echo "<input type='checkbox' class='flat-red' name='checkboxVP' id='optionsVP' value='1'";
+	if ($jjw['VP'] == "1") {
+		echo "checked";
+	} else {
+		echo "";
+	}
+	echo " disabled> Hasil Verifikasi Portfolio";
+	echo "</td><td>";
+
+	echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
+	if ($jjw['CL'] == "1") {
+		echo "checked";
+	} else {
+		echo "";
+	}
+	echo " disabled> Hasil Reviu Produk";
+	echo "</td>
+							</tr>
+							<tr><td>";
+							
 	echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
 	if ($jjw['DPT'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> T : Hasil Tes Tulis";
+	echo " disabled> Hasil Pertanyaan Lisan";
 	echo "</td><td>";
+
 	echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
 	if ($jjw['DIT'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> L : Kegiatan Terstruktur (DIT)";
+	echo " disabled> Hasil Pertanyaan Tertulis";
+	echo "</td>
+							</tr>
+							<tr><td colspan='2'>";						
+
+	echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
+	if ($jjw['DPT'] == "1") {
+		echo "checked";
+	} else {
+		echo "";
+	}
+	echo " disabled> Hasil Observasi Langsung";
+	echo "</td><td>";
+
+	echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
+	if ($jjw['DIT'] == "1") {
+		echo "checked";
+	} else {
+		echo "";
+	}
+	echo " disabled> Hasil Kegiatan Terstruktur";
 	echo "</td>
 							</tr>
 							<tr><td colspan='2'>";
+
 	echo "<input type='checkbox' class='flat-red' name='checkboxDPL' id='optionsDPL' value='1'";
 	if ($jjw['DPL'] == "1") {
 		echo "checked";
@@ -7305,6 +7352,7 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 	echo "</td>
 							</tr>
 							<tr><td colspan='2'>";
+							
 	echo "<input type='checkbox' class='flat-red' name='checkboxPW' id='optionsPW' value='1'";
 	if ($jjw['PW'] == "1") {
 		echo "checked";
@@ -7877,6 +7925,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
 	$sqlgetskema = "SELECT * FROM `skema_kkni` WHERE `id`='$jd[id_skemakkni]'";
 	$getskema = $conn->query($sqlgetskema);
 	$sk = $getskema->fetch_assoc();
+	// var_dump($sk);
 	$sqltuk = "SELECT * FROM `tuk` WHERE `id`='$jd[tempat_asesmen]'";
 	$tuk = $conn->query($sqltuk);
 	$tq = $tuk->fetch_assoc();
@@ -7983,6 +8032,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
 	$cektandatangan = $conn->query($sqlcektandatangan);
 	$jumttd = $cektandatangan->num_rows;
 	$ttdx = $cektandatangan->fetch_assoc();
+	$tglttdasesi = tgl_indo($ttdx['waktu']);
 	echo "<!-- Main content -->
     <section class='content'>
       <div class='row'>
@@ -7991,7 +8041,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
             <div class='box-body'>
               <!-- form start -->
             	<div class='box-body'>
-					<h2>FR.AK.04. FORMULIR BANDIING ASESMEN</h2>
+					<h2>FR.AK.04. FORMULIR BANDING ASESMEN</h2>
 					<form role='form' method='POST' enctype='multipart/form-data'>
 					<table id='example9' class='table table-bordered table-striped'>
 						<tr><td width='25%'>Nama Asesi</td><td colspan='2'>$rowAgen[nama]</td></tr>
@@ -8037,7 +8087,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
 							echo "";
 						}
 						echo "></td></tr>
-						<tr><td colspan='3'>Banding ini diajukan atas Keputusan Asesmen yang dibuat terhadap Skema Sertifikasi (Kualifikasi/Klaster/Okupasi) berikut :<br>Skema Sertifikasi: Supervisor Logistik (Logistics Supervisor)<br>No. Skema Sertifikasi: 010/SKEMA-LSP-PPM/I/2017</td></tr>
+						<tr><td colspan='3'>Banding ini diajukan atas Keputusan Asesmen yang dibuat terhadap Skema Sertifikasi (Kualifikasi/Klaster/Okupasi) berikut :<br>Skema Sertifikasi: $sk[judul] ($sk[judul_eng]) <br>No. Skema Sertifikasi: $sk[kode_skema]</td></tr>
 						<tr><td colspan='3'>Banding ini diajukan atas alasan sebagai berikut :<br><textarea class='form-control' name='alasan_banding'>$arrak04[alasan_banding]</textarea></td></tr>
 						<tr><td colspan='3'>Anda mempunyai hak mengajukan banding jika Anda menilai Proses Asesmen tidak sesuai SOP dan tidak memenuhi Prinsip Asesmen.</td></tr>
 						<tr><td colspan='3'>"; 
@@ -8045,7 +8095,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
 						echo "<img src='$ttdx[file]' width='400px'/><br><br>";
 						}else{
 						}
-						echo "Tanda tangan asesi :$rowAgen[nama] Tanggal :</td></tr>
+						echo "Tanda tangan asesi :$rowAgen[nama] Tanggal : $tglttdasesi</td></tr>
 					</table>";
 	//Data Asesmen
 	$sqlgetkeputusan = "SELECT * FROM `asesi_asesmen` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
@@ -8072,7 +8122,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
 							<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 					</div>
 					<div class='col-md-4 col-sm-12 col-xs-12'>
-							<a href='asesor/form-fr-ak-02.php?ida=$_SESSION[namauser]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+							<a href='asesor/form-fr-ak-04.php?ida=$_SESSION[namauser]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
 					</div>
 				</div>";
 	} else {
@@ -8097,7 +8147,7 @@ elseif ($_GET['module'] == 'form-fr-ak-04') {
 							<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
 					</div>
 					<div class='col-md-4 col-sm-12 col-xs-12'>
-							<a href='asesor/form-fr-ak-02.php?ida=$_SESSION[namauser]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+							<a href='asesor/form-fr-ak-04.php?ida=$_SESSION[namauser]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
 					</div>
 					<div class='col-md-4 col-sm-12 col-xs-12'>
 							<button type='submit' class='btn btn-success form-control' name='simpan'>Simpan Jawaban</button>

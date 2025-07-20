@@ -4383,10 +4383,11 @@
 																										}
 																											// cek akses asesi ke soal
 																											$sqlgetaksessoal = "SELECT * FROM `asesi_aksessoal` WHERE `id_skemakkni`='$pm[id_skemakkni]' AND `id_asesi`='$pm[id_asesi]' AND `id_jadwal`='$_GET[idj]' AND `jenis_soal`='FR.IA.05'";
+																											// var_dump($sqlgetaksessoal);
 																											$getaksessoal = $conn->query($sqlgetaksessoal);
 																											$gaso = $getaksessoal->fetch_assoc();
 																											$jgaso = $getaksessoal->num_rows;
-																											if($pm['id_skemakkni'] != 2){
+																											// if($pm['id_skemakkni'] != 2){
 																											if ($jgaso > 0) {
 																												switch ($gaso['status']) {
 																													case "1":
@@ -4512,7 +4513,7 @@
 								<input type='submit' class='btn btn-success btn-xs' name='bukaaksessoal' value='Buka Akses Soal Pilihan Ganda'>
 								</form>";
 																											}
-																										}
+																										// }
 																											// cek apakah sudah mengerjakan soal ia 06
 																											$sqlcekstatussoalia06 = "SELECT `id_asesi` FROM `asesmen_ia06` WHERE `id_asesi`='$pm[id_asesi]'";
 																											$cekstatussoalia06 = $conn->query($sqlcekstatussoalia06);
@@ -7038,7 +7039,6 @@
 																									echo "> TL : Verifikasi Portfolio";
 																									echo "</td><td>";
 
-
 																									echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
 																									if ($jjw['CL'] == "1") {
 																										echo "checked";
@@ -7058,7 +7058,6 @@
 																									echo "> T : Hasil Tes Tulis";
 																									echo "</td><td>";
 
-																									
 																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
 																									if ($jjw['DIT'] == "1") {
 																										echo "checked";
@@ -7868,7 +7867,6 @@
 																									$cektandatangan = $conn->query($sqlcektandatangan);
 																									$jumttd = $cektandatangan->num_rows;
 																									$ttdx = $cektandatangan->fetch_assoc();
-
 																									// belum fix
 																									if ($jumttd > 0) {
 																										echo "<div class='col-md-12'>
@@ -15643,7 +15641,7 @@ presentasi</li>
 								echo "</thead>
 							</table>";
 							echo "<table id='example9' class='table table-bordered table-striped'>
-							<thead><tr><th rowspan='2'>No.</th><th rowspan='2'>MUK</th><th colspan='5'>Potensi Asesi**</th></tr>
+							<thead><tr><th rowspan='2'>No.</th><th rowspan='2'>INSTRUMEN ASESMEN</th><th colspan='5'>Potensi Asesi**</th></tr>
 							<tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>";
 								echo "</tr></thead><tbody>";
 								$sqlgetkatmuk = "SELECT * FROM `muk` ORDER BY `id` ASC";
@@ -15652,7 +15650,11 @@ presentasi</li>
 									$sqlgetmuk = "SELECT * FROM `skema_mapa2` WHERE `id_skema`='$_GET[idsk]' AND `id_unitkompetensi`='$gtu1[id]' AND `id_muk`='$gmuk[id]'";
 									$getmuk = $conn->query($sqlgetmuk);
 									$gtmuk = $getmuk->fetch_assoc();
-									echo "<tr><td>$gmuk[id]<input type='hidden' name='id_muk$gtu1[id]$gmuk[id]' value='$gmuk[id]'/></td><td>$gmuk[judul] ID MUK : $gtu1[id]$gmuk[id] MUK : $gtu1[id]$gmuk[id]_1</td>
+
+									// var_dump($gmuk['id']);
+
+									// update wnp@ppm hapus id muk
+									echo "<tr><td>$gmuk[id]<input type='hidden' name='id_muk$gtu1[id]$gmuk[id]' value='$gmuk[id]'/></td><td>$gmuk[kode] - $gmuk[judul]</td>
 								<td><input type='checkbox' name='muk$gtu1[id]$gmuk[id]_1' id='options1$gtu1[id]$gmuk[id]' value='1'";
 									if ($gtmuk['kandidat1'] == "1") {
 										echo " checked";

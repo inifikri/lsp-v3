@@ -1,32 +1,62 @@
 <?php
+// Tampilkan semua error
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include "classes/class.phpmailer.php";
+include "classes/class.phpmailer.php"; // PHPMailer versi lama
 include "config/koneksi.php";
 date_default_timezone_set("Asia/Jakarta");
-$mail = new PHPMailer; 
-$mail->IsSMTP();
-//$mail->SMTPSecure = 'ssl'; 
-$mail->SMTPSecure = 'tls'; 
-$mail->Host = $_POST['host']; //host masing2 provider email
-$mail->SMTPDebug = 2;
-//$mail->Port = 465;
-$mail->Port = 587;
-$mail->SMTPAuth = true;
-$mail->Username = $_POST['username']; //user email
-$mail->Password = $_POST['password']; //password email 
-//Set who the message is to be sent from
-$mail->setFrom("$_POST[username]","Sistem Informasi LSP");
-//Set an alternative reply-to address
-$mail->addReplyTo("$_POST[username]","Pengembang Aplikasi Sistem Informasi LSP");
-$mail->Subject = "Testing Email Sistem Informasi LSP Berhasil"; //subyek email
-$mail->AddAddress($_POST['tujuan'],$_POST['nama']);  //tujuan email
-$mail->MsgHTML("Bila email ini diterima, maka Sistem Informasi LSP telah berhasil mengirim email dengan pengaturan atau konfigurasi SMTP yang dilakukan.");
-if($mail->Send()) echo "Message has been sent";
-else echo "Failed to sending message";
+
+// Ambil data dari POST
+$host   = $_POST['host'] ?? '';
+$port   = $_POST['port'] ?? 587;
+$tujuan = $_POST['tujuan'] ?? '';
+$nama   = $_POST['nama'] ?? 'User';
+
+// Validasi email tujuan
+if (!filter_var($tujuan, FILTER_VALIDATE_EMAIL)) {
+    echo "❌ Email tujuan tidak valid: $tujuan";
+    exit;
+}
+
+// Inisialisasi PHPMailer
+$mail = new PHPMailer();
+$mail->isSMTP();
+$mail->SMTPDebug = 2; // Debug verbose
+
+// Konfigurasi SMTP tanpa autentikasi
+$mail->Host       = $host;
+$mail->Port       = $port;
+$mail->SMTPSecure = ''; // Tanpa TLS/SSL
+$mail->SMTPAuth   = false;
+
+// Opsi bypass SSL error (optional, untuk dev)
+$mail->SMTPOptions = [
+    'ssl' => [
+        'verify_peer'       => false,
+        'verify_peer_name'  => false,
+        'allow_self_signed' => true
+    ]
+];
+
+// Set email pengirim (dummy aja untuk dev)
+$mail->setFrom('no-reply@ppm-manajemen.ac.id', 'Sistem Informasi LSP');
+$mail->addReplyTo('no-reply@ppm-manajemen.ac.id', 'Sistem Informasi LSP');
+
+// Penerima
+$mail->addAddress($tujuan, $nama);
+
+// Isi email
+$mail->Subject = "Testing Email Sistem Informasi LSP Berhasil";
+$mail->MsgHTML("✅ Bila email ini diterima, maka sistem berhasil mengirim email melalui SMTP dev (tanpa login dan TLS).");
+
+// Kirim email
+if ($mail->send()) {
+    echo "✅ Email berhasil dikirim ke <strong>$tujuan</strong>";
+} else {
+    echo "❌ Gagal kirim email: " . $mail->ErrorInfo;
+}
+
 echo "<br><br><a href='admin/media.php?module=smtp'>Kembali</a>";
-//mail($email,$subjek,$pesan,$dari);
-//echo $pesan; 
 ?>

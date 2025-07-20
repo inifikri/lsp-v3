@@ -165,8 +165,8 @@ $nomorlisensi="Nomor Lisensi : ".$lq['no_lisensi'];
 //Disable automatic page break
 //$pdf->SetAutoPageBreak(false);
 // Foto atau Logo
-$pdf->Image('../images/logolsp.jpg',15,15,25,25);
-$pdf->Image('../images/logo-bnsp.jpg',170,15,25,25);
+$pdf->Image('../images/logolsp.jpg',15,15,25,14);
+$pdf->Image('../images/logo-bnsp.jpg',170,15,25,14);
 
 //tampilan Judul Laporan
 $pdf->SetFont('Arial','B','12'); //Font Arial, Tebal/Bold, ukuran font 11

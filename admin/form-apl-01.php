@@ -119,9 +119,9 @@ $pdf->AddFont('FontUTF8','I','Arimo-Italic.php');
 $pdf->AddFont('FontUTF8','BI','Arimo-BoldItalic.php');
 
 $write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.png, w31, h13; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logo-bnsp.png, w25, h25;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();

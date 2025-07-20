@@ -94,17 +94,17 @@ if ($ktp==0){
 	date_default_timezone_set("Asia/Jakarta");
 	$mail = new PHPMailer; 
 	$mail->IsSMTP();
-	$mail->SMTPSecure = $gsmtp['protokol']; 
+	// $mail->SMTPSecure = $gsmtp['protokol']; 
 	$mail->Host = $gsmtp['host']; //host masing2 provider email
-	$mail->SMTPDebug = 0;
+	$mail->SMTPDebug = 2;
 	$mail->Port = $gsmtp['port'];
 	$mail->SMTPAuth = true;
 	$mail->Username = $gsmtp['username']; //user email
 	$mail->Password = $gsmtp['password']; //password email 
 	//Set who the message is to be sent from
-	$mail->setFrom("$gsmtp[username]",$iden['nama_lsp']);
+	$mail->setFrom("no-reply@ppm-manajemen.ac.id",$iden['nama_lsp']);
 	//Set an alternative reply-to address
-	$mail->addReplyTo("$gsmtp[username]",$iden['nama_lsp']);
+	$mail->addReplyTo("no-reply@ppm-manajemen.ac.id",$iden['nama_lsp']);
 	$mail->Subject = $subjek; //subyek email
 	$mail->AddAddress($emailinput,$namanyainput);  //tujuan email
 	$mail->MsgHTML($pesan);

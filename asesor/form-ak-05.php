@@ -590,7 +590,7 @@ $sqlcekttd = "SELECT * FROM `logdigisign`
               WHERE `nama_dokumen`='FR.AK.05. LAPORAN ASESMEN' 
               AND `penandatangan`='$asr[nama]' 
               AND `url_ditandatangani`='$urltandatanganas' 
-              AND id_jadwal='$jdq[id]' 
+              AND id_jadwal='$_GET[idj]' 
               ORDER BY `id` DESC";
 
 // var_dump($sqlcekttd);

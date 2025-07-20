@@ -14,6 +14,7 @@ $sqlskema="SELECT * FROM `skema_kkni` WHERE `id`='$_GET[idsk]'";
 $skema=$conn->query($sqlskema);
 $sq=$skema->fetch_assoc();
 $skemakkni=$sq['judul'];
+$skemakknieng=$sq['judul_eng'];
 
 $sqlwil1="SELECT * FROM `data_wilayah` WHERE `id_wil`='$lq[id_wilayah]'";
 $wilayah1=$conn->query($sqlwil1);
@@ -49,9 +50,9 @@ $alamatlsptampil=$alamatlsp." ".$alamatlsp2." ".$telpemail;
 //$pdf->Cell(0, 5, '', '0', 1, 'C');
 $pdf->Ln();
 $write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h14;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();
@@ -71,7 +72,7 @@ $write=new easyTable($pdf, '{50, 20, 5, 115}', 'width:190; align:L; font-style:B
 $write->easyCell('Skema Sertifikasi (KKNI/Okupasi/Klaster)', 'align:L; rowspan:2; border:LTBR');
 $write->easyCell('Judul', 'align:L; font-size:10; border:LTBR');
 $write->easyCell(':', 'align:C; font-size:10; border:LTBR');
-$write->easyCell($skemakkni, 'align:L; font-size:10; border:LTBR');
+$write->easyCell($skemakkni . ' ' . "($skemakknieng)", 'align:L; font-size:10; border:LTBR');
 $write->printRow();
 $write->easyCell('Nomor', 'align:L; font-size:10; border:LTBR');
 $write->easyCell(':', 'align:C; font-size:10; border:LTBR');
@@ -108,7 +109,7 @@ while ($unk=$getkelunit->fetch_assoc()){
 
 	$write=new easyTable($pdf, '{10, 130, 10, 10, 10, 10, 10}', 'width:190; align:L; font-family:arial; font-size:12');
 	$write->easyCell('No.', 'align:C; rowspan:2; border:LTBR; font-style:B');
-	$write->easyCell('MUK', 'align:C; rowspan:2; border:LTBR; font-style:B');
+	$write->easyCell('INSTRUMEN ASESMEN', 'align:C; rowspan:2; border:LTBR; font-style:B');
 	$write->easyCell('Potensi Asesi**', 'align:C; colspan:5; border:LTBR; font-style:B');
 	$write->printRow();
 	$write->easyCell('1', 'align:C; border:LTBR; font-style:B');
@@ -127,7 +128,7 @@ while ($unk=$getkelunit->fetch_assoc()){
 			$gtmukx=$getmukx->fetch_assoc();
 			
 			$write->easyCell($nomuk, 'align:C; border:LTBR; font-size:11');
-			$write->easyCell($gmuk['judul'], 'align:L; border:LTBR; font-size:11');
+			$write->easyCell($gmuk['kode'] . ' ' . $gmuk['judul'], 'align:L; border:LTBR; font-size:11');
 			if ($gtmukx['kandidat1']=="1"){
 				$write->easyCell('', 'img:../images/checked.jpg, w4, h4; align:C; valign:M; border:TRB;');
 			}else{

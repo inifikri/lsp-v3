@@ -5,6 +5,8 @@ include "../config/fungsi_indotgl.php";
 include "../config/fungsi_combobox.php";
 include "../config/class_paging.php";
 include "../config/fungsi_rupiah.php";
+ini_set('display_errors',0); 
+
 error_reporting(E_ALL ^ E_NOTICE);
 // Bagian Home
 if ($_GET['module']=='home'){

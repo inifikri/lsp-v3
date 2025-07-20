@@ -1,6 +1,4 @@
 <?php
-
-
 date_default_timezone_set('Asia/Jakarta'); // PHP 6 mengharuskan penyebutan timezone.
 $seminggu = array("Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu");
 $hari = date("w");

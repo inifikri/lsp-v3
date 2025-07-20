@@ -64,8 +64,6 @@ $sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemak
 $cektandatangan = $conn->query($sqlcektandatangan);
 $ttdx = $cektandatangan->fetch_assoc();
 
-
-
 // var_dump($sqlcektandatangan);
 
 // TTD Asesi

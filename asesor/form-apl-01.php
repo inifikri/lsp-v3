@@ -117,9 +117,9 @@ $pdf->AddFont('FontUTF8','I','Arimo-Italic.php');
 $pdf->AddFont('FontUTF8','BI','Arimo-BoldItalic.php');
 
 $write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h14;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();
@@ -654,10 +654,9 @@ $write->printRow();
 $write->easyCell('Tanda tangan/ 
 Tanggal', 'align:L; valign:T; font-size:10; border:LBR; rowspan:2');
 // tandatangan admin LSP
-// $urltandatanganadmin=$iden['url_domain']."/admin/media.php?module=syarat&amp;idas=".$assm['id']."&amp;id=".$jdq['id_skemakkni']."&amp;ida=".$_GET['ida'];
+$urltandatanganadmin=$iden['url_domain']."/admin/media.php?module=syarat&amp;idas=".$assm['id']."&amp;id=".$jdq['id_skemakkni']."&amp;ida=".$_GET['ida'];
 // $sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI' AND `penandatangan`='$adminlsp' AND `url_ditandatangani`='$urltandatanganadmin' ORDER BY `id` DESC";
 $sqlcekttdadminapl01="SELECT * FROM `logdigisign` WHERE `id_asesi`='$_GET[ida]' AND `id_skema`='$sq[id]'";
-// var_dump($sqlcekttdadminapl01);
 $cekttdadminapl01=$conn->query($sqlcekttdadminapl01);
 $jumttdadmin=$cekttdadminapl01->num_rows;
 $ttdad=$cekttdadminapl01->fetch_assoc();
