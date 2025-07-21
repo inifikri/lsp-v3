@@ -7180,7 +7180,7 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 				Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul].</b><br>
 				<a class='btn btn-warning form-control' href='?module=jadwal'>Kembali</a></div>
 				<script>alert('Data berhasil diubah'); window.location = '" . $base_url . "media.php?module=form-fr-ak-01&ida=$_GET[ida]&idj=$_GET[idj]'</script>";
-				$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan_asesi`, `tanggal_asesittd`) VALUES ('$_SESSION[namauser]','$jd[id_skemakkni]','$_GET[idj]','$_POST[checkboxVP]','$_POST[checkboxCL]','$_POST[checkboxDPT]','$_POST[checkboxDPL]','$_POST[checkboxPW]','$_POST[persetujuan]','$tglsekarang')";
+				$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `RP`, `OL`, `KT`, `PL`, `PT`, `PW`, `PK`, `HL`, `persetujuan_asesi`, `tanggal_asesittd`) VALUES ('$_SESSION[namauser]','$jd[id_skemakkni]','$_GET[idj]','$_POST[checkboxVP]','$_POST[checkboxCL]','$_POST[checkboxDPT]','$_POST[checkboxDPL]','$_POST[checkboxPW]','$_POST[persetujuan]','$tglsekarang')";
 				$conn->query($sqlinputak01);
 			} else {
 				$image_parts = explode(";base64,", $_POST['signed']);
@@ -7206,32 +7206,47 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 				} else {
 					$checkboxVP = '0';
 				}
-				if (isset($_POST['checkboxCL'])) {
-					$checkboxCL = $_POST['checkboxCL'];
+				if (isset($_POST['checkboxRP'])) {
+					$checkboxRP = $_POST['checkboxRP'];
 				} else {
-					$checkboxCL = '0';
+					$checkboxRP = '0';
 				}
-				if (isset($_POST['checkboxDPT'])) {
-					$checkboxDPT = $_POST['checkboxDPT'];
+				if (isset($_POST['checkboxOL'])) {
+					$checkboxOL = $_POST['checkboxOL'];
 				} else {
-					$checkboxDPT = '0';
+					$checkboxOL = '0';
 				}
-				if (isset($_POST['checkboxDPL'])) {
-					$checkboxDPL = $_POST['checkboxDPL'];
+				if (isset($_POST['checkboxKT'])) {
+					$checkboxKT = $_POST['checkboxKT'];
 				} else {
-					$checkboxDPL = '0';
+					$checkboxKT = '0';
+				}
+				if (isset($_POST['checkboxPL'])) {
+					$checkboxPL = $_POST['checkboxPL'];
+				} else {
+					$checkboxPL = '0';
+				}
+				if (isset($_POST['checkboxPT'])) {
+					$checkboxPT = $_POST['checkboxPT'];
+				} else {
+					$checkboxPT = '0';
 				}
 				if (isset($_POST['checkboxPW'])) {
 					$checkboxPW = $_POST['checkboxPW'];
 				} else {
 					$checkboxPW = '0';
 				}
-				if (isset($_POST['checkboxDIT'])) {
-					$checkboxDIT = $_POST['checkboxDIT'];
+				if (isset($_POST['checkboxPK'])) {
+					$checkboxPK = $_POST['checkboxPK'];
 				} else {
-					$checkboxDIT = '0';
+					$checkboxPK = '0';
 				}
-				$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan_asesi`, `tanggal_asesittd`) VALUES ('$_SESSION[namauser]','$jd[id_skemakkni]','$_GET[idj]','$checkboxVP','$checkboxCL','$checkboxDPT','$checkboxDPL','$checkboxPW','$_POST[persetujuan]','$tglsekarang')";
+				if (isset($_POST['checkboxHL'])) {
+					$checkboxHL = $_POST['checkboxHL'];
+				} else {
+					$checkboxHL = '0';
+				}
+				$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `RP`, `OL`, `KT`, `PL`, `PT`, `PW`, `PK`, `HL`, `persetujuan_asesi`, `tanggal_asesittd`) VALUES ('$_SESSION[namauser]','$jd[id_skemakkni]','$_GET[idj]','$checkboxVP','$checkboxCL','$checkboxDPT','$checkboxDPL','$checkboxPW','$_POST[persetujuan]','$tglsekarang')";
 				$conn->query($sqlinputak01);
 			}
 		}
@@ -7271,8 +7286,8 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 	echo " disabled> Hasil Verifikasi Portfolio";
 	echo "</td><td>";
 
-	echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
-	if ($jjw['CL'] == "1") {
+	echo "<input type='checkbox' class='flat-red' name='checkboxRP' id='optionsRP' value='1'";
+	if ($jjw['RP'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
@@ -7282,28 +7297,28 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 							</tr>
 							<tr><td>";
 
-	echo "<input type='checkbox' class='flat-red' name='checkboxVP' id='optionsVP' value='1'";
-	if ($jjw['VP'] == "1") {
+	echo "<input type='checkbox' class='flat-red' name='checkboxOL' id='optionsOL' value='1'";
+	if ($jjw['OL'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> Hasil Verifikasi Portfolio";
+	echo " disabled> Hasil Observasi Langsung";
 	echo "</td><td>";
 
-	echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
-	if ($jjw['CL'] == "1") {
+	echo "<input type='checkbox' class='flat-red' name='checkboxKT' id='optionsKT' value='1'";
+	if ($jjw['KT'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> Hasil Reviu Produk";
+	echo " disabled> Hasil Kegiatan Terstruktur";
 	echo "</td>
 							</tr>
 							<tr><td>";
 							
-	echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
-	if ($jjw['DPT'] == "1") {
+	echo "<input type='checkbox' class='flat-red' name='checkboxPL' id='optionsPL' value='1'";
+	if ($jjw['PL'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
@@ -7311,8 +7326,8 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 	echo " disabled> Hasil Pertanyaan Lisan";
 	echo "</td><td>";
 
-	echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
-	if ($jjw['DIT'] == "1") {
+	echo "<input type='checkbox' class='flat-red' name='checkboxPT' id='optionsPT' value='1'";
+	if ($jjw['PT'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
@@ -7322,44 +7337,34 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 							</tr>
 							<tr><td colspan='2'>";						
 
-	echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
-	if ($jjw['DPT'] == "1") {
-		echo "checked";
-	} else {
-		echo "";
-	}
-	echo " disabled> Hasil Observasi Langsung";
-	echo "</td><td>";
-
-	echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
-	if ($jjw['DIT'] == "1") {
-		echo "checked";
-	} else {
-		echo "";
-	}
-	echo " disabled> Hasil Kegiatan Terstruktur";
-	echo "</td>
-							</tr>
-							<tr><td colspan='2'>";
-
-	echo "<input type='checkbox' class='flat-red' name='checkboxDPL' id='optionsDPL' value='1'";
-	if ($jjw['DPL'] == "1") {
-		echo "checked";
-	} else {
-		echo "";
-	}
-	echo " disabled> L : Hasil Tes Lisan";
-	echo "</td>
-							</tr>
-							<tr><td colspan='2'>";
-							
 	echo "<input type='checkbox' class='flat-red' name='checkboxPW' id='optionsPW' value='1'";
 	if ($jjw['PW'] == "1") {
 		echo "checked";
 	} else {
 		echo "";
 	}
-	echo " disabled> L : Hasil Wawancara";
+	echo " disabled> Hasil Pertanyaan Wawancara	";
+	echo "</td><td>";
+
+	echo "<input type='checkbox' class='flat-red' name='checkboxPK' id='optionsPK' value='1'";
+	if ($jjw['PK'] == "1") {
+		echo "checked";
+	} else {
+		echo "";
+	}
+	echo " disabled> Hasil Verifikasi Pihak Ketiga";
+	echo "</td>
+							</tr>
+							<tr><td colspan='2'>";
+
+							
+	echo "<input type='checkbox' class='flat-red' name='checkboxHL' id='optionsHL' value='1'";
+	if ($jjw['HL'] == "1") {
+		echo "checked";
+	} else {
+		echo "";
+	}
+	echo " disabled> Hasil Lainnya...";
 	echo "</td>
 							</tr>
 						</table>
