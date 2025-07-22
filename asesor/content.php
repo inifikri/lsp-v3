@@ -6748,37 +6748,52 @@
 					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>
 					<script>alert('Data berhasil disimpan'); window.location = '" . $base_url . "media.php?module=form-fr-ak-01&ida=$_GET[ida]&idj=$_GET[idj]'</script>";
 																												if (isset($_POST['checkboxVP'])) {
-																													$postVP = $_POST['checkboxVP'];
-																												} else {
-																													$postVP = "0";
-																												}
-																												if (isset($_POST['checkboxCL'])) {
-																													$postCL = $_POST['checkboxCL'];
-																												} else {
-																													$postCL = "0";
-																												}
-																												if (isset($_POST['checkboxDPT'])) {
-																													$postDPT = $_POST['checkboxDPT'];
-																												} else {
-																													$postDPT = "0";
-																												}
-																												if (isset($_POST['checkboxDPL'])) {
-																													$postDPL = $_POST['checkboxDPL'];
-																												} else {
-																													$postDPL = "0";
-																												}
-																												if (isset($_POST['checkboxPW'])) {
-																													$postPW = $_POST['checkboxPW'];
-																												} else {
-																													$postPW = "0";
-																												}
-																												if (isset($_POST['checkboxDIT'])) {
-																													$postDIT = $_POST['checkboxDIT'];
-																												} else {
-																													$postDIT = "0";
-																												}
-																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postDIT',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
-																												$conn->query($sqlinputak01);
+																												$postVP = $_POST['checkboxVP'];
+																											} else {
+																												$postVP = "0";
+																											}
+																											if (isset($_POST['checkboxRP'])) {
+																												$postRP = $_POST['checkboxRP'];
+																											} else {
+																												$postRP = "0";
+																											}
+																											if (isset($_POST['checkboxOL'])) {
+																												$postOL = $_POST['checkboxOL'];
+																											} else {
+																												$postOL = "0";
+																											}
+																											if (isset($_POST['checkboxKT'])) {
+																												$postKT = $_POST['checkboxKT'];
+																											} else {
+																												$postKT = "0";
+																											}
+																											if (isset($_POST['checkboxPL'])) {
+																												$postPL = $_POST['checkboxPL'];
+																											} else {
+																												$postPL = "0";
+																											}
+																											if (isset($_POST['checkboxPT'])) {
+																												$postPT = $_POST['checkboxPT'];
+																											} else {
+																												$postPT = "0";
+																											}
+																											if (isset($_POST['checkboxPW'])) {
+																												$postPW = $_POST['checkboxPW'];
+																											} else {
+																												$postPW = "0";
+																											}
+																											if (isset($_POST['checkboxPK'])) {
+																												$postPK = $_POST['checkboxPK'];
+																											} else {
+																												$postPK = "0";
+																											}
+																											if (isset($_POST['checkboxHL'])) {
+																												$postHL = $_POST['checkboxHL'];
+																											} else {
+																												$postHL = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`RP`='$postRP', `OL`='$postOL', `KT`='$postKT', `PL`='$postPL', `PT`='$postPT', `PW`='$postPW', `PK`='$postPK', `HL`='$postHL', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											$conn->query($sqlinputak01);
 																											} else {
 																												$image_parts = explode(";base64,", $_POST['signed']);
 																												$image_type_aux = explode("image/", $image_parts[0]);
@@ -6798,38 +6813,53 @@
 					Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul], dan tanda tangan telah ditambahkan</b><br>
 					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>
 					<script>alert('Data berhasil disimpan'); window.location = '" . $base_url . "media.php?module=form-fr-ak-01&ida=$_GET[ida]&idj=$_GET[idj]'</script>";
-																												if (isset($_POST['checkboxVP'])) {
-																													$postVP = $_POST['checkboxVP'];
-																												} else {
-																													$postVP = "0";
-																												}
-																												if (isset($_POST['checkboxCL'])) {
-																													$postCL = $_POST['checkboxCL'];
-																												} else {
-																													$postCL = "0";
-																												}
-																												if (isset($_POST['checkboxDPT'])) {
-																													$postDPT = $_POST['checkboxDPT'];
-																												} else {
-																													$postDPT = "0";
-																												}
-																												if (isset($_POST['checkboxDPL'])) {
-																													$postDPL = $_POST['checkboxDPL'];
-																												} else {
-																													$postDPL = "0";
-																												}
-																												if (isset($_POST['checkboxPW'])) {
-																													$postPW = $_POST['checkboxPW'];
-																												} else {
-																													$postPW = "0";
-																												}
-																												if (isset($_POST['checkboxDIT'])) {
-																													$postDIT = $_POST['checkboxDIT'];
-																												} else {
-																													$postDIT = "0";
-																												}
-																												$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang' WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
-																												$conn->query($sqlinputak01);
+																											if (isset($_POST['checkboxVP'])) {
+																												$postVP = $_POST['checkboxVP'];
+																											} else {
+																												$postVP = "0";
+																											}
+																											if (isset($_POST['checkboxRP'])) {
+																												$postRP = $_POST['checkboxRP'];
+																											} else {
+																												$postRP = "0";
+																											}
+																											if (isset($_POST['checkboxOL'])) {
+																												$postOL = $_POST['checkboxOL'];
+																											} else {
+																												$postOL = "0";
+																											}
+																											if (isset($_POST['checkboxKT'])) {
+																												$postKT = $_POST['checkboxKT'];
+																											} else {
+																												$postKT = "0";
+																											}
+																											if (isset($_POST['checkboxPL'])) {
+																												$postPL = $_POST['checkboxPL'];
+																											} else {
+																												$postPL = "0";
+																											}
+																											if (isset($_POST['checkboxPT'])) {
+																												$postPT = $_POST['checkboxPT'];
+																											} else {
+																												$postPT = "0";
+																											}
+																											if (isset($_POST['checkboxPW'])) {
+																												$postPW = $_POST['checkboxPW'];
+																											} else {
+																												$postPW = "0";
+																											}
+																											if (isset($_POST['checkboxPK'])) {
+																												$postPK = $_POST['checkboxPK'];
+																											} else {
+																												$postPK = "0";
+																											}
+																											if (isset($_POST['checkboxHL'])) {
+																												$postHL = $_POST['checkboxHL'];
+																											} else {
+																												$postHL = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`RP`='$postRP', `OL`='$postOL', `KT`='$postKT', `PL`='$postPL', `PT`='$postPT', `PW`='$postPW', `PK`='$postPK', `HL`='$postHL', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											$conn->query($sqlinputak01);
 																											}
 																										} else {
 																											$folderPath = "../foto_tandatangan/";
@@ -6839,7 +6869,52 @@
 					<h4><i class='icon fa fa-check'></i> Persetujuan Asesor berhasil disimpan</h4>
 					Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul].</b><br>
 					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>";
-																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$_POST[persetujuan]','$tglsekarang')";
+																												if (isset($_POST['checkboxVP'])) {
+																												$postVP = $_POST['checkboxVP'];
+																											} else {
+																												$postVP = "0";
+																											}
+																											if (isset($_POST['checkboxRP'])) {
+																												$postRP = $_POST['checkboxRP'];
+																											} else {
+																												$postRP = "0";
+																											}
+																											if (isset($_POST['checkboxOL'])) {
+																												$postOL = $_POST['checkboxOL'];
+																											} else {
+																												$postOL = "0";
+																											}
+																											if (isset($_POST['checkboxKT'])) {
+																												$postKT = $_POST['checkboxKT'];
+																											} else {
+																												$postKT = "0";
+																											}
+																											if (isset($_POST['checkboxPL'])) {
+																												$postPL = $_POST['checkboxPL'];
+																											} else {
+																												$postPL = "0";
+																											}
+																											if (isset($_POST['checkboxPT'])) {
+																												$postPT = $_POST['checkboxPT'];
+																											} else {
+																												$postPT = "0";
+																											}
+																											if (isset($_POST['checkboxPW'])) {
+																												$postPW = $_POST['checkboxPW'];
+																											} else {
+																												$postPW = "0";
+																											}
+																											if (isset($_POST['checkboxPK'])) {
+																												$postPK = $_POST['checkboxPK'];
+																											} else {
+																												$postPK = "0";
+																											}
+																											if (isset($_POST['checkboxHL'])) {
+																												$postHL = $_POST['checkboxHL'];
+																											} else {
+																												$postHL = "0";
+																											}
+																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `RP`, `OL`, `KT`, `PL`,`PT`, `PW`, `PK`, `HL`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postRP','$postOL','$postKT','$postPL','$postPT','$postPW','$postPK','$postHL','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											} else {
 																												$image_parts = explode(";base64,", $_POST['signed']);
@@ -6860,36 +6935,51 @@
 					Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul], dan tanda tangan telah ditambahkan</b><br>
 					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>";
 																												if (isset($_POST['checkboxVP'])) {
-																													$postVP = $_POST['checkboxVP'];
-																												} else {
-																													$postVP = "0";
-																												}
-																												if (isset($_POST['checkboxCL'])) {
-																													$postCL = $_POST['checkboxCL'];
-																												} else {
-																													$postCL = "0";
-																												}
-																												if (isset($_POST['checkboxDPT'])) {
-																													$postDPT = $_POST['checkboxDPT'];
-																												} else {
-																													$postDPT = "0";
-																												}
-																												if (isset($_POST['checkboxDPL'])) {
-																													$postDPL = $_POST['checkboxDPL'];
-																												} else {
-																													$postDPL = "0";
-																												}
-																												if (isset($_POST['checkboxPW'])) {
-																													$postPW = $_POST['checkboxPW'];
-																												} else {
-																													$postPW = "0";
-																												}
-																												if (isset($_POST['checkboxDIT'])) {
-																													$postDIT = $_POST['checkboxDIT'];
-																												} else {
-																													$postDIT = "0";
-																												}
-																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `CL`, `DPT`, `DPL`, `PW`,`DIT`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postCL','$postDPT','$postDPL','$postPW','$postDIT','$_POST[persetujuan]','$tglsekarang')";
+																												$postVP = $_POST['checkboxVP'];
+																											} else {
+																												$postVP = "0";
+																											}
+																											if (isset($_POST['checkboxRP'])) {
+																												$postRP = $_POST['checkboxRP'];
+																											} else {
+																												$postRP = "0";
+																											}
+																											if (isset($_POST['checkboxOL'])) {
+																												$postOL = $_POST['checkboxOL'];
+																											} else {
+																												$postOL = "0";
+																											}
+																											if (isset($_POST['checkboxKT'])) {
+																												$postKT = $_POST['checkboxKT'];
+																											} else {
+																												$postKT = "0";
+																											}
+																											if (isset($_POST['checkboxPL'])) {
+																												$postPL = $_POST['checkboxPL'];
+																											} else {
+																												$postPL = "0";
+																											}
+																											if (isset($_POST['checkboxPT'])) {
+																												$postPT = $_POST['checkboxPT'];
+																											} else {
+																												$postPT = "0";
+																											}
+																											if (isset($_POST['checkboxPW'])) {
+																												$postPW = $_POST['checkboxPW'];
+																											} else {
+																												$postPW = "0";
+																											}
+																											if (isset($_POST['checkboxPK'])) {
+																												$postPK = $_POST['checkboxPK'];
+																											} else {
+																												$postPK = "0";
+																											}
+																											if (isset($_POST['checkboxHL'])) {
+																												$postHL = $_POST['checkboxHL'];
+																											} else {
+																												$postHL = "0";
+																											}
+																												$sqlinputak01 = "INSERT INTO `asesmen_ak01`(`id_asesi`, `id_skemakkni`, `id_jadwal`, `VP`, `RP`, `OL`, `KT`, `PL`,`PT`, `PW`, `PK`, `HL`, `persetujuan`, `tanggal`) VALUES ('$_GET[ida]','$jd[id_skemakkni]','$_GET[idj]','$postVP','$postRP','$postOL','$postKT','$postPL','$postPT','$postPW','$postPK','$postHL','$_POST[persetujuan]','$tglsekarang')";
 																												$conn->query($sqlinputak01);
 																											}
 																										}
@@ -6920,32 +7010,47 @@
 																											} else {
 																												$postVP = "0";
 																											}
-																											if (isset($_POST['checkboxCL'])) {
-																												$postCL = $_POST['checkboxCL'];
+																											if (isset($_POST['checkboxRP'])) {
+																												$postRP = $_POST['checkboxRP'];
 																											} else {
-																												$postCL = "0";
+																												$postRP = "0";
 																											}
-																											if (isset($_POST['checkboxDPT'])) {
-																												$postDPT = $_POST['checkboxDPT'];
+																											if (isset($_POST['checkboxOL'])) {
+																												$postOL = $_POST['checkboxOL'];
 																											} else {
-																												$postDPT = "0";
+																												$postOL = "0";
 																											}
-																											if (isset($_POST['checkboxDPL'])) {
-																												$postDPL = $_POST['checkboxDPL'];
+																											if (isset($_POST['checkboxKT'])) {
+																												$postKT = $_POST['checkboxKT'];
 																											} else {
-																												$postDPL = "0";
+																												$postKT = "0";
+																											}
+																											if (isset($_POST['checkboxPL'])) {
+																												$postPL = $_POST['checkboxPL'];
+																											} else {
+																												$postPL = "0";
+																											}
+																											if (isset($_POST['checkboxPT'])) {
+																												$postPT = $_POST['checkboxPT'];
+																											} else {
+																												$postPT = "0";
 																											}
 																											if (isset($_POST['checkboxPW'])) {
 																												$postPW = $_POST['checkboxPW'];
 																											} else {
 																												$postPW = "0";
 																											}
-																											if (isset($_POST['checkboxDIT'])) {
-																												$postDIT = $_POST['checkboxDIT'];
+																											if (isset($_POST['checkboxPK'])) {
+																												$postPK = $_POST['checkboxPK'];
 																											} else {
-																												$postDIT = "0";
+																												$postPK = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											if (isset($_POST['checkboxHL'])) {
+																												$postHL = $_POST['checkboxHL'];
+																											} else {
+																												$postHL = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`RP`='$postRP', `OL`='$postOL', `KT`='$postKT', `PL`='$postPL', `PT`='$postPT', `PW`='$postPW', `PK`='$postPK', `HL`='$postHL', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										} else {
 																											// UPDATE @FHM-PUSTI 7 AGUSTUS 2023 : Hapus data logdigisign Asesi
@@ -6978,32 +7083,47 @@
 																											} else {
 																												$postVP = "0";
 																											}
-																											if (isset($_POST['checkboxCL'])) {
-																												$postCL = $_POST['checkboxCL'];
+																											if (isset($_POST['checkboxRP'])) {
+																												$postRP = $_POST['checkboxRP'];
 																											} else {
-																												$postCL = "0";
+																												$postRP = "0";
 																											}
-																											if (isset($_POST['checkboxDPT'])) {
-																												$postDPT = $_POST['checkboxDPT'];
+																											if (isset($_POST['checkboxOL'])) {
+																												$postOL = $_POST['checkboxOL'];
 																											} else {
-																												$postDPT = "0";
+																												$postOL = "0";
 																											}
-																											if (isset($_POST['checkboxDPL'])) {
-																												$postDPL = $_POST['checkboxDPL'];
+																											if (isset($_POST['checkboxKT'])) {
+																												$postKT = $_POST['checkboxKT'];
 																											} else {
-																												$postDPL = "0";
+																												$postKT = "0";
+																											}
+																											if (isset($_POST['checkboxPL'])) {
+																												$postPL = $_POST['checkboxPL'];
+																											} else {
+																												$postPL = "0";
+																											}
+																											if (isset($_POST['checkboxPT'])) {
+																												$postPT = $_POST['checkboxPT'];
+																											} else {
+																												$postPT = "0";
 																											}
 																											if (isset($_POST['checkboxPW'])) {
 																												$postPW = $_POST['checkboxPW'];
 																											} else {
 																												$postPW = "0";
 																											}
-																											if (isset($_POST['checkboxDIT'])) {
-																												$postDIT = $_POST['checkboxDIT'];
+																											if (isset($_POST['checkboxPK'])) {
+																												$postPK = $_POST['checkboxPK'];
 																											} else {
-																												$postDIT = "0";
+																												$postPK = "0";
 																											}
-																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`CL`='$postCL', `DPT`='$postDPT', `DPL`='$postDPL', `PW`='$postPW',`DIT`='$postDIT', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																											if (isset($_POST['checkboxHL'])) {
+																												$postHL = $_POST['checkboxHL'];
+																											} else {
+																												$postHL = "0";
+																											}
+																											$sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`RP`='$postRP', `OL`='$postOL', `KT`='$postKT', `PL`='$postPL', `PT`='$postPT', `PW`='$postPW', `PK`='$postPK', `HL`='$postHL', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
 																											$conn->query($sqlinputak01);
 																										}
 																									}
@@ -7036,58 +7156,96 @@
 																									} else {
 																										echo "";
 																									}
-																									echo "> TL : Verifikasi Portfolio";
+																									echo ">Hasil Verifikasi Portfolio";
 																									echo "</td><td>";
 
-																									echo "<input type='checkbox' class='flat-red' name='checkboxCL' id='optionsCL' value='1'";
-																									if ($jjw['CL'] == "1") {
+																									echo "<input type='checkbox' class='flat-red' name='checkboxRP' id='optionsRP' value='1'";
+																									if ($jjw['RP'] == "1") {
 																										echo "checked";
 																									} else {
 																										echo "";
 																									}
-																									echo "> L : Observasi Langsung";
+																									echo "> Hasil Reviu Produk";
 																									echo "</td>
-							</tr>
-							<tr><td>";
-																									echo "<input type='checkbox' class='flat-red' name='checkboxDPT' id='optionsDPT' value='1'";
-																									if ($jjw['DPT'] == "1") {
+																									</tr>
+																									<tr><td>";
+
+																									echo "<input type='checkbox' class='flat-red' name='checkboxOL' id='optionsOL' value='1'";
+																									if ($jjw['OL'] == "1") {
 																										echo "checked";
 																									} else {
 																										echo "";
 																									}
-																									echo "> T : Hasil Tes Tulis";
+																									echo "> Hasil Observasi Langsung";
 																									echo "</td><td>";
 
-																									echo "<input type='checkbox' class='flat-red' name='checkboxDIT' id='optionsDIT' value='1'";
-																									if ($jjw['DIT'] == "1") {
+																									echo "<input type='checkbox' class='flat-red' name='checkboxKT' id='optionsKT' value='1'";
+																									if ($jjw['KT'] == "1") {
 																										echo "checked";
 																									} else {
 																										echo "";
 																									}
-																									echo "> L : Kegiatan Terstruktur (DIT)";
-																									echo "</td>";
-																									
-							echo "</tr>
-							<tr><td colspan='2'>";
-																									echo "<input type='checkbox' class='flat-red' name='checkboxDPL' id='optionsDPL' value='1'";
-																									if ($jjw['DPL'] == "1") {
-																										echo "checked";
-																									} else {
-																										echo "";
-																									}
-																									echo "> L : Hasil Tes Lisan";
+																									echo "> Hasil Kegiatan Terstruktur";
 																									echo "</td>
-							</tr>
-							<tr><td colspan='2'>";
+																									</tr>
+																									<tr><td>";
+
+																									echo "<input type='checkbox' class='flat-red' name='checkboxPL' id='optionsPL' value='1'";
+																									if ($jjw['PL'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> Hasil Pertanyaan Lisan";
+																									echo "</td><td>";
+
+																									echo "<input type='checkbox' class='flat-red' name='checkboxPT' id='optionsPT' value='1'";
+																									if ($jjw['PT'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> Hasil Pertanyaan Tertulis";
+																									echo "</td>
+																									</tr>
+																									<tr><td>";
+
 																									echo "<input type='checkbox' class='flat-red' name='checkboxPW' id='optionsPW' value='1'";
 																									if ($jjw['PW'] == "1") {
 																										echo "checked";
 																									} else {
 																										echo "";
 																									}
-																									echo "> L : Hasil Wawancara";
+																									echo "> Hasil Pertanyaan Wawancara";
+																									echo "</td><td>";
+
+																									echo "<input type='checkbox' class='flat-red' name='checkboxPK' id='optionsPK' value='1'";
+																									if ($jjw['PK'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> Hasil Verifikasi Pihak Ketiga";
 																									echo "</td>
-							</tr>
+																									</tr>
+																									<tr><td>";
+
+																								
+																									echo "</td><td>";
+
+																									echo "<input type='checkbox' class='flat-red' name='checkboxHL' id='optionsHL' value='1'";
+																									if ($jjw['HL'] == "1") {
+																										echo "checked";
+																									} else {
+																										echo "";
+																									}
+																									echo "> Hasil Lainnya";
+																									echo "</td>";
+																									
+																									echo "</tr>
+																								
+																								
+							
 						</table>
 						<table id='example9' class='table table-bordered table-striped'>
 							<tr><td rowspan='3' width='25%'>Pelaksanaan asesmen disepakati pada:</td><td>";

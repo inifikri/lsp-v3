@@ -7335,7 +7335,7 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 	echo " disabled> Hasil Pertanyaan Tertulis";
 	echo "</td>
 							</tr>
-							<tr><td colspan='2'>";						
+							<tr><td>";						
 
 	echo "<input type='checkbox' class='flat-red' name='checkboxPW' id='optionsPW' value='1'";
 	if ($jjw['PW'] == "1") {
@@ -7355,8 +7355,9 @@ elseif ($_GET['module'] == 'form-fr-ak-01') {
 	echo " disabled> Hasil Verifikasi Pihak Ketiga";
 	echo "</td>
 							</tr>
-							<tr><td colspan='2'>";
+							<tr><td>";
 
+	echo "</td><td>";
 							
 	echo "<input type='checkbox' class='flat-red' name='checkboxHL' id='optionsHL' value='1'";
 	if ($jjw['HL'] == "1") {

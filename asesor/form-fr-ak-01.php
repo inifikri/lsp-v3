@@ -168,32 +168,51 @@ $write->endTable(0);
 $write=new easyTable($pdf, '{60, 10, 50, 10, 50}', 'width:180; align:C; font-family:arial; font-size:10');
 
 // update wnp@ppm
-$write->easyCell('Bukti yang akan dikumpulkan', 'align:L; valign:M; font-size:11; border:LTBR; rowspan:4');
+$write->easyCell('Bukti yang akan dikumpulkan', 'align:L; valign:M; font-size:11; border:LTBR; rowspan:5');
 
+// Baris 1
 $write->easyCell('', 'img:' . ($jjw['VP'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
 $write->easyCell('Hasil Verifikasi Portfolio', 'align:L; valign:M; font-size:11; border:TBR;');
 
-$write->easyCell('', 'img:' . ($jjw['CL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
-$write->easyCell('Observasi Langsung', 'align:L; valign:M; font-size:11; border:TBR;');
+$write->easyCell('', 'img:' . ($jjw['RP'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Reviu Produk', 'align:L; valign:M; font-size:11; border:TBR;');
 $write->printRow();
 
-$write->easyCell('', 'img:' . ($jjw['DPT'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LT;');
-$write->easyCell('Hasil Tes Tulis', 'align:L; valign:M; font-size:11; border:TBR;');
+// Baris 2
+$write->easyCell('', 'img:' . ($jjw['OL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Observasi Langsung', 'align:L; valign:M; font-size:11; border:TBR;');
 
-$write->easyCell('', 'img:' . ($jjw['DIT'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
-$write->easyCell('Kegiatan Terstruktur (DIT)', 'align:L; valign:M; font-size:11; border:TBR;');
+$write->easyCell('', 'img:' . ($jjw['KT'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Kegiatan Terstruktur', 'align:L; valign:M; font-size:11; border:TBR;');
 $write->printRow();
 
-$write->easyCell('', 'img:' . ($jjw['DPL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LT;');
-$write->easyCell('Hasil Tes Lisan', 'align:L; valign:M; font-size:11; border:R; colspan:3;');
+// Baris 3
+$write->easyCell('', 'img:' . ($jjw['PL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Pertanyaan Lisan', 'align:L; valign:M; font-size:11; border:TBR;');
+
+$write->easyCell('', 'img:' . ($jjw['PT'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Pertanyaan Tertulis', 'align:L; valign:M; font-size:11; border:TBR;');
 $write->printRow();
 
-$write->easyCell('', 'img:' . ($jjw['PW'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:L;');
-$write->easyCell('Hasil Wawancara', 'align:L; valign:M; font-size:11; border:BR; colspan:3;');
+// Baris 4
+$write->easyCell('', 'img:' . ($jjw['PW'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Pertanyaan Wawancara', 'align:L; valign:M; font-size:11; border:TBR;');
+
+$write->easyCell('', 'img:' . ($jjw['PK'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Verifikasi Pihak Ketiga', 'align:L; valign:M; font-size:11; border:TBR;');
 $write->printRow();
 
+// Baris 5 (1 item saja)
+$write->easyCell('', 'img:' . ($jjw['HL'] == '1' ? '../images/checked.jpg' : '../images/unchecked.jpg') . ', w5, h5; align:C; border:LTB;');
+$write->easyCell('Hasil Lainnya ....', 'align:L; valign:M; font-size:11; border:TBR;');
+
+// Kosongin kolom kanan
+$write->easyCell('', 'border:LTB;');
+$write->easyCell('', 'border:TBR;');
+$write->printRow();
 
 $write->endTable(0);
+
 $write=new easyTable($pdf, '{60, 40, 5, 75}', 'width:180; align:C; font-family:arial; font-size:10');
 $write->easyCell('Pelaksanaan asesmen disepakati pada:', 'align:L; valign:M; font-size:11; border:LTBR; rowspan:3');
 $write->easyCell('Hari/ Tanggal', 'align:L; valign:M; font-size:11; border:LTB;');
@@ -301,6 +320,11 @@ if ($jumttdasesi>0){
 	$write->easyCell('.......................................', 'align:L; valign:B; font-size:11; border:BR;');
 	$write->printRow();
 }
+
+$write->easyCell('* Coret yang tidak perlu', 'align:L; valign:B; font-size:11; font-style:I; border:0; colspan:2;');
+$write->printRow();
+
+
 
 $write->endTable(5);
 //memanggil library QR Code
