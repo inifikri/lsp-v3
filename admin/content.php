@@ -21094,6 +21094,23 @@ elseif ($_GET['module']=='jadwalasesmen'){
 			echo "<script>alert('Maaf Data dengan ID Tersebut Tidak Ada');</script>";
 		}
 	}
+
+
+	// Proses TTD Ketua LSP
+
+	// tambahkan field is_ttdketua di table jadwal_asesmen
+	if (isset($_POST['ttd_ketua'])) {
+    $id = $_POST['id'];
+
+    $query = "UPDATE jadwal_asesmen SET is_ttdketua = 1 WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    // Optional: feedback/sukses
+    echo "<script>alert('Berhasil tandatangani surat tugas');</script>";
+}
+
 	if( isset( $_REQUEST['inputbakomite'] ))
 		{
 		$filebgcert = $_FILES['file'];
@@ -21541,7 +21558,7 @@ elseif ($_GET['module']=='jadwalasesmen'){
 									$namaasesor=$asr['nama'];
 								}
 							}
-							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
+							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs' target='_blank'>Lihat Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
 							if (!empty($pm['file_surattugas'])){
 								echo "<a href='../foto_surat/$pm[file_surattugas]' class='btn btn-primary btn-xs' target='_blank'>Unduh Arsip Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b>";
 								if ($pupr>0){
@@ -21554,6 +21571,54 @@ elseif ($_GET['module']=='jadwalasesmen'){
 								}
 							}
 							echo "<a href='#myModalNoCert".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-success'>";if(empty($pm['no_surattugas'])){echo "Input No. Surat Tugas";}else{echo "Ubah No. Surat Tugas";} echo"</a><br/>";
+							// echo "<a href='#myModalNoCert".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-success'>";if($pm['is_ttdketua'] == 0 ){echo "Tandatangani Surat Tugas";}else{echo "Sudah Ditandatangani";} echo"</a><br/>";
+
+							// Start modal ttd ketua lsp WNP-PPM
+							if ($pm['is_ttdketua'] == 0) {
+									echo "<a href='#myModalTtdKetua".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-primary'>Tandatangani Surat Tugas</a><br/>";
+								} else {
+									echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
+								}
+								
+								// modal ttd ketua lsp
+
+								echo "
+										<script>
+										$(function(){
+											$(document).on('click', '.edit-record', function(e){
+												e.preventDefault();
+												$('#myModalTtdKetua".$pm['id']."').modal('show');
+											});
+										});
+										</script>
+
+										<!-- Modal -->
+										<div class='modal fade' id='myModalTtdKetua".$pm['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalTtdKetuaLabel' aria-hidden='true'>
+										<div class='modal-dialog'>
+											<div class='modal-content'>
+											<form method='POST'>
+												<div class='modal-header'>
+												<h5 class='modal-title' id='modalLabel".$pm['id']."'>Konfirmasi TTD</h5>
+												<button type='button' class='close' data-dismiss='modal'>&times;</button>
+												</div>
+												<div class='modal-body'>
+												Yakin ingin menandatangani surat tugas ini?
+												<input type='hidden' name='id' value='".$pm['id']."'>
+												</div>
+												<div class='modal-footer'>
+												<button type='submit' name='ttd_ketua' class='btn btn-primary'>Tandatangani</button>
+												<button type='button' class='btn btn-secondary' data-dismiss='modal'>Batal</button>
+												</div>
+											</form>
+											</div>
+										</div>
+										</div>
+										";
+
+										// End modal ttd ketua lsp WNP-PPM
+								
+
+
 							//modal input nomor surat tugas asesor
 							echo "<script>
 								$(function(){
@@ -21599,7 +21664,7 @@ elseif ($_GET['module']=='jadwalasesmen'){
 											</div>
 											<div class='modal-footer'>";
 												echo"<div align='left' class='col-md-6 col-sm-6 col-xs-6'>
-													<input type='submit' name='inputnosurattugasasesor' class='btn btn-success'>
+													<input type='submit' name='inputnosurattugasasesor' class='btn btn-success	'>
 												</div>
 												<div align='right' class='col-md-6 col-sm-6 col-xs-6'>
 													<button type='button' class='btn btn-default' data-dismiss='modal'>Tutup</button>
@@ -23432,7 +23497,7 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 									$namaasesor=$asr['nama'];
 								}
 							}
-							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
+							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs'>Unduh Surat Tugassssss</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
 							if (!empty($pm['file_surattugas'])){
 								echo "<a href='../foto_surat/$pm[file_surattugas]' class='btn btn-primary btn-xs' target='_blank'>Unduh Arsip Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b>";
 								if ($pupr>0){

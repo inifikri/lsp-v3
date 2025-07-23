@@ -317,6 +317,8 @@ $write=new easyTable($pdf, '{80}', 'width:180; align:R; font-size:11; font-famil
 $write->easyCell($namalsp, 'align:C;');
 $write->printRow();
 $write->rowStyle('min-height:15');
+
+
 $write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:C;');
 $write->printRow();
 $write->easyCell($lq['direktur'], 'align:C; font-style:BU;');
