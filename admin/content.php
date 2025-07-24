@@ -21098,7 +21098,7 @@ elseif ($_GET['module']=='jadwalasesmen'){
 
 	// Proses TTD Ketua LSP
 
-	// tambahkan field is_ttdketua di table jadwal_asesmen
+	// tambahkan field is_ttdketua di table 
 	if (isset($_POST['ttd_ketua'])) {
     $id = $_POST['id'];
 
@@ -21108,8 +21108,35 @@ elseif ($_GET['module']=='jadwalasesmen'){
     $stmt->execute();
 
     // Optional: feedback/sukses
-    echo "<script>alert('Berhasil tandatangani surat tugas');</script>";
+    echo "<script>alert('Berhasil Tandatangan SPT');</script>";
 }
+
+	if (isset($_POST['ttd_ketuatuk'])) {
+    $id = $_POST['id'];
+
+    $query = "UPDATE asesor_verifikatortuk SET is_ttdketua = 1 WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    // Optional: feedback/sukses
+    echo "<script>alert('Berhasil Tandatangan SPT');</script>";
+}
+
+// 	// tambahkan field is_ttdketua di table 
+// 	if (isset($_POST['ttd_ketuakomite'])) {
+//     $id = $_POST['id'];
+
+//     $query = "UPDATE jadwal_asesmen SET is_ttdketua = 1 WHERE id = ?";
+//     $stmt = $conn->prepare($query);
+//     $stmt->bind_param('i', $id);
+//     $stmt->execute();
+
+//     // Optional: feedback/sukses
+//     echo "<script>alert('Berhasil Tandatangan SPT');</script>";
+// }
+
+
 
 	if( isset( $_REQUEST['inputbakomite'] ))
 		{
@@ -21575,7 +21602,7 @@ elseif ($_GET['module']=='jadwalasesmen'){
 
 							// Start modal ttd ketua lsp WNP-PPM
 							if ($pm['is_ttdketua'] == 0) {
-									echo "<a href='#myModalTtdKetua".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-primary'>Tandatangani Surat Tugas</a><br/>";
+									echo "<a href='#myModalTtdKetua".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-primary'>Tandatangani SPT</a><br/>";
 								} else {
 									echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
 								}
@@ -22033,8 +22060,54 @@ elseif ($_GET['module']=='jadwalasesmen'){
 									$namaasesor2=$asr2['nama'];
 								}
 							}
-							echo "<br/><b>$noasr2. $namaasesor2</b><br><a href='../asesor/unduhsurattugasvertuk.php?idj=$pm[id]&idas=$asr2[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas</a><br>";
-							echo "<br/><a href='#myModalVerTUK".$pmt['id']."' data-toggle='modal' data-id='".$pmt['id']."' class='btn btn-xs btn-success'>";if(empty($pmt['no_surattugas'])){echo "Input No. Surat Tugas Verifikasi TUK";}else{echo "Ubah No. Surat Tugas Verifikasi TUK";} echo"</a>";
+							echo "<br/><b>$noasr2. $namaasesor2</b><br><a href='../asesor/unduhsurattugasvertuk.php?idj=$pm[id]&idas=$asr2[id]' class='btn btn-success btn-xs' target='_blank'>Unduh Surat Tugas</a><br>";
+							echo "<br/><a href='#myModalVerTUK".$pmt['id']."' data-toggle='modal' data-id='".$pmt['id']."' class='btn btn-xs btn-success'>";if(empty($pmt['no_surattugas'])){echo "Input No. Surat Tugas Verifikasi TUK";}else{echo "Ubah No. Surat Tugas Verifikasi TUK";} echo"</a></br>";
+							
+							// Start modal ttd ketua lsp TUK WNP-PPM
+							// var_dump($pmt);
+							// die;
+							if ($pmt['is_ttdketua'] == 0) {
+									echo "<a href='#myModalTtdKetuaTUK".$pmt['id']."' data-toggle='modal' data-id='".$pmt['id']."' class='btn btn-xs btn-primary'>Tandatangani SPT Verifikasi TUK</a><br/>";
+								} else {
+									echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
+								}
+								
+								// modal ttd ketua lsp
+
+								echo "
+										<script>
+										$(function(){
+											$(document).on('click', '.edit-record', function(e){
+												e.preventDefault();
+												$('#myModalTtdKetuaTUK".$pmt['id']."').modal('show');
+											});
+										});
+										</script>
+
+										<!-- Modal -->
+										<div class='modal fade' id='myModalTtdKetuaTUK".$pmt['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalTtdKetuaLabel' aria-hidden='true'>
+										<div class='modal-dialog'>
+											<div class='modal-content'>
+											<form method='POST'>
+												<div class='modal-header'>
+												<h5 class='modal-title' id='modalLabel".$pmt['id']."'>Konfirmasi TTD</h5>
+												<button type='button' class='close' data-dismiss='modal'>&times;</button>
+												</div>
+												<div class='modal-body'>
+												Yakin ingin menandatangani surat tugas ini?
+												<input type='hidden' name='id' value='".$pmt['id']."'>
+												</div>
+												<div class='modal-footer'>
+												<button type='submit' name='ttd_ketuatuk' class='btn btn-primary'>Tandatangani</button>
+												<button type='button' class='btn btn-secondary' data-dismiss='modal'>Batal</button>
+												</div>
+											</form>
+											</div>
+										</div>
+										</div>
+										";
+
+										// End modal ttd ketua lsp WNP-PPM
 							//echo "&nbsp;$namaasesor2<br>";
 							//modal input nomor surat tugas verifikator TUK
 							echo "<script>
@@ -22202,8 +22275,52 @@ elseif ($_GET['module']=='jadwalasesmen'){
 								}
 							}
 							echo "<br/><b>$noasr2. $namaasesork</b>"; */
-							echo "<br><a href='../asesor/unduhsurattugaskomite.php?idj=$pm[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas Komite Teknis</a>";
-							echo "<br/><a href='#myModalTugasKomite".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."'";if(empty($pm['no_surattugaskomtek'])){echo " class='btn btn-xs btn-primary'>Input No. Surat Tugas Komite Teknis";}else{echo " class='btn btn-xs btn-success'>Ubah No. Surat Tugas Komite Teknis";} echo"</a>";
+							echo "<br><a href='../asesor/unduhsurattugaskomite.php?idj=$pm[id]' class='btn btn-success btn-xs' target='_blank'>Unduh Surat Tugas Komite Teknis</a>";
+							echo "<br/><a href='#myModalTugasKomite".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."'";if(empty($pm['no_surattugaskomtek'])){echo " class='btn btn-xs btn-primary'>Input No. Surat Tugas Komite Teknis";}else{echo " class='btn btn-xs btn-success'>Ubah No. Surat Tugas Komite Teknis";} echo"</a></br>";
+							
+							// Start modal ttd ketua lsp WNP-PPM
+							// if ($pm['is_ttdketua'] == 0) {
+							// 		echo "<a href='#myModalTtdKetuaKomite".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-primary'>Tandatangani SPT</a><br/>";
+							// 	} else {
+							// 		echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
+							// 	}
+								
+								// modal ttd ketua lsp
+
+								// echo "
+								// 		<script>
+								// 		$(function(){
+								// 			$(document).on('click', '.edit-record', function(e){
+								// 				e.preventDefault();
+								// 				$('#myModalTtdKetuaKomite".$pm['id']."').modal('show');
+								// 			});
+								// 		});
+								// 		</script>
+
+								// 		<!-- Modal -->
+								// 		<div class='modal fade' id='myModalTtdKetuaKomite".$pm['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalTtdKetuaLabel' aria-hidden='true'>
+								// 		<div class='modal-dialog'>
+								// 			<div class='modal-content'>
+								// 			<form method='POST'>
+								// 				<div class='modal-header'>
+								// 				<h5 class='modal-title' id='modalLabel".$pm['id']."'>Konfirmasi TTD</h5>
+								// 				<button type='button' class='close' data-dismiss='modal'>&times;</button>
+								// 				</div>
+								// 				<div class='modal-body'>
+								// 				Yakin ingin menandatangani surat tugas ini?
+								// 				<input type='hidden' name='id' value='".$pm['id']."'>
+								// 				</div>
+								// 				<div class='modal-footer'>
+								// 				<button type='submit' name='ttd_ketuakomite' class='btn btn-primary'>Tandatangani</button>
+								// 				<button type='button' class='btn btn-secondary' data-dismiss='modal'>Batal</button>
+								// 				</div>
+								// 			</form>
+								// 			</div>
+								// 		</div>
+								// 		</div>
+								// 		";
+
+										// End modal ttd ketua lsp WNP-PPM
 							//echo "&nbsp;$namaasesork<br>";
 							//modal input nomor surat tugas komite
 							echo "<script>
@@ -23161,6 +23278,7 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 			echo "<script>alert('Maaf Data Jadwal Asesmen dengan ID Tersebut Tidak Ada');</script>";
 		}
 	}
+	
 	if( isset( $_REQUEST['inputnosurattugasvertuk'] ))
 		{
 		$filebgcert = $_FILES['file'];
@@ -23201,6 +23319,8 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 		}else{
 			echo "<script>alert('Maaf Data Penugasan Verifikator TUK dengan ID Tersebut Tidak Ada');</script>";
 		}
+
+		// disini
 	}
 	if( isset( $_REQUEST['inputnosurattugasia11'] ))
 		{
@@ -23284,6 +23404,8 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 			echo "<script>alert('Maaf Data Penugasan Komite Teknis dengan ID Tersebut Tidak Ada');</script>";
 		}
 	}
+
+	// disins
     echo "
     <!-- Content Header (Page header) -->
     <section class='content-header'>

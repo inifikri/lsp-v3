@@ -3152,7 +3152,13 @@ elseif ($_GET['module']=='pesertaasesmen'){
 			$iddokumen=md5($url);
 			$escaped_url = htmlspecialchars( $url, ENT_QUOTES, 'UTF-8' );
 			$alamatip=$_SERVER['REMOTE_ADDR'];
-			$sqlinputdigisign="INSERT INTO `logdigisign`(`id_dokumen`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`) VALUES ('$iddokumen','$escaped_url','BERITA ACATA PLENO KOMITE TEKNIS','$_SESSION[namalengkap]','$file','$alamatip')";
+			$sqlinputdigisign="INSERT INTO `logdigisign`(`id_dokumen`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$escaped_url','BERITA ACARA PLENO KOMITE TEKNIS','$_SESSION[namalengkap]','$file','$alamatip', '$_GET[idj]')";
+
+			// var_dump($_GET);
+			// die;
+
+							// $sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`,`id_asesi`, `id_skema`, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$_SESSION[namauser]','$_GET[id]','$escaped_url','FR-TUK.FORMULIR PERMOHONAN TUK JARAK JAUH','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+
 			$conn->query($sqlinputdigisign);
 
 			echo "<div class='alert alert-success alert-dismissible'>

@@ -323,7 +323,14 @@ $write=new easyTable($pdf, '{80}', 'width:180; align:R; font-size:11; font-famil
 $write->easyCell($namalsp, 'align:C;');
 $write->printRow();
 $write->rowStyle('min-height:15');
-$write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:C;');
+
+// $write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:C;');
+
+	if ($jdq['is_ttdketua'] == 1) {
+    $write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:L');
+} else {
+    $write->easyCell('Belum Ditandatangani', 'align:L; font-style:I; font-size:10');
+}
 $write->printRow();
 $write->easyCell($lq['direktur'], 'align:C; font-style:BU;');
 $write->printRow();
@@ -357,7 +364,7 @@ $pdf->AliasNbPages();
 
 //output file pdf
 $fileoutputnya="surat-tugas-komite-teknis-".$skemakkni."-".$_GET['idj'].".pdf";
-$pdf->Output($fileoutputnya,'D');
+$pdf->Output($fileoutputnya,'I');
  
 ob_end_flush();
 ?>

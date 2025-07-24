@@ -318,8 +318,12 @@ $write->easyCell($namalsp, 'align:C;');
 $write->printRow();
 $write->rowStyle('min-height:15');
 
-
-$write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:C;');
+// var_dump($as);
+	if ($as['is_ttdketua'] == 1) {
+    $write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:L');
+} else {
+    $write->easyCell('Belum Ditandatangani', 'align:L; font-style:I; font-size:10');
+}
 $write->printRow();
 $write->easyCell($lq['direktur'], 'align:C; font-style:BU;');
 $write->printRow();
