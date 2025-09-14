@@ -1,138 +1,203 @@
 <?php
-require('fpdf-easytable-master/fpdf.php');
-require('fpdf-easytable-master/exfpdf.php');
-require('fpdf-easytable-master/easyTable.php');
+// 1. Load TCPDF (sesuaikan path jika perlu)
+require_once('tcpdf/tcpdf.php');
 
-$pdf = new exFPDF();
+// 2. Inisialisasi dokumen
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false);
+$pdf->SetMargins(10, 15, 10);
+$pdf->SetAutoPageBreak(true, 15);
+$pdf->SetFont('helvetica', '', 10);
+
+// -----------------------------------------------------------------------------
+// Halaman 1
+// -----------------------------------------------------------------------------
 $pdf->AddPage();
-$pdf->SetFont('Arial','',10);
-$pdf->AddFont('FontUTF8','','Arimo-Regular.php'); 
-$pdf->AddFont('FontUTF8','B','Arimo-Bold.php');
 
-// === HEADER LSP ===
-$write = new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
-$write->easyCell('LEMBAGA SERTIFIKASI PROFESI (LSP) CONTOH', 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h14;align:C; rowspan:3');
-$write->printRow();
-$write->easyCell('Nomor Lisensi : 1234/LSP/BNSP/2024', 'align:C; font-size:10;');
-$write->printRow();
-$write->easyCell('Jl. Contoh Alamat No.1, Kota Contoh, Indonesia. Telp. 012-3456789 Email: info@example.com', 'align:C; font-size:8;');
-$write->printRow();
-$write->endTable(5);
+// Logo LSP‑PPM (sesuaikan nama/file)
+$pdf->Image('logo_lspppm.png', 15, 10, 30);
 
-// === JUDUL FORM ===
-$write = new easyTable($pdf, 1, 'width:180; align:C; font-style:B; font-size:12; font-family:arial;');
-$write->easyCell('FR.AK.07. CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN', 'align:L;');
-$write->printRow();
-$write->endTable(3);
+// Judul utama
+$pdf->SetFont('helvetica', 'B', 14);
+$pdf->Cell(0, 8, 'FR.AK.07 – CEKLIST PENYESUAIAN YANG WAJAR DAN BERALASAN', 0, 1, 'C');
+$pdf->Ln(4);
+$pdf->SetFont('helvetica', '', 10);
 
-// === INFORMASI ASESI ===
-$write = new easyTable($pdf, '{50, 5, 125}', 'width:180; align:L; font-size:10; font-family:arial;');
-$data_asesi = [
-  'Skema Sertifikasi' => 'KKNI/Okupasi/Klaster',
-  'Judul' => 'MANAJER PENGEMBANGAN PRODUK BARU',
-  'Nomor' => '001/SKEMA-LSP-PPM/I/2017',
-  'TUK' => 'Sewaktu / Tempat Kerja / Mandiri',
-  'Nama Asesi' => 'Ahmad Surya Putra',
-  'Nama Asesor' => 'Budi Santosa, S.Kom',
-  'Tanggal' => '19 Juli 2025'
-];
-$keys = array_keys($data_asesi);
-foreach ($keys as $i => $label) {
-    $border = 'LR';
-    if ($i === 0) $border = 'LTR';
-    if ($i === count($keys) - 1) $border = 'LRB';
-    $write->easyCell($label, "border:$border");
-    $write->easyCell(':', "border:$border");
-    $write->easyCell($data_asesi[$label], "border:$border");
-    $write->printRow();
-}
-$write->endTable(5);
+// Tabel metadata
+$tbl  = '<table cellspacing="0" cellpadding="4" border="1">';
+$tbl .= '<tr>
+           <td width="30%">Skema Sertifikasi<br>(KKNI/Okupasi/Klaster)</td>
+           <td width="20%">Judul :</td>
+           <td width="50%">MANAJER PENGEMBANGAN PRODUK BARU<br>(New Product Development Manager)</td>
+         </tr>';
+$tbl .= '<tr>
+           <td></td>
+           <td>Nomor :</td>
+           <td>001/SKEMA‑LSP‑PPM/I/2017</td>
+         </tr>';
+$tbl .= '<tr>
+           <td>TUK :</td>
+           <td colspan="2">Sewaktu/Tempat Kerja/Mandiri*</td>
+         </tr>';
+$tbl .= '<tr>
+           <td>Nama Asesor :</td>
+           <td colspan="2"></td>
+         </tr>';
+$tbl .= '<tr>
+           <td>Nama Asesi :</td>
+           <td colspan="2"></td>
+         </tr>';
+$tbl .= '<tr>
+           <td>Tanggal :</td>
+           <td colspan="2"></td>
+         </tr>';
+$tbl .= '</table>';
+$pdf->writeHTML($tbl, true, false, false, false, '');
 
-// === POTENSI ASESI ===
-$write = new easyTable($pdf, 1, 'width:180; align:L; font-style:B; font-size:11;');
-$write->easyCell('Potensi Asesi', 'align:L;');
-$write->printRow();
-$write->endTable(1);
+// Panduan Asesor
+$pdf->Ln(4);
+$pdf->SetFont('helvetica', 'B', 11);
+$pdf->Cell(0, 6, 'PANDUAN BAGI ASESOR', 0, 1);
+$pdf->SetFont('helvetica', '', 10);
+$pdf->writeHTML('
+<ul>
+  <li>Form ini digunakan jika diperlukan penyesuaian wajar sebelum/saat/after pra‑asesmen.</li>
+  <li>Coretlah tanda * yang tidak sesuai.</li>
+  <li>Berilah tanda √ pada kotak untuk potensi asesi.</li>
+  <li>Berilah tanda √ Ya/Tidak dan isi kolom keterangan jika Ya.</li>
+</ul>
+', true, false, false, false);
 
-$write = new easyTable($pdf, '{5, 175}', 'width:180; font-size:10; align:L;');
+// Potensi Asesi
+$pdf->Ln(2);
+$pdf->SetFont('helvetica', 'B', 11);
+$pdf->Cell(0, 6, 'POTENSI ASESI', 0, 1);
+$pdf->SetFont('helvetica', '', 10);
+
+$tbl2  = '<table cellspacing="0" cellpadding="4" border="1">';
 $potensi = [
-    'Hasil pelatihan berbasis standar kompetensi',
-    'Hasil pelatihan non-kompetensi',
-    'Pekerja dari industri sesuai standar kompetensi',
-    'Pekerja industri non-standar',
-    'Pelatihan / belajar mandiri'
+  'Hasil pelatihan/pendidikan sesuai standar kompetensi.',
+  'Hasil pelatihan/pendidikan belum berbasis kompetensi.',
+  'Pekerja berpengalaman, operasional sesuai standar.',
+  'Pekerja berpengalaman, operasional belum berbasis kompetensi.',
+  'Belajar mandiri atau otodidak.'
 ];
-foreach ($potensi as $p) {
-    $write->easyCell('☐', '');
-    $write->easyCell($p);
-    $write->printRow();
+foreach ($potensi as $item) {
+    $tbl2 .= '<tr>
+               <td width="5%">&#9633;</td>
+               <td width="95%">'.$item.'</td>
+              </tr>';
 }
-$write->endTable(5);
+$tbl2 .= '</table>';
+$pdf->writeHTML($tbl2, true, false, false, false, '');
 
-// === TABEL PENYESUAIAN ===
-$write = new easyTable($pdf, '{10, 90, 20, 20, 40}', 'width:180; align:C; font-size:9;');
-$write->easyCell('No', 'border:1; align:C; bgcolor:#ccc');
-$write->easyCell('Persyaratan', 'border:1; bgcolor:#ccc');
-$write->easyCell('Ya', 'border:1; align:C; bgcolor:#ccc');
-$write->easyCell('Tidak', 'border:1; align:C; bgcolor:#ccc');
-$write->easyCell('Keterangan', 'border:1; bgcolor:#ccc');
-$write->printRow();
+// -----------------------------------------------------------------------------
+// Halaman 2
+// -----------------------------------------------------------------------------
+$pdf->AddPage();
 
-$dummy_penyesuaian = [
-    "Keterbatasan bahasa/literasi",
-    "Butuh pendamping baca/tulis",
-    "Gunakan teknologi adaptif",
-    "Fleksibel karena keletihan",
-    "Butuh braille/audio",
-    "Penyesuaian tempat asesmen",
-    "Pertimbangan usia/gender",
-    "Pertimbangan budaya/agama"
+// Tabel checklist modifikasi (1–6)
+$pdf->SetFont('helvetica', 'B', 11);
+$pdf->Cell(0, 6, 'MODIFIKASI & KONTEKSTUALISASI (1–6)', 0, 1);
+$pdf->SetFont('helvetica', '', 10);
+
+$headers = '<tr>
+             <th width="5%">No</th>
+             <th width="40%">Karakteristik Asesi</th>
+             <th width="10%">Ya</th>
+             <th width="10%">Tidak</th>
+             <th width="35%">Keterangan</th>
+           </tr>';
+$rows = '';
+$descs = [
+  1 => 'Keterbatasan bahasa, literasi, numerasi.',
+  2 => 'Penyediaan dukungan pembaca/penerjemah.',
+  3 => 'Penggunaan teknologi adaptif/peralatan khusus.',
+  4 => 'Fleksibilitas pelaksanaan asesmen (keletihan/medis).',
+  5 => 'Peralatan khusus (Braille, audio/video tape).',
+  6 => 'Penyesuaian tempat fisik/lingkungan.'
 ];
-
-for ($i=0; $i<count($dummy_penyesuaian); $i++) {
-    $write->easyCell($i+1, 'border:1; align:C;');
-    $write->easyCell($dummy_penyesuaian[$i], 'border:1;');
-    $write->easyCell('☑', 'border:1; align:C;'); // Dummy: Ya
-    $write->easyCell('', 'border:1;');
-    $write->easyCell('-', 'border:1;');
-    $write->printRow();
+for ($i = 1; $i <= 6; $i++) {
+    $rows .= '<tr>
+                <td align="center">'.$i.'</td>
+                <td>'.$descs[$i].'</td>
+                <td align="center">&#9633;</td>
+                <td align="center">&#9633;</td>
+                <td>&nbsp;</td>
+              </tr>';
 }
-$write->endTable(5);
+$tbl3 = '<table cellspacing="0" cellpadding="4" border="1">'.$headers.$rows.'</table>';
+$pdf->writeHTML($tbl3, true, false, false, false, '');
 
-// === HASIL PENYESUAIAN ===
-$write = new easyTable($pdf, 1, 'width:180; font-size:10; align:L;');
-$write->easyCell('Hasil Penyesuaian yang disepakati menggunakan:', 'align:L; font-style:B;');
-$write->printRow();
-$write->easyCell('1) Acuan Pembanding Asesmen: Standar Kompetensi SKKNI', '');
-$write->printRow();
-$write->easyCell('2) Metode Asesmen: Observasi, Tanya Jawab', '');
-$write->printRow();
-$write->easyCell('3) Instrumen Asesmen: FR.AK.02, FR.AK.03', '');
-$write->printRow();
-$write->endTable(5);
+// -----------------------------------------------------------------------------
+// Halaman 3
+// -----------------------------------------------------------------------------
+$pdf->AddPage();
 
-// === TANDA TANGAN DAN QR ===
-$write = new easyTable($pdf, '{40, 50, 40, 50}', 'width:180; align:L; font-size:10;');
-$write->easyCell('Tanda Tangan Asesi', '');
-$write->easyCell(': Ahmad Surya Putra', '');
-$write->easyCell('Tanggal', '');
-$write->easyCell(': 19 Juli 2025', '');
-$write->printRow();
+// Tabel checklist modifikasi (7–8)
+$pdf->SetFont('helvetica', 'B', 11);
+$pdf->Cell(0, 6, 'MODIFIKASI & KONTEKSTUALISASI (7–8)', 0, 1);
+$pdf->SetFont('helvetica', '', 10);
 
-$write->easyCell('Tanda Tangan Asesor', '');
-$write->easyCell(': Budi Santosa, S.Kom', '');
-$write->easyCell('Tanggal', '');
-$write->easyCell(': 19 Juli 2025', '');
-$write->printRow();
-$write->endTable(3);
+$headers3 = '<tr>
+               <th width="5%">No</th>
+               <th width="40%">Karakteristik Asesi</th>
+               <th width="10%">Ya</th>
+               <th width="10%">Tidak</th>
+               <th width="35%">Keterangan</th>
+             </tr>';
+$rows3 = '';
+$descs3 = [
+  7 => 'Pertimbangan umur/usia lanjut/gender.',
+  8 => 'Pertimbangan budaya/tradisi/agama.'
+];
+foreach ($descs3 as $i => $d) {
+    $rows3 .= '<tr>
+                 <td align="center">'.$i.'</td>
+                 <td>'.$d.'</td>
+                 <td align="center">&#9633;</td>
+                 <td align="center">&#9633;</td>
+                 <td>&nbsp;</td>
+               </tr>';
+}
+$tbl4 = '<table cellspacing="0" cellpadding="4" border="1">'.$headers3.$rows3.'</table>';
+$pdf->writeHTML($tbl4, true, false, false, false, '');
 
-// === QR Code ===
-$write = new easyTable($pdf, 1, 'width:180; align:C;');
-$write->easyCell('', 'img:../foto_tandatangan/generateqr.png, h25; align:C;');
-$write->printRow();
-$write->endTable(0);
+// Hasil kesepakatan
+$pdf->Ln(4);
+$pdf->SetFont('helvetica', 'B', 11);
+$pdf->Cell(0, 6, 'HASIL PENYESUAIAN DISEPAKATI MENGGUNAKAN:', 0, 1);
+$pdf->SetFont('helvetica', '', 10);
+$pdf->writeHTML('
+<ol>
+  <li>Acuan Pembanding Asesmen</li>
+  <li>Metode Asesmen</li>
+  <li>Instrumen Asesmen</li>
+</ol>', true, false, false, false, '');
 
-$pdf->Output('FR-AK-07-PENYESUAIAN.pdf','I');
-?>
+// Tanda tangan
+$pdf->Ln(4);
+$sign = '
+<table cellspacing="0" cellpadding="4" border="0">
+  <tr>
+    <td width="50%">Nama Asesor :</td>
+    <td width="50%">Tanggal & TTD Asesor :</td>
+  </tr>
+  <tr>
+    <td height="20"></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Nama Asesi :</td>
+    <td>Tanggal & TTD Asesi :</td>
+  </tr>
+  <tr>
+    <td height="20"></td>
+    <td></td>
+  </tr>
+</table>';
+$pdf->writeHTML($sign, true, false, false, false, '');
+
+// 4. Output ke browser
+$pdf->Output('FR_AK_07_Replika.pdf', 'I');
