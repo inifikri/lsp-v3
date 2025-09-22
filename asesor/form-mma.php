@@ -87,9 +87,9 @@ $alamatlsptampil=$alamatlsp." ".$alamatlsp2." ".$telpemail;
 //$pdf->Cell(0, 5, '', '0', 1, 'C');
 $pdf->Ln();
 $write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h14;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();
@@ -374,7 +374,7 @@ while ($unk3=$getunitkompetensi3->fetch_assoc()){
 			$write->easyCell($nokrt, 'border:LTB; align:L; valign:T; rowspan:2');
 			$write->easyCell($kr['kriteria'], 'border:TBR; align:L; valign:T; rowspan:2');
 			$krtam1="Hasil Verifikasi Bukti Portofolio: 
-Bukti No: ……….
+Bukti No: ï¿½ï¿½ï¿½.
 Berkaitan dengan ".$kr['kriteria'];
 			$write->easyCell($krtam1, 'border:LTBR; align:L; valign:T');
 			$write->easyCell('', 'align:C; border:LTBR');
@@ -423,22 +423,22 @@ $write->endTable(5);
 $write=new easyTable($pdf, '{5, 40, 5, 140}', 'width:190; align:L; border-color:#000000; font-size:10;font-family:arial;');
 $write->easyCell('Sumber Daya Phisik/Material : Sarana/pra sarana yang dibutuhkan untuk masing-masing metode', 'align:L; border:LTR; colspan:4');
 $write->printRow();
-$write->easyCell('•', 'align:C; border:L');
+$write->easyCell('ï¿½', 'align:C; border:L');
 $write->easyCell('Observasi Demonstrasi', 'align:L');
 $write->easyCell(':', 'align:C');
 $write->easyCell('', 'align:L; border:R');
 $write->printRow();
-$write->easyCell('•', 'align:C; border:L');
+$write->easyCell('ï¿½', 'align:C; border:L');
 $write->easyCell('Tes Lisan', 'align:L');
 $write->easyCell(':', 'align:C');
 $write->easyCell('', 'align:L; border:R');
 $write->printRow();
-$write->easyCell('•', 'align:C; border:L');
+$write->easyCell('ï¿½', 'align:C; border:L');
 $write->easyCell('Verifikasi Porto Folio', 'align:L');
 $write->easyCell(':', 'align:C');
 $write->easyCell('', 'align:L; border:R');
 $write->printRow();
-$write->easyCell('•', 'align:C; border:LB');
+$write->easyCell('ï¿½', 'align:C; border:LB');
 $write->easyCell('Dll.', 'align:L; border:B');
 $write->easyCell(':', 'align:C; border:B');
 $write->easyCell('', 'align:L; border:BR');
@@ -530,14 +530,14 @@ $write->endTable(0);
 
 $write=new easyTable($pdf, '{45,45,100}', 'width:190; align:L; font-size:10;font-family:arial;');
 $write->easyCell('Jangka dan periode waktu asesmen', 'align:L; valign:T; border:LTBR; rowspan:3');
-$write->easyCell('•	Tanggal Asesmen', 'align:L; border:LT');
+$write->easyCell('ï¿½	Tanggal Asesmen', 'align:L; border:LT');
 $write->easyCell(':', 'align:L; border:TR');
 $write->printRow();
-$write->easyCell('•	Durasi per metode', 'align:L; border:L');
+$write->easyCell('ï¿½	Durasi per metode', 'align:L; border:L');
 $write->easyCell(':', 'align:L; border:R');
 $write->printRow();
-$write->easyCell('1. Observasi Demonstrasi	: …..  menit (Pk ..... s/d Pk ..........)
-	2. Tes Lisan 		: …… menit (Pk..... s/d Pk ..... )
+$write->easyCell('1. Observasi Demonstrasi	: ï¿½..  menit (Pk ..... s/d Pk ..........)
+	2. Tes Lisan 		: ï¿½ï¿½ menit (Pk..... s/d Pk ..... )
     3. Dll
 ', 'align:L; border:LBR; colspan:3');
 $write->printRow();
@@ -621,15 +621,15 @@ $write->easyCell('Bahan dan Sumberdaya Fisik', 'font-style:B; align:C; border:LT
 $write->easyCell('Status', 'font-style:B; align:C; border:LTB');
 $write->easyCell('Ket.', 'font-style:B; align:C; border:LTBR');
 $write->printRow();
-$write->easyCell('•	Tempat Asesmen kompetensi', 'border:LTB');
+$write->easyCell('ï¿½	Tempat Asesmen kompetensi', 'border:LTB');
 $write->easyCell('Disediakan oleh Kepala TUK', 'border:LTB');
 $write->easyCell('15 menit sebelum asesmen telah siap', 'border:LTBR');
 $write->printRow();
-$write->easyCell('•	Kelengkapan tempat asesmen  (penerangan, AC, in out) meja, kursi dan ATK sudah dipastikan tersedia di ruangan', 'border:LTB');
+$write->easyCell('ï¿½	Kelengkapan tempat asesmen  (penerangan, AC, in out) meja, kursi dan ATK sudah dipastikan tersedia di ruangan', 'border:LTB');
 $write->easyCell('Diperiksa ketersediaan dan kelengkapannya oleh Teknisi TUK', 'border:LTB');
 $write->easyCell('15 menit sebelum asesmen telah siap', 'border:LTBR');
 $write->printRow();
-$write->easyCell('•	Alat  dan bahan yang digunakan', 'border:LTB');
+$write->easyCell('ï¿½	Alat  dan bahan yang digunakan', 'border:LTB');
 $write->easyCell('Diperiksa ketersediaan dan kelengkapannya oleh Teknisi TUK', 'border:LTB');
 $write->easyCell('15 menit sebelum asesmen telah siap', 'border:LTBR');
 $write->printRow();
@@ -645,20 +645,20 @@ $write->easyCell('Pengorganisasian personil yang terlibat', 'valign:T; rowspan:4
 $write->easyCell('Personil :', 'align:C; border:LTB');
 $write->easyCell('Tugas dan Tanggung Jawab', 'align:C; border:LTBR');
 $write->printRow();
-$write->easyCell('•	 Asesor', 'valign:T; border:TBR');
+$write->easyCell('ï¿½	 Asesor', 'valign:T; border:TBR');
 $write->easyCell('-	Memeriksa Kesiapan dokumen/berkas Asesmen
 -	Memeriksa kesiapan sumber daya asesmen yg dibutuhkan
 -	Memberikan arahan kepada peserta asesmen
 -	Melakukan & mengawasi proses asesmen
 -	Mengumpulkan & memerikasa kelengkapan berkas/dokumen asesmen', 'align:L; border:LTBR');
 $write->printRow();
-$write->easyCell('•	 Peserta', 'valign:T; border:TBR');
+$write->easyCell('ï¿½	 Peserta', 'valign:T; border:TBR');
 $write->easyCell('-	Peserta ditempatkan/dikumpulkan ditempat yg telah disediakan
 -	Peserta diminta mengisi & menandatangani daftar hadir
 -	Peserta menerima penjelasan & pengarahan mengenai pelaksanaan asesmen, termasuk tata tertib asesmen yg berlaku
 -	Peserta mengikuti jadwal asesmen yg sudah ditetapkan', 'align:L; border:LTBR');
 $write->printRow();
-$write->easyCell('•	 Panitia', 'valign:T; border:TBR');
+$write->easyCell('ï¿½	 Panitia', 'valign:T; border:TBR');
 $write->easyCell('-	Menyiapkan ruangan ruangan/fasilitas asesmen
 -	Menyiapkan berkas/form asesmen
 -	Menyiapkan peralatan tulis yg dibutuhkan
@@ -669,15 +669,15 @@ $write->printRow();
 $write->easyCell('4.4', 'border:LTB');
 $write->easyCell('Strategi Komunikasi (pilih yang sesuai)', 'colspan:3; border:TBR');
 $write->printRow();
-$write->easyCell('[__] •	Wawancara, baik secara berhadapan maupun melalui telepon', 'colspan:4; border:LBR');
+$write->easyCell('[__] ï¿½	Wawancara, baik secara berhadapan maupun melalui telepon', 'colspan:4; border:LBR');
 $write->printRow();
-$write->easyCell('[__] •	Email, memo, korespondensi', 'colspan:4; border:LBR');
+$write->easyCell('[__] ï¿½	Email, memo, korespondensi', 'colspan:4; border:LBR');
 $write->printRow();
-$write->easyCell('[__] •	Rapat', 'colspan:4; border:LTBR');
+$write->easyCell('[__] ï¿½	Rapat', 'colspan:4; border:LTBR');
 $write->printRow();
-$write->easyCell('[__] •	Video Conference/Pembelajaran Berbasis Elektronik', 'colspan:4; border:LBR');
+$write->easyCell('[__] ï¿½	Video Conference/Pembelajaran Berbasis Elektronik', 'colspan:4; border:LBR');
 $write->printRow();
-$write->easyCell('[__] •	Fokus Group', 'colspan:4; border:LBR');
+$write->easyCell('[__] ï¿½	Fokus Group', 'colspan:4; border:LBR');
 $write->printRow();
 $write->rowStyle('min-height:20');
 $write->easyCell('4.5', 'border:LTB');

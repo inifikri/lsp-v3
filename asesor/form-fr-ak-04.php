@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors',1); 
+ini_set('display_errors',0); 
 error_reporting(E_ALL);
 ob_start();
 include 'fpdf-easytable-master/fpdf.php';
@@ -79,9 +79,9 @@ $alamatlsptampil=$alamatlsp." ".$alamatlsp2;
 //$pdf->Cell(0, 5, '', '0', 1, 'C');
 $pdf->Ln();
 $write=new easyTable($pdf, '{30, 130, 30}', 'width:190; align:L; font-style:B; font-family:arial;');
-$write->easyCell('', 'img:../images/logolsp.jpg, w25, h25; align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logolsp.jpg, w25, h14; align:C; rowspan:3');
 $write->easyCell($namalsp, 'align:C; font-size:14;');
-$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h25;align:C; rowspan:3');
+$write->easyCell('', 'img:../images/logo-bnsp.jpg, w25, h14;align:C; rowspan:3');
 $write->printRow();
 $write->easyCell($nomorlisensi, 'align:C; font-size:10;');
 $write->printRow();
@@ -151,14 +151,14 @@ $write->printRow();
 $sqlcekbanding="SELECT * FROM `asesmen_ak04` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
 $cekbanding=$conn->query($sqlcekbanding);
 $cbd=$cekbanding->fetch_assoc();
-switch ($cbd['pertanyaan1']){
-	case "1":
+switch ($cbd['pertanyaan_1']){
+	case "ya":
 		$write->easyCell('Apakah Proses Banding telah dijelaskan kepada Anda?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->printRow();
 	break;
-	case "0":
+	case "tidak":
 		$write->easyCell('Apakah Proses Banding telah dijelaskan kepada Anda?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
@@ -171,14 +171,14 @@ switch ($cbd['pertanyaan1']){
 		$write->printRow();
 	break;
 }
-switch ($cbd['pertanyaan2']){
-	case "1":
+switch ($cbd['pertanyaan_2']){
+	case "ya":
 		$write->easyCell('Apakah Anda telah mendiskusikan Banding dengan Asesor?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->printRow();
 	break;
-	case "0":
+	case "tidak":
 		$write->easyCell('Apakah Anda telah mendiskusikan Banding dengan Asesor?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
@@ -191,21 +191,21 @@ switch ($cbd['pertanyaan2']){
 		$write->printRow();
 	break;
 }
-switch ($cbd['pertanyaan3']){
-	case "1":
-		$write->easyCell('Apakah Anda mau melibatkan �orang lain� membantu Anda dalam Proses Banding?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
+switch ($cbd['pertanyaan_3']){
+	case "ya":
+		$write->easyCell('Apakah Anda mau melibatkan "orang lain" membantu Anda dalam Proses Banding?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->printRow();
 	break;
-	case "0":
-		$write->easyCell('Apakah Anda mau melibatkan �orang lain� membantu Anda dalam Proses Banding?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
+	case "tidak":
+		$write->easyCell('Apakah Anda mau melibatkan "orang lain" membantu Anda dalam Proses Banding?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'img:../images/checked.jpg, w5, h5; align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->printRow();
 	break;
 	default:
-		$write->easyCell('Apakah Anda mau melibatkan �orang lain� membantu Anda dalam Proses Banding?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
+		$write->easyCell('Apakah Anda mau melibatkan "orang lain" membantu Anda dalam Proses Banding?', 'align:L; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->easyCell('', 'align:C; valign:M; font-size:11; font-style:B; border:LTBR;');
 		$write->printRow();
@@ -246,12 +246,17 @@ $sqlidentitas="SELECT * FROM `identitas`";
 $identitas=$conn->query($sqlidentitas);
 $iden=$identitas->fetch_assoc();
 // tandatangan Asesi
-$urltandatangan=$iden['url_domain']."/media.php?module=banding&amp;idass=".$_GET['idass']."&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
-$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.04. BANDING ASESMEN' AND `penandatangan`='$namaasesi' AND `url_ditandatangani`='$urltandatangan' ORDER BY `id` DESC LIMIT 1";
+
+// lsp-v3.local/media.php?module=form-fr-ak-04&amp;ida=1122334455667788&amp;idj=72
+$urltandatangan=$iden['url_domain']."/media.php?module=form-fr-ak-04&amp;ida=".$_GET['ida']."&amp;idj=".$_GET['idj'];
+$sqlcekttdasesiapl01="SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.04. FORMULIR BANDING ASESMEN' AND `penandatangan`='$namaasesi' AND `url_ditandatangani`='$urltandatangan' ORDER BY `id` DESC LIMIT 1";
+// var_dump($sqlcekttdasesiapl01);
 $cekttdasesiapl01=$conn->query($sqlcekttdasesiapl01);
 $jumttdasesi=$cekttdasesiapl01->num_rows;
 $ttdas=$cekttdasesiapl01->fetch_assoc();
-$tglttdasesi=tgl_indo($jjw['tanggal_asesittd']);
+// $tglttdasesi=tgl_indo($jjw['tanggal_asesittd']);
+
+$tglttdasesi=tgl_indo($ttdas['waktu']);
 if ($jumttdasesi>0){
 	$write->easyCell('', 'align:L; valign:B; font-size:11; border:L;');
 	$write->easyCell('', 'align:L; valign:B; font-size:11;');

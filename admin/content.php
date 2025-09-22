@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 0);
-error_reporting(0);
 
 include "../config/koneksi.php";
 include "../config/library.php";
@@ -10,6 +8,7 @@ include "../config/class_paging.php";
 include "../config/fungsi_rupiah.php";
 include "../classes/class.phpmailer.php";
 
+ini_set('display_errors', 0);
 
 $sqlidentitas="SELECT * FROM `identitas`";
 $identitas=$conn->query($sqlidentitas);
@@ -18852,7 +18851,7 @@ if( isset( $_REQUEST['jadwalujiulangasesmen'] )){
 			if ($usia<91 && $as['pendidikan']>1){
 			echo "<div class='row'>
 		    	<div class='box-body'>
-					<h1>FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI++++</h1>
+					<h1>FR-APL-01. FORMULIR PERMOHONAN SERTIFIKASI KOMPETENSI</h1>
 					<h2>Bagian 1: Rincian Data Pemohon Sertifikasi</h2>
 					<h3>a. Data Pribadi</h3>
 					<div class='row'>
@@ -21095,6 +21094,50 @@ elseif ($_GET['module']=='jadwalasesmen'){
 			echo "<script>alert('Maaf Data dengan ID Tersebut Tidak Ada');</script>";
 		}
 	}
+
+
+	// Proses TTD Ketua LSP
+
+	// tambahkan field is_ttdketua di table 
+	if (isset($_POST['ttd_ketua'])) {
+    $id = $_POST['id'];
+
+    $query = "UPDATE jadwal_asesmen SET is_ttdketua = 1 WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    // Optional: feedback/sukses
+    echo "<script>alert('Berhasil Tandatangan SPT');</script>";
+}
+
+	if (isset($_POST['ttd_ketuatuk'])) {
+    $id = $_POST['id'];
+
+    $query = "UPDATE asesor_verifikatortuk SET is_ttdketua = 1 WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    // Optional: feedback/sukses
+    echo "<script>alert('Berhasil Tandatangan SPT');</script>";
+}
+
+// 	// tambahkan field is_ttdketua di table 
+// 	if (isset($_POST['ttd_ketuakomite'])) {
+//     $id = $_POST['id'];
+
+//     $query = "UPDATE jadwal_asesmen SET is_ttdketua = 1 WHERE id = ?";
+//     $stmt = $conn->prepare($query);
+//     $stmt->bind_param('i', $id);
+//     $stmt->execute();
+
+//     // Optional: feedback/sukses
+//     echo "<script>alert('Berhasil Tandatangan SPT');</script>";
+// }
+
+
+
 	if( isset( $_REQUEST['inputbakomite'] ))
 		{
 		$filebgcert = $_FILES['file'];
@@ -21542,7 +21585,7 @@ elseif ($_GET['module']=='jadwalasesmen'){
 									$namaasesor=$asr['nama'];
 								}
 							}
-							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
+							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs' target='_blank'>Lihat Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
 							if (!empty($pm['file_surattugas'])){
 								echo "<a href='../foto_surat/$pm[file_surattugas]' class='btn btn-primary btn-xs' target='_blank'>Unduh Arsip Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b>";
 								if ($pupr>0){
@@ -21555,6 +21598,54 @@ elseif ($_GET['module']=='jadwalasesmen'){
 								}
 							}
 							echo "<a href='#myModalNoCert".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-success'>";if(empty($pm['no_surattugas'])){echo "Input No. Surat Tugas";}else{echo "Ubah No. Surat Tugas";} echo"</a><br/>";
+							// echo "<a href='#myModalNoCert".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-success'>";if($pm['is_ttdketua'] == 0 ){echo "Tandatangani Surat Tugas";}else{echo "Sudah Ditandatangani";} echo"</a><br/>";
+
+							// Start modal ttd ketua lsp WNP-PPM
+							if ($pm['is_ttdketua'] == 0) {
+									echo "<a href='#myModalTtdKetua".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-primary'>Tandatangani SPT</a><br/>";
+								} else {
+									echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
+								}
+								
+								// modal ttd ketua lsp
+
+								echo "
+										<script>
+										$(function(){
+											$(document).on('click', '.edit-record', function(e){
+												e.preventDefault();
+												$('#myModalTtdKetua".$pm['id']."').modal('show');
+											});
+										});
+										</script>
+
+										<!-- Modal -->
+										<div class='modal fade' id='myModalTtdKetua".$pm['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalTtdKetuaLabel' aria-hidden='true'>
+										<div class='modal-dialog'>
+											<div class='modal-content'>
+											<form method='POST'>
+												<div class='modal-header'>
+												<h5 class='modal-title' id='modalLabel".$pm['id']."'>Konfirmasi TTD</h5>
+												<button type='button' class='close' data-dismiss='modal'>&times;</button>
+												</div>
+												<div class='modal-body'>
+												Yakin ingin menandatangani surat tugas ini?
+												<input type='hidden' name='id' value='".$pm['id']."'>
+												</div>
+												<div class='modal-footer'>
+												<button type='submit' name='ttd_ketua' class='btn btn-primary'>Tandatangani</button>
+												<button type='button' class='btn btn-secondary' data-dismiss='modal'>Batal</button>
+												</div>
+											</form>
+											</div>
+										</div>
+										</div>
+										";
+
+										// End modal ttd ketua lsp WNP-PPM
+								
+
+
 							//modal input nomor surat tugas asesor
 							echo "<script>
 								$(function(){
@@ -21600,7 +21691,7 @@ elseif ($_GET['module']=='jadwalasesmen'){
 											</div>
 											<div class='modal-footer'>";
 												echo"<div align='left' class='col-md-6 col-sm-6 col-xs-6'>
-													<input type='submit' name='inputnosurattugasasesor' class='btn btn-success'>
+													<input type='submit' name='inputnosurattugasasesor' class='btn btn-success	'>
 												</div>
 												<div align='right' class='col-md-6 col-sm-6 col-xs-6'>
 													<button type='button' class='btn btn-default' data-dismiss='modal'>Tutup</button>
@@ -21969,8 +22060,54 @@ elseif ($_GET['module']=='jadwalasesmen'){
 									$namaasesor2=$asr2['nama'];
 								}
 							}
-							echo "<br/><b>$noasr2. $namaasesor2</b><br><a href='../asesor/unduhsurattugasvertuk.php?idj=$pm[id]&idas=$asr2[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas</a><br>";
-							echo "<br/><a href='#myModalVerTUK".$pmt['id']."' data-toggle='modal' data-id='".$pmt['id']."' class='btn btn-xs btn-success'>";if(empty($pmt['no_surattugas'])){echo "Input No. Surat Tugas Verifikasi TUK";}else{echo "Ubah No. Surat Tugas Verifikasi TUK";} echo"</a>";
+							echo "<br/><b>$noasr2. $namaasesor2</b><br><a href='../asesor/unduhsurattugasvertuk.php?idj=$pm[id]&idas=$asr2[id]' class='btn btn-success btn-xs' target='_blank'>Unduh Surat Tugas</a><br>";
+							echo "<br/><a href='#myModalVerTUK".$pmt['id']."' data-toggle='modal' data-id='".$pmt['id']."' class='btn btn-xs btn-success'>";if(empty($pmt['no_surattugas'])){echo "Input No. Surat Tugas Verifikasi TUK";}else{echo "Ubah No. Surat Tugas Verifikasi TUK";} echo"</a></br>";
+							
+							// Start modal ttd ketua lsp TUK WNP-PPM
+							// var_dump($pmt);
+							// die;
+							if ($pmt['is_ttdketua'] == 0) {
+									echo "<a href='#myModalTtdKetuaTUK".$pmt['id']."' data-toggle='modal' data-id='".$pmt['id']."' class='btn btn-xs btn-primary'>Tandatangani SPT Verifikasi TUK</a><br/>";
+								} else {
+									echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
+								}
+								
+								// modal ttd ketua lsp
+
+								echo "
+										<script>
+										$(function(){
+											$(document).on('click', '.edit-record', function(e){
+												e.preventDefault();
+												$('#myModalTtdKetuaTUK".$pmt['id']."').modal('show');
+											});
+										});
+										</script>
+
+										<!-- Modal -->
+										<div class='modal fade' id='myModalTtdKetuaTUK".$pmt['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalTtdKetuaLabel' aria-hidden='true'>
+										<div class='modal-dialog'>
+											<div class='modal-content'>
+											<form method='POST'>
+												<div class='modal-header'>
+												<h5 class='modal-title' id='modalLabel".$pmt['id']."'>Konfirmasi TTD</h5>
+												<button type='button' class='close' data-dismiss='modal'>&times;</button>
+												</div>
+												<div class='modal-body'>
+												Yakin ingin menandatangani surat tugas ini?
+												<input type='hidden' name='id' value='".$pmt['id']."'>
+												</div>
+												<div class='modal-footer'>
+												<button type='submit' name='ttd_ketuatuk' class='btn btn-primary'>Tandatangani</button>
+												<button type='button' class='btn btn-secondary' data-dismiss='modal'>Batal</button>
+												</div>
+											</form>
+											</div>
+										</div>
+										</div>
+										";
+
+										// End modal ttd ketua lsp WNP-PPM
 							//echo "&nbsp;$namaasesor2<br>";
 							//modal input nomor surat tugas verifikator TUK
 							echo "<script>
@@ -22138,8 +22275,52 @@ elseif ($_GET['module']=='jadwalasesmen'){
 								}
 							}
 							echo "<br/><b>$noasr2. $namaasesork</b>"; */
-							echo "<br><a href='../asesor/unduhsurattugaskomite.php?idj=$pm[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas Komite Teknis</a>";
-							echo "<br/><a href='#myModalTugasKomite".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."'";if(empty($pm['no_surattugaskomtek'])){echo " class='btn btn-xs btn-primary'>Input No. Surat Tugas Komite Teknis";}else{echo " class='btn btn-xs btn-success'>Ubah No. Surat Tugas Komite Teknis";} echo"</a>";
+							echo "<br><a href='../asesor/unduhsurattugaskomite.php?idj=$pm[id]' class='btn btn-success btn-xs' target='_blank'>Unduh Surat Tugas Komite Teknis</a>";
+							echo "<br/><a href='#myModalTugasKomite".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."'";if(empty($pm['no_surattugaskomtek'])){echo " class='btn btn-xs btn-primary'>Input No. Surat Tugas Komite Teknis";}else{echo " class='btn btn-xs btn-success'>Ubah No. Surat Tugas Komite Teknis";} echo"</a></br>";
+							
+							// Start modal ttd ketua lsp WNP-PPM
+							// if ($pm['is_ttdketua'] == 0) {
+							// 		echo "<a href='#myModalTtdKetuaKomite".$pm['id']."' data-toggle='modal' data-id='".$pm['id']."' class='btn btn-xs btn-primary'>Tandatangani SPT</a><br/>";
+							// 	} else {
+							// 		echo "<a class='btn btn-xs btn-success disabled'>Sudah Ditandatangani</a><br/>";
+							// 	}
+								
+								// modal ttd ketua lsp
+
+								// echo "
+								// 		<script>
+								// 		$(function(){
+								// 			$(document).on('click', '.edit-record', function(e){
+								// 				e.preventDefault();
+								// 				$('#myModalTtdKetuaKomite".$pm['id']."').modal('show');
+								// 			});
+								// 		});
+								// 		</script>
+
+								// 		<!-- Modal -->
+								// 		<div class='modal fade' id='myModalTtdKetuaKomite".$pm['id']."' tabindex='-1' role='dialog' aria-labelledby='myModalTtdKetuaLabel' aria-hidden='true'>
+								// 		<div class='modal-dialog'>
+								// 			<div class='modal-content'>
+								// 			<form method='POST'>
+								// 				<div class='modal-header'>
+								// 				<h5 class='modal-title' id='modalLabel".$pm['id']."'>Konfirmasi TTD</h5>
+								// 				<button type='button' class='close' data-dismiss='modal'>&times;</button>
+								// 				</div>
+								// 				<div class='modal-body'>
+								// 				Yakin ingin menandatangani surat tugas ini?
+								// 				<input type='hidden' name='id' value='".$pm['id']."'>
+								// 				</div>
+								// 				<div class='modal-footer'>
+								// 				<button type='submit' name='ttd_ketuakomite' class='btn btn-primary'>Tandatangani</button>
+								// 				<button type='button' class='btn btn-secondary' data-dismiss='modal'>Batal</button>
+								// 				</div>
+								// 			</form>
+								// 			</div>
+								// 		</div>
+								// 		</div>
+								// 		";
+
+										// End modal ttd ketua lsp WNP-PPM
 							//echo "&nbsp;$namaasesork<br>";
 							//modal input nomor surat tugas komite
 							echo "<script>
@@ -22224,8 +22405,10 @@ elseif ($_GET['module']=='jadwalasesmen'){
 								echo "<a href='#myModalShowDoc".$pm['id']."' class='btn btn-success btn-xs btn-block' data-toggle='modal' data-id='".$pm['id']."' title='Lihat Dokumen Standar Kompetensi'>Lihat Dokumen Standar Kompetensi</a>";
 							}
 							echo "<br><a href='?module=jadwalasesor&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor pada Jadwal Asesmen'>Tambah/Ubah Asesor pada Jadwal</a>";
+							echo "<br><a href='?module=jadwalpenyusun&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor pada Jadwal Asesmen'>Tambah/Ubah Penyusun</a>";
 							echo "<br><a href='?module=verifikatortuk&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Verifikator TUK'>Tambah/Ubah Verifikator TUK</a>";
 							echo "<br><a href='?module=validatormkva&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Validator MKVA'>Tambah/Ubah Validator MKVA</a>";
+							echo "<br><a href='?module=validatorform&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Validator MKVA'>Tambah/Ubah Validator Form</a>";
 							echo "<br><a href='?module=peninjauia11&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Peninjau Instrumen Asesmen'>Tambah/Ubah Peninjau Instrumen Asesmen</a>";
 							if ($_SESSION['leveluser']=='admin'){
 								echo "<br><a href='?module=ubahjadwal&idj=$pm[id]' class='btn btn-primary btn-xs btn-block' title='Ubah Jadwal Asesmen'>Ubah Jadwal Asesmen</a>";
@@ -22242,15 +22425,111 @@ elseif ($_GET['module']=='jadwalasesmen'){
 								echo "<a href='#myModalShowDoc".$pm['id']."' class='btn btn-success btn-xs btn-block' data-toggle='modal' data-id='".$pm['id']."' title='Lihat Dokumen Standar Kompetensi'>Lihat Dokumen Standar Kompetensi</a>";
 							}
 							echo "<br><a href='?module=jadwalasesor&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor pada Jadwal Asesmen'>Tambah/Ubah Asesor pada Jadwal</a>";
+							echo "<br><a href='?module=jadwalpenyusun&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor pada Jadwal Asesmen'>Tambah/Ubah Penyusun</a>";
 							echo "<br><a href='?module=verifikatortuk&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Verifikator TUK'>Tambah/Ubah Verifikator TUK</a>";
 							echo "<br><a href='?module=validatormkva&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Validator MKVA'>Tambah/Ubah Validator MKVA</a>";
-							echo "<br><a href='?module=peninjauia11&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Peninjau Instrumen Asesmen'>Tambah/Ubah Peninjau Instrumen Asesmen</a>";
+							echo "<br><a href='?module=validatorform&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Validator MKVA'>Tambah/Ubah Validator Form</a>";
+							echo "<br><a href='?module=validatorform&idj=$pm[id]' class='btn btn-default btn-xs btn-block' title='Tambah Asesor Peninjau Instrumen Asesmen'>Tambah/Ubah Peninjau Instrumen Asesmen</a>";
 							if ($_SESSION['leveluser']=='admin'){
 								echo "<br><a href='?module=ubahjadwal&idj=$pm[id]' class='btn btn-primary btn-xs btn-block' title='Ubah Jadwal Asesmen'>Ubah Jadwal Asesmen</a>";
 							}
 							echo "<br><a href='?module=pesertaasesmen&idj=$pm[id]' class='btn btn-info btn-xs btn-block' title='Lihat Peserta Asesmen'>Lihat Peserta</a>
-								<br><a href='../asesor/daftarhadir.php?idj=$pm[id]' class='btn btn-primary btn-xs btn-block' title='Unduh Daftar Hadir Peserta'>Unduh Presensi</a>
-								<br><a href='exporthasilasesmen.php?idj=$pm[id]' class='btn btn-success btn-xs btn-block' title='Unduh hasil asesmen dalam excel untuk usulan blangko sertifikat dan diunggah ke sistem BNSP'>Unduh Hasil Asesmen (Lap. ke BNSP)</a>";
+								<br><a href='../asesor/daftarhadir.php?idj=$pm[id]' class='btn btn-primary btn-xs btn-block' title='Unduh Daftar Hadir Peserta'>Unduh Presensi</a>";
+							// BUKA AKSES UJIAN PG
+							$sqlgetaksessoal = "SELECT * FROM `asesi_aksessoal` WHERE `id_skemakkni`='$pm[id_skemakkni]' AND `id_jadwal`='$pm[id]' AND `jenis_soal`='FR.IA.05'";
+							$getaksessoal = $conn->query($sqlgetaksessoal);
+							$gaso = $getaksessoal->fetch_assoc();
+							$jgaso = $getaksessoal->num_rows;
+							if($pm['id_skemakkni'] != 2){
+								if ($jgaso > 0) {
+									switch ($gaso['status']) {
+										case "1":
+											echo "<br><form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>";
+											// GET DATA ASESI YANG SUDAH DIJADWALKAN
+											$sqljadwaltuk = "SELECT * FROM `asesi_asesmen` WHERE `id_jadwal`='$pm[id]'";
+											$jadwalasemen = $conn->query($sqljadwaltuk);
+
+											// GET DATA ASESI
+											while ($jas = $jadwalasemen->fetch_assoc()) {
+												$sqlasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$jas[id_asesi]'";
+												$asesi = $conn->query($sqlasesi);
+												while($as = $asesi->fetch_assoc()){
+													echo "<input type='hidden' name='nama_asesi[]' value='$as[nama]'>
+													<input type='hidden' name='id_asesi[]' value='$as[no_pendaftaran]'>";
+												}
+											}
+											echo "<input type='hidden' name='id_jadwal' value='$pm[id]'>
+											<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+											<input type='hidden' name='jenis_soal' value='FR.IA.05'>
+											<input type='submit' class='btn btn-danger btn-xs btn-block' name='tutupaksessoal' value='Tutup Akses Perbaikan Soal Pilihan Ganda'>
+											</form>";
+										break;
+										case "0":
+											echo "<br><form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>";
+											// GET DATA ASESI YANG SUDAH DIJADWALKAN
+											$sqljadwaltuk = "SELECT * FROM `asesi_asesmen` WHERE `id_jadwal`='$pm[id]'";
+											$jadwalasemen = $conn->query($sqljadwaltuk);
+
+											// GET DATA ASESI
+											while ($jas = $jadwalasemen->fetch_assoc()) {
+												$sqlasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$jas[id_asesi]'";
+												$asesi = $conn->query($sqlasesi);
+												while($as = $asesi->fetch_assoc()){
+													echo "<input type='hidden' name='nama_asesi[]' value='$as[nama]'>
+													<input type='hidden' name='id_asesi[]' value='$as[no_pendaftaran]'>";
+												}
+											}
+											echo "<input type='hidden' name='id_jadwal' value='$pm[id]'>
+											<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+											<input type='hidden' name='jenis_soal' value='FR.IA.05'>
+											<input type='submit' class='btn btn-success btn-xs btn-block' name='bukaaksessoal' value='Buka Akses Soal Pilihan Ganda'>
+											</form>";
+										break;
+										case "2":
+											echo "<br><form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>";
+											// GET DATA ASESI YANG SUDAH DIJADWALKAN
+											$sqljadwaltuk = "SELECT * FROM `asesi_asesmen` WHERE `id_jadwal`='$pm[id]'";
+											$jadwalasemen = $conn->query($sqljadwaltuk);
+
+											// GET DATA ASESI
+											while ($jas = $jadwalasemen->fetch_assoc()) {
+												$sqlasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$jas[id_asesi]'";
+												$asesi = $conn->query($sqlasesi);
+												while($as = $asesi->fetch_assoc()){
+													echo "<input type='hidden' name='nama_asesi[]' value='$as[nama]'>
+													<input type='hidden' name='id_asesi[]' value='$as[no_pendaftaran]'>";
+												}
+											}
+											echo "<input type='hidden' name='id_jadwal' value='$pm[id]'>
+											<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+											<input type='hidden' name='jenis_soal' value='FR.IA.05'>
+											<input type='submit' class='btn btn-success btn-xs btn-block' name='perbaikan' value='Buka Akses Perbaikan Soal Pilihan Ganda'>
+											</form>";
+										break;
+									}
+								}else{
+									echo "<br><form role='form' action='aksessoal.php' method='POST' enctype='multipart/form-data'>";
+									// GET DATA ASESI YANG SUDAH DIJADWALKAN
+									$sqljadwaltuk = "SELECT * FROM `asesi_asesmen` WHERE `id_jadwal`='$pm[id]'";
+									$jadwalasemen = $conn->query($sqljadwaltuk);
+
+									// GET DATA ASESI
+									while ($jas = $jadwalasemen->fetch_assoc()) {
+										$sqlasesi = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$jas[id_asesi]'";
+										$asesi = $conn->query($sqlasesi);
+										while($as = $asesi->fetch_assoc()){
+											echo "<input type='hidden' name='nama_asesi[]' value='$as[nama]'>
+											<input type='hidden' name='id_asesi[]' value='$as[no_pendaftaran]'>";
+										}
+									}
+									echo "<input type='hidden' name='id_jadwal' value='$pm[id]'>
+									<input type='hidden' name='id_skemakkni' value='$pm[id_skemakkni]'>
+									<input type='hidden' name='jenis_soal' value='FR.IA.05'>
+									<input type='submit' class='btn btn-success btn-xs btn-block' name='bukaaksessoal' value='Buka Akses Soal Pilihan Ganda'>
+									</form>";
+								}
+							}
+							echo "<br><a href='exporthasilasesmen.php?idj=$pm[id]' class='btn btn-success btn-xs btn-block' title='Unduh hasil asesmen dalam excel untuk usulan blangko sertifikat dan diunggah ke sistem BNSP'>Unduh Hasil Asesmen (Lap. ke BNSP)</a>";
 							if ($pupr>0){
 								if (!empty($pm['id_jadwalbnsp'])){
 									echo "<a href='#myModalUpdateJadwalBNSP".$pm['id']."' class='btn btn-primary btn-xs btn-block' data-toggle='modal' data-id='".$pm['id']."' title='Perbarui Jadwal ke Sistem BNSP'>Perbarui Jadwal ke Sistem BNSP</a>";
@@ -22999,6 +23278,7 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 			echo "<script>alert('Maaf Data Jadwal Asesmen dengan ID Tersebut Tidak Ada');</script>";
 		}
 	}
+	
 	if( isset( $_REQUEST['inputnosurattugasvertuk'] ))
 		{
 		$filebgcert = $_FILES['file'];
@@ -23039,6 +23319,8 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 		}else{
 			echo "<script>alert('Maaf Data Penugasan Verifikator TUK dengan ID Tersebut Tidak Ada');</script>";
 		}
+
+		// disini
 	}
 	if( isset( $_REQUEST['inputnosurattugasia11'] ))
 		{
@@ -23122,6 +23404,8 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 			echo "<script>alert('Maaf Data Penugasan Komite Teknis dengan ID Tersebut Tidak Ada');</script>";
 		}
 	}
+
+	// disins
     echo "
     <!-- Content Header (Page header) -->
     <section class='content-header'>
@@ -23335,7 +23619,7 @@ elseif ($_GET['module']=='arsipjadwalasesmen'){
 									$namaasesor=$asr['nama'];
 								}
 							}
-							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs'>Unduh Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
+							echo "<br><a href='../asesor/surattugasasesor.php?idj=$pm[id]&idas=$asr[id]' class='btn btn-success btn-xs'>Unduh Surat Tugassssss</a>&nbsp;<b>$noasr. $namaasesor</b><br>";
 							if (!empty($pm['file_surattugas'])){
 								echo "<a href='../foto_surat/$pm[file_surattugas]' class='btn btn-primary btn-xs' target='_blank'>Unduh Arsip Surat Tugas</a>&nbsp;<b>$noasr. $namaasesor</b>";
 								if ($pupr>0){
@@ -25213,6 +25497,162 @@ elseif ($_GET['module']=='jadwalasesor'){
 		echo "<div align='center'><b>Maaf Anda tidak memiliki hak akses</b></div>";
 	}
 }
+// Bagian Jadwal Penyusun ================================================================================================================
+elseif ($_GET['module']=='jadwalpenyusun'){
+	// Cek Hak Akses Modul
+	$sessionidlogin=md5($_SESSION['namauser']);
+	$urlmodul="?module=".$_GET['module'];
+	$sqlcekmodulnya="SELECT * FROM `modul` WHERE `link`='$urlmodul'";
+	$cekmodulnya=$conn->query($sqlcekmodulnya);
+	$cmdl=$cekmodulnya->fetch_assoc();
+	$sqlcekhakakses="SELECT * FROM `users_modul` WHERE `id_session`='$sessionidlogin' AND `id_modul`='$cmdl[id_modul]'";
+	$cekhakakses=$conn->query($sqlcekhakakses);
+	$berhakkah=$cekhakakses->num_rows;
+	if ($_SESSION['leveluser']=='admin'|| $berhakkah>0){
+	echo "
+    <!-- Content Header (Page header) -->
+    <section class='content-header'>
+      <h1>
+        Penyusun
+        <small>Data Penyusun pada Jadwal Asesmen</small>
+      </h1>
+      <ol class='breadcrumb'>
+        <li><a href='media.php?module=home'><i class='fa fa-dashboard'></i> Home</a></li>
+        <li class='active'>Penyusun</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class='content'>
+      <div class='row'>
+        <div class='col-xs-12'>
+	  <div class='box'>
+            <div class='box-header'>
+              <h3 class='box-title'>Info Jadwal Asesmen</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class='box-body'>";
+			$sqljadwaltuk2="SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'";
+			$jadwaltuk2=$conn->query($sqljadwaltuk2);
+			$jdt=$jadwaltuk2->fetch_assoc();
+			$sqltuk="SELECT * FROM `tuk` WHERE `id`='$jdt[tempat_asesmen]'";
+			$tuk=$conn->query($sqltuk);
+			$tt=$tuk->fetch_assoc();
+			$masa_berlaku=tgl_indo($tt['masa_berlaku']);
+			$sqltukjenis1="SELECT * FROM `tuk_jenis` WHERE `id`='$tt[jenis_tuk]'";
+			$jenistuk=$conn->query($sqltukjenis1);
+			$jt=$jenistuk->fetch_assoc();
+			$tglasesmen=tgl_indo($jdt['tgl_asesmen']);
+			$sqlskemakkni="SELECT * FROM `skema_kkni` WHERE `id`='$jdt[id_skemakkni]'";
+			$skemakkni=$conn->query($sqlskemakkni);
+			$skm=$skemakkni->fetch_assoc();
+			echo "<table class='table table-bordered table-striped'>
+			<tbody><tr><td>Skema</td><td><b>$skm[kode_skema]-$skm[judul]</b><br>";
+			$namaskkni=$conn->query("SELECT * FROM `skkni` WHERE `id`='$skm[id_skkni]'");
+			$nsk=$namaskkni->fetch_assoc();
+			$pesertaasesmen=$conn->query("SELECT * FROM `asesi_asesmen` WHERE `id_jadwal`='$jdt[id]'");
+			$jumps=$pesertaasesmen->num_rows;
+			echo "$nsk[nama]</td></tr>
+			<tr><td>Periode</td><td><b>$jdt[periode] $jdt[tahun]</td></tr>
+			<tr><td>Gelombang</td><td><b>$jdt[gelombang]</b></td></tr>
+			<tr><td>Tanggal</td><td><b>$tglasesmen</b></td></tr>
+			<tr><td>Pukul</td><td><b>$jdt[jam_asesmen]</b></td></tr>
+			<tr><td>Tempat</td><td><b>$tt[nama]</b><br>$tt[alamat] $tt[kelurahan]</td></tr>
+			<tr><td>Maksimal Peserta</td><td><b>$jdt[kapasitas] Asesi</b></td></tr>
+			<tr><td>Peserta Terjadwal</td><td><b>$jumps Asesi</b></td></tr>";
+			echo "<tr><td>Asesor</td><td>";
+			$noasr=1;
+			$getasesor=$conn->query("SELECT * FROM `jadwal_penyusun` WHERE `id_jadwal`='$_GET[idj]'");
+			while ($gas=$getasesor->fetch_assoc()){
+			$sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
+			$asesor=$conn->query($sqlasesor);
+			$asr=$asesor->fetch_assoc();
+				if (!empty($asr['gelar_depan'])){
+					if (!empty($asr['gelar_blk'])){
+						$namaasesor=$asr['gelar_depan']." ".$asr['nama'].", ".$asr['gelar_blk'];
+					}else{
+						$namaasesor=$asr['gelar_depan']." ".$asr['nama'];
+					}
+				}else{
+					if (!empty($asr['gelar_blk'])){
+						$namaasesor=$asr['nama'].", ".$asr['gelar_blk'];
+					}else{
+						$namaasesor=$asr['nama'];
+					}
+				}
+				echo "<b>$noasr. $namaasesor</b><br>";
+				$noasr++;
+			}
+			echo "</td></tr></tbody></table><br>
+			<div align='left' class='col-md-6 col-sm-6 col-xs-6'>
+				<a href='daftarhadir.php?idj=$_GET[idj]' class='btn btn-primary'>Unduh Daftar Hadir</a>
+			</div>
+			<div align='right' class='col-md-6 col-sm-6 col-xs-6'>";
+				echo "<a href='?module=jadwalasesmen' class='btn btn-success'>Lihat Jadwal Lainnya</a>";
+			echo"</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+          <div class='box'>
+            <div class='box-header'>
+              <h3 class='box-title'>Data Asesor Uji Kompetensi Lembaga Sertifikasi Profesi yang telah memiliki SK Penugasan</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class='box-body'>";
+			//mendapatkan asesor yang berwenang berdasarkan SK Penugasan Asesor
+			$sqlgetasesorskema="SELECT * FROM `asesor_tugasskema` WHERE `id_skemakkni`='$jdt[id_skemakkni]'";
+			$getasesorskema=$conn->query($sqlgetasesorskema);
+			$jumasesorskema=$getasesorskema->num_rows;
+			if ($jumasesorskema>0){		
+				echo "<table id='example1' class='table table-bordered table-striped'>
+					<thead><tr><th>No</th><th>Identitas Asesor</th><th>Aksi</th></tr></thead>
+					<tbody>";
+						$no=1;
+						while ($assk=$getasesorskema->fetch_assoc()){
+							$sqljadwaltuk="SELECT * FROM `asesor` WHERE `id`='$assk[id_asesor]' AND `masaberlaku_lisensi`>".date("Y-m-d");
+							$jadwaltuk=$conn->query($sqljadwaltuk);
+							$pm=$jadwaltuk->fetch_assoc();
+							echo "<tr class=gradeX><td>$no</td><td><b>$pm[nama]</b><br>No. Register : $pm[no_induk]<br>No. Lisensi : $pm[no_lisensi]<br>No. HP : $pm[no_hp]<br>No. SK Penugasan : $assk[no_sk]<br>Tanggal SK Penugasan : ".tgl_indo($assk['tanggal_sk'])."</td>
+							<td width='20%'>";
+							$getasesor2=$conn->query("SELECT * FROM `jadwal_penyusun` WHERE `id_jadwal`='$_GET[idj]' AND `id_asesor`='$pm[id]'");
+							$jumas2=$getasesor2->num_rows;
+							if ($jumas2==0){
+								echo "<form name='frm' action='tambahpenyusun.php' method='POST' role='form' enctype='multipart/form-data'>
+								<input type='hidden' name='idj' value='$_GET[idj]'>
+								<input type='hidden' name='ida' value='$pm[id]'>
+								<input type='hidden' name='tuk' value='$jdt[tempat_asesmen]'>
+								<input type='hidden' name='skemakkni' value='$jdt[id_skemakkni]'>
+								<input type='hidden' name='tgl_asesmen' value='$tglasesmen'>
+								<input type='hidden' name='jam_asesmen' value='$jdt[jam_asesmen]'>
+								<input type='submit' name='tambah' class='btn btn-primary btn-xs btn-block' title='Tambahkan pada Jadwal Asesmen' value='Tambahkan ke Jadwal'/>
+								</form>";
+							}else{
+								echo "<form name='frm' action='hapuspenyusun.php' method='POST' role='form' enctype='multipart/form-data'>
+								<input type='hidden' name='idjdel' value='$_GET[idj]'>
+								<input type='hidden' name='idadel' value='$pm[id]'>
+								<input type='hidden' name='tukdel' value='$jdt[tempat_asesmen]'>
+								<input type='hidden' name='skemakknidel' value='$jdt[id_skemakkni]'>
+								<input type='hidden' name='tgl_asesmendel' value='$tglasesmen'>
+								<input type='hidden' name='jam_asesmendel' value='$jdt[jam_asesmen]'>
+								<input type='submit' name='hapus' onclick='return confirmation()' class='btn btn-danger btn-xs btn-block' title='Hapus dari Jadwal Asesmen' value='Hapus dari Jadwal'/>
+								</form>";
+							}
+							echo "</td>";
+							echo "</tr>";
+							$no++;
+						}
+					echo "</tbody>
+				</table>";
+			}else{
+				echo "<span class='text-red text-large'>Penugasan  asesor pada skema ini belum diinput, silahkan input penugasan asesor dari menu <a href='?module=asesor'>Asesor</a></span>";
+			}
+			echo "</div>
+		  </div>
+	</section>";
+	}else{
+		echo "<div align='center'><b>Maaf Anda tidak memiliki hak akses</b></div>";
+	}
+}
 // Bagian Asesor Verifikator TUK ================================================================================================================
 elseif ($_GET['module']=='verifikatortuk'){
 	// Cek Hak Akses Modul
@@ -25546,6 +25986,164 @@ elseif ($_GET['module']=='validatormkva'){
 								<input type='hidden' name='tukdel' value='$jdt[tempat_asesmen]'>
 								<input type='hidden' name='skemakknidel' value='$jdt[id_skemakkni]'>
 								<input type='hidden' name='tgl_asesmendel' value='$tglasesmen'>
+								<input type='submit' name='hapus' onclick='return confirmation()' class='btn btn-danger btn-xs btn-block' title='Hapus dari Jadwal Asesmen' value='Hapus dari Jadwal'/>
+								</form>";
+							}
+							echo "</td>";
+							echo "</tr>";
+							$no++;
+						}
+					echo "</tbody>
+				</table>";
+			}else{
+				echo "<span class='text-red text-large'>Penugasan asesor pada skema ini belum diinput, silahkan input penugasan asesor dari menu <a href='?module=asesor'>Asesor</a></span>";
+			}
+			echo "</div>
+		  </div>
+	</section>";
+	}else{
+		echo "<div align='center'><b>Maaf Anda tidak memiliki hak akses</b></div>";
+	}
+}
+elseif ($_GET['module']=='validatorform'){
+	// Cek Hak Akses Modul
+	$sessionidlogin=md5($_SESSION['namauser']);
+	$urlmodul="?module=".$_GET['module'];
+	$sqlcekmodulnya="SELECT * FROM `modul` WHERE `link`='$urlmodul'";
+	$cekmodulnya=$conn->query($sqlcekmodulnya);
+	$cmdl=$cekmodulnya->fetch_assoc();
+	$sqlcekhakakses="SELECT * FROM `users_modul` WHERE `id_session`='$sessionidlogin' AND `id_modul`='$cmdl[id_modul]'";
+	$cekhakakses=$conn->query($sqlcekhakakses);
+	$berhakkah=$cekhakakses->num_rows;
+	if ($_SESSION['leveluser']=='admin'|| $berhakkah>0){
+	echo "
+    <!-- Content Header (Page header) -->
+    <section class='content-header'>
+      <h1>
+        Verifikator Form
+        <small>Data Asesor Validator Form</small>
+      </h1>
+      <ol class='breadcrumb'>
+        <li><a href='media.php?module=home'><i class='fa fa-dashboard'></i> Home</a></li>
+        <li class='active'>Asesor Validator Form.</li>
+      </ol>
+    </section>
+    <!-- Main content -->
+    <section class='content'>
+      <div class='row'>
+        <div class='col-xs-12'>
+	  <div class='box'>
+            <div class='box-header'>
+              <h3 class='box-title'>Info Pelaksanaan Asesmen dan Tempat Uji Kompetensi</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class='box-body'>";
+			$sqljadwaltuk2="SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'";
+			$jadwaltuk2=$conn->query($sqljadwaltuk2);
+			$jdt=$jadwaltuk2->fetch_assoc();
+			$sqltuk="SELECT * FROM `tuk` WHERE `id`='$jdt[tempat_asesmen]'";
+			$tuk=$conn->query($sqltuk);
+			$tt=$tuk->fetch_assoc();
+			$masa_berlaku=tgl_indo($tt['masa_berlaku']);
+			$sqltukjenis1="SELECT * FROM `tuk_jenis` WHERE `id`='$tt[jenis_tuk]'";
+			$jenistuk=$conn->query($sqltukjenis1);
+			$jt=$jenistuk->fetch_assoc();
+			$tglasesmen=tgl_indo($jdt['tgl_asesmen']);
+			$tglverifikasi=strtotime($jdt['tgl_asesmen'].' -1 day');
+			$tglverifikasi2=date('Y-m-d',$tglverifikasi);
+			$tglverifikasituk=tgl_indo($tglverifikasi2);
+			$sqlskemakkni="SELECT * FROM `skema_kkni` WHERE `id`='$jdt[id_skemakkni]'";
+			$skemakkni=$conn->query($sqlskemakkni);
+			$skm=$skemakkni->fetch_assoc();
+			echo "<table class='table table-bordered table-striped'>
+			<tbody><tr><td>Skema</td><td><b>$skm[kode_skema]-$skm[judul]</b><br>";
+			$namaskkni=$conn->query("SELECT * FROM `skkni` WHERE `id`='$skm[id_skkni]'");
+			$nsk=$namaskkni->fetch_assoc();
+			$pesertaasesmen=$conn->query("SELECT * FROM `asesi_asesmen` WHERE `id_jadwal`='$jdt[id]'");
+			$jumps=$pesertaasesmen->num_rows;
+			echo "$nsk[nama]</td></tr>
+			<tr><td>Periode</td><td><b>$jdt[periode] $jdt[tahun]</td></tr>
+			<tr><td>Gelombang</td><td><b>$jdt[gelombang]</b></td></tr>
+			<tr><td>Tanggal Uji Kompetensi</td><td><b>$tglasesmen</b></td></tr>
+			<tr><td>Pukul</td><td><b>$jdt[jam_asesmen]</b></td></tr>
+			<tr><td>Tempat Uji Kompetensi (TUK)</td><td><b>$tt[nama]</b><br>$tt[alamat] $tt[kelurahan]</td></tr>
+			<tr><td>Maksimal Peserta</td><td><b>$jdt[kapasitas] Asesi</b></td></tr>
+			<tr><td>Tanggal Verifikasi TUK</td><td><b>$tglverifikasituk</b></td></tr>
+			<tr><td>Peserta Terjadwal</td><td><b>$jumps Asesi</b></td></tr>";
+			echo "<tr><td>Validator Form</td><td>";
+			$noasr=1;
+			$getasesor=$conn->query("SELECT * FROM `asesor_verifikatorform` WHERE `id_jadwal`='$_GET[idj]'");
+			$gas=$getasesor->fetch_assoc();
+			If (!empty($gas['id_asesor'])){
+				$asesormkva1=1;
+			}else{
+				$asesormkva1=0;
+			}
+			$jumverifikator=$asesormkva1;
+			$sqlasesor="SELECT * FROM `asesor` WHERE `id`='$gas[id_verifikatorform]'";
+			$asesor=$conn->query($sqlasesor);
+			$asr=$asesor->fetch_assoc();
+			if (!empty($asr['gelar_depan'])){
+				if (!empty($asr['gelar_blk'])){
+					$namaasesor=$asr['gelar_depan']." ".$asr['nama'].", ".$asr['gelar_blk'];
+				}else{
+					$namaasesor=$asr['gelar_depan']." ".$asr['nama'];
+				}
+			}else{
+				if (!empty($asr['gelar_blk'])){
+					$namaasesor=$asr['nama'].", ".$asr['gelar_blk'];
+				}else{
+					$namaasesor=$asr['nama'];
+				}
+			}
+			echo "<b>$noasr. $namaasesor</b><br>";
+			$noasr++;
+			echo "</td></tr></tbody></table><br>
+			<div align='left' class='col-md-6 col-sm-6 col-xs-6'>";
+			echo "</div>
+			<div align='right' class='col-md-6 col-sm-6 col-xs-6'>";
+				echo "<a href='?module=jadwalasesmen' class='btn btn-success'>Lihat Jadwal Lainnya</a>";
+			echo"</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+          <div class='box'>
+            <div class='box-header'>
+              <h3 class='box-title'>Data Asesor Lembaga Sertifikasi Profesi yang telah memiliki SK Penugasan</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class='box-body'>";
+			//mendapatkan asesor yang berwenang berdasarkan SK Penugasan Asesor
+			$sqlgetasesorskema="SELECT * FROM `asesor_tugasskema` WHERE `id_skemakkni`='$jdt[id_skemakkni]'";
+			$getasesorskema=$conn->query($sqlgetasesorskema);
+			$jumasesorskema=$getasesorskema->num_rows;
+			if ($jumasesorskema>0){		
+				echo "<table id='example1' class='table table-bordered table-striped'>
+					<thead><tr><th>No</th><th>Identitas Asesor</th><th>Aksi</th></tr></thead>
+					<tbody>";
+						$no=1;
+						while ($assk=$getasesorskema->fetch_assoc()){
+							$sqljadwaltuk="SELECT * FROM `asesor` WHERE `id`='$assk[id_asesor]' AND `masaberlaku_lisensi`>".date("Y-m-d");
+							$jadwaltuk=$conn->query($sqljadwaltuk);
+							$pm=$jadwaltuk->fetch_assoc();
+							echo "<tr class=gradeX><td>$no</td><td><b>$pm[nama]</b><br>No. Register : $pm[no_induk]<br>No. Lisensi : $pm[no_lisensi]<br>No. HP : $pm[no_hp]<br>No. SK Penugasan : $assk[no_sk]<br>Tanggal SK Penugasan : ".tgl_indo($assk['tanggal_sk'])."</td>
+							<td width='20%'>";
+							$getasesor2=$conn->query("SELECT * FROM `asesor_verifikatorform` WHERE id_verifikatorform='$pm[id]' AND `id_jadwal`='$_GET[idj]'");
+							$jumas2=$getasesor2->num_rows;
+							if ($jumas2==0){
+								echo "<form name='frm' action='tambahvalidatorform.php' method='POST' role='form' enctype='multipart/form-data'>
+								<input type='hidden' name='idj' value='$_GET[idj]'>
+								<input type='hidden' name='ida' value='$pm[id]'>
+								<input type='hidden' name='tgl_verifikasiform' value='$tglasesmen'>
+								<input type='submit' name='tambah' class='btn btn-primary btn-xs btn-block' title='Tambahkan pada Jadwal Asesmen' value='Tambahkan ke Jadwal'/>
+								</form>";
+							}else{
+								echo "<form name='frm' action='hapusvalidatorform.php' method='POST' role='form' enctype='multipart/form-data'>
+								<input type='hidden' name='idjdel' value='$_GET[idj]'>
+								<input type='hidden' name='idadel' value='$pm[id]'>
+								<input type='hidden' name='tgl_verifikasidel' value='$tglasesmen'>
+								<input type='hidden' name='skemakknidel' value='$jdt[id_skemakkni]'>
 								<input type='submit' name='hapus' onclick='return confirmation()' class='btn btn-danger btn-xs btn-block' title='Hapus dari Jadwal Asesmen' value='Hapus dari Jadwal'/>
 								</form>";
 							}

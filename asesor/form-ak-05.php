@@ -14,6 +14,10 @@ include "../config/library.php";
 
 include "../config/fungsi_indotgl.php";
 
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+
+
 
 
 /*$sqlasesi="SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
@@ -126,9 +130,9 @@ while ($gas = $getasesor->fetch_assoc()) {
 
 	$noregasesor = $asr['no_induk'];
 
-	$namaasesor =$namaasesor;
+	$namaasesor = $namaasesor;
 
-	$noregasesor =$noregasesor;
+	$noregasesor = $noregasesor;
 
 
 
@@ -578,17 +582,28 @@ $identitas = $conn->query($sqlidentitas);
 
 $iden = $identitas->fetch_assoc();
 
+// $urltandatanganas = $iden['url_domain'] . "/asesor/media.php?module=form-fr-ak-05&amp;idj=" . $jdq['id'];
 $urltandatanganas = $iden['url_domain'] . "/asesor/media.php?module=form-fr-ak-05&amp;idj=" . $jdq['id'];
 
-$sqlcekttdasesiapl01as = "SELECT * FROM `logdigisign` WHERE `nama_dokumen`='FR.AK.05. LAPORAN ASESMEN' AND `penandatangan`='$asr[nama]' AND `url_ditandatangani`='$urltandatanganas' AND id_jadwal='$_GET[idj]' ORDER BY `id` DESC";
 
-$cekttdasesiapl01as = $conn->query($sqlcekttdasesiapl01as);
+$sqlcekttd = "SELECT * FROM `logdigisign` 
+              WHERE `nama_dokumen`='FR.AK.05. LAPORAN ASESMEN' 
+              AND `penandatangan`='$asr[nama]' 
+              AND `url_ditandatangani`='$urltandatanganas' 
+              AND id_jadwal='$_GET[idj]' 
+              ORDER BY `id` DESC";
 
-$jumttdasesias = $cekttdasesiapl01as->num_rows;
+// var_dump($sqlcekttd);
+// die;
 
-$ttdasas = $cekttdasesiapl01as->fetch_assoc();
+$cekttdasesor = $conn->query($sqlcekttd);
 
-if ($jumttdasesias > 0) {
+$jumttd = $cekttdasesor->num_rows;
+
+$ttdasas = $cekttdasesor->fetch_assoc();
+
+
+if ($jumttd > 0) {
 
 	$write->easyCell('', 'img:' . $ttdasas['file'] . ', h20; align:C; valign:T; font-size:10; font-style:B; border:R;');
 } else {
@@ -662,12 +677,7 @@ $pdf->AliasNbPages();
 
 
 
-//output file pdf
-
+ob_clean(); // Pastikan buffer bersih sebelum output PDF
 $fileoutputnya = "FR-AK-05-" . $skemakkni . "-" . $_GET['idj'] . ".pdf";
-
 $pdf->Output($fileoutputnya, 'I');
-
-
-
-ob_end_flush();
+exit;

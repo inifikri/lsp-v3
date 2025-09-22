@@ -280,7 +280,9 @@ if (!empty($lq['ttddigital'])){
 	$write->easyCell($namapimpinan,'valign:T;');
 	$write->printRow();
 	$write->easyCell('');
-	$write->easyCell('','img:../images/ttd-stempel-pimpinan.png, h25; align:L');
+
+
+
 	$write->printRow();
 	$write->endTable(5);
 	$ttdcetakketua=$lq['direktur'];
@@ -290,6 +292,23 @@ if (!empty($lq['ttddigital'])){
 }else{
 	$write->rowStyle('min-height:15');
 	$write->easyCell('');
+
+	// 	var_dump($jdq);
+	// die;
+
+	// WNP-PPM
+
+	if ($jdq['is_ttdketua'] == 1) {
+    $write->easyCell('', 'img:../images/ttd-stempel-pimpinan.png, h25; align:L');
+} else {
+    $write->easyCell('Belum Ditandatangani', 'align:L; font-style:I; font-size:10');
+}
+
+
+// WNP-PPM
+
+
+
 	$write->easyCell($namapimpinan,'valign:T;');
 	$write->printRow();
 	$write->endTable(5);
@@ -454,6 +473,6 @@ $write->endTable(5);
 $pdf->AliasNbPages();
 //output file pdf
 $fileoutputnya="surat-tugas-asesor-".$skemakkni."-".$_GET['idj'].".pdf";
-$pdf->Output($fileoutputnya,'D');
+$pdf->Output($fileoutputnya,'I');
 ob_end_flush();
 ?>
