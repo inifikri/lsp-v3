@@ -9,24 +9,19 @@ ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 
+// Form-FR-IA-04a
+
 $sqlasesi="SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
 $asesi=$conn->query($sqlasesi);
 $as=$asesi->fetch_assoc();
-// var_dump($sqlasesi);
 $sqljadwal="SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'";
 $jadwal=$conn->query($sqljadwal);
 $jdq=$jadwal->fetch_assoc();
 $tgl_cetak = tgl_indo($jdq['tgl_asesmen']);
 
-// GET DATA ASESOR
-$getasesor=$conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
-$gjas=$getasesor->fetch_assoc();
-$sqlgetasesordata = "SELECT * FROM `asesor` WHERE `id`='$gjas[id_asesor]'";
+$sqlgetasesordata = "SELECT * FROM `asesor` WHERE `no_ktp`='$_GET[asr]'";
 $getasesordata = $conn->query($sqlgetasesordata);
 $asr = $getasesordata->fetch_assoc();
-// var_dump($asr);
-
-
 
 $sqltuk="SELECT * FROM `tuk` WHERE `id`='$jdq[tempat_asesmen]'";
 $tuk=$conn->query($sqltuk);
@@ -64,21 +59,9 @@ $sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemak
 $cektandatangan = $conn->query($sqlcektandatangan);
 $ttdx = $cektandatangan->fetch_assoc();
 
-// var_dump($sqlcektandatangan);
-
 // TTD Asesi
-$sqlcektandatanganasesi = "SELECT * FROM `logdigisign` 
-    WHERE id_skema='$jdq[id_skemakkni]' 
-    AND id_asesi='$as[no_pendaftaran]' 
-    AND `penandatangan`='$as[nama]' 
-    AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' 
-    ORDER BY `waktu` DESC";
-
-$cektandatanganasesi = $conn->query($sqlcektandatanganasesi);
-$ttdasesi = $cektandatanganasesi->fetch_assoc();
-
-// var_dump($sqlcektandatanganasesi);
-
+$sqlcektandatanganasesi = $conn->query("SELECT * FROM `logdigisign` WHERE id_skema='$jdq[id_skemakkni]' AND id_asesi='$_GET[ida]' AND `penandatangan`='$as[nama]' AND nama_dokumen='FR.IA.04A. DIT - DAFTAR INSTRUKSI TERSTRUKTUR (PENJELASAN PROYEK SINGKAT/ KEGIATAN TERSTRUKTUR LAINNYA' ORDER BY `waktu` DESC");
+$ttdasesi = $sqlcektandatanganasesi->fetch_assoc();
 
 $pdf = new TCPDF();
 // $pdf->SetAutoPageBreak(TRUE, 10);
@@ -107,11 +90,11 @@ $html = '
 <table border="0" cellpadding="2" cellspacing="0" style="width:190mm; font-family: Arial;">
     <tr>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="../images/logolsp.jpg" width="400px"/>
+            <img src="../images/logolsp.png" width="400px"/>
         </td>
         <td style="width:130mm; text-align:center; font-size:14px; font-weight:bold;">' . $namalsp . '</td>
         <td rowspan="3" style="width:30mm; text-align:center;">
-            <img src="../images/logobnsp.jpg" width="400px"/>
+            <img src="../images/logobnsp.jpeg" width="400px"/>
         </td>
     </tr>
     <tr>
@@ -235,7 +218,6 @@ $pdf->Ln(5);
 $contentasesmenIA04 = $conn->query("SELECT * FROM content_ia04A WHERE `id_skemakkni`='$jdq[id_skemakkni]'");
 
 while ($cta = $contentasesmenIA04->fetch_assoc()) {
-    $getumpanbalik=$conn->query("SELECT * FROM asesmen_ia04A a LEFT JOIN content_ia04A b ON b.id=a.id_pertanyaan WHERE a.id_skemakkni='$jdq[id_skemakkni]' AND a.id_pertanyaan='$cta[id]' AND a.id_jadwal='$_GET[idj]' AND a.id_asesi='$_GET[ida]'");
     $unit_kompetensi = explode(',', $cta['kode_unit']);
     $rowspan = 1 + count($unit_kompetensi);
     // $kelompok = strip_tags($cta['kelompok']);
@@ -275,47 +257,23 @@ while ($cta = $contentasesmenIA04->fetch_assoc()) {
         <tr>
             <td style="width:90mm;">' . $cta['content'] . '</td>
             <td style="width:100mm;">' . $cta['content1'] . '</td>
-        </tr>';
-    while($gu = $getumpanbalik->fetch_assoc()){    
-        $html .= '<tr>
-                <td colspan="2" style="font-weight:bold;">Umpan Balik :'.$gu['umpan_balik'].'</td>
-            </tr>';
-    }
-    $html .= '</table>';
-
+        </tr>
+        <tr>
+            <td colspan="2" style="font-weight:bold;">Umpan Balik :</td>
+        </tr>
+    </table>
+    ';
     $pdf->writeHTML($html, true, false, true, false, '');
     $pdf->Ln(5);
 } 
-// var_dump($ttdasesi['file']);
-// die;
-// <td align="center">Tanda Tangan Asesi<br><img src="../'.$ttdasesi['file'].'" width="400px"/></td>
-//             <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
 $html = '
-<h3>TANDA TANGAN</h3>
-   <table border="1" cellpadding="5" cellspacing="0" style="font-family: Arial; font-size:12px; width:190mm;">
-    <tr style="text-align:center; font-weight:bold;">
-        <td style="width:95mm;">Asesi</td>
-        <td style="width:95mm;">Asesor</td>
-    </tr>
-    <tr>
-        <td align="center">
-            <div>' . $as['nama'] . '</div><br>';
-if (!empty($ttdasesi['file']) && file_exists('../' . $ttdasesi['file'])) {
-    $html .= '<img src="../' . $ttdasesi['file'] . '" height="50"><br>';
-}
-$html .= '
-            <div>Tanggal: ' . tgl_indo($ttdasesi['waktu']) . '</div>
-        </td>
-        <td align="center">
-            <div>' . $namaasesor . '</div><br>';
-if (!empty($ttdx['file']) && file_exists($ttdx['file'])) {
-    $html .= '<img src="' . $ttdx['file'] . '" height="50"><br>';
-}
-$html .= '
-            <div>Tanggal: ' . tgl_indo($ttdx['waktu']) . '</div>
-        </td>
-    </tr>
-</table>
+    <table border="1" cellpadding="3" cellspacing="0" style="font-family: Arial; font-size:12px;">
+        <tr>
+            <td align="center">Tanda Tangan Asesi<br><img src="'.$ttdasesi['file'].'" width="400px"/></td>
+            <td align="center">Tanda Tangan Asesor<br><img src="'.$ttdx['file'].'" width="400px"/></td>
+            <td align="center">Nama dan Tanda Tangan Supervisor (Jika ada)</td>
+        </tr>
+    </table>
     <p style="font-family: Arial; font-size:8px;">*) Apabila asesi pada Level 4 ke atas, berikan tugas proyek yang meliputi tentang pemecahan masalah dan analisa</p>
     ';
     $pdf->writeHTML($html, true, false, true, false, '');
@@ -333,9 +291,9 @@ $html .= '
         </tr>
         <tr>
             <td rowspan="2">PENYUSUN</td>
-            <td>1. </td>
-              <td>' . $asr['nama'] . '</td>
-            <td>' . $asr['no_induk'] . '</td>
+            <td>1</td>
+            <td>MARTDIAN RATNA SARI </td>
+            <td>MET.000.004268 2018</td>
             <td></td>
         </tr>
         <tr>
