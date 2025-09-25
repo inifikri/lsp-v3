@@ -1,8 +1,8 @@
 <?php
-$server = "db";
+$server = "localhost";
 $username = "root";
-$password = "root";
-$database = "lsp_db";
+$password = "";
+$database = "lsp-v3";
 // Create connection
 $conn = new mysqli($server, $username, $password, $database);
 // Check connection

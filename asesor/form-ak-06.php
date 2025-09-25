@@ -1,10 +1,21 @@
 <?php
+
 include 'fpdf-easytable-master/fpdf.php';
 include 'fpdf-easytable-master/exfpdf.php';
 include 'fpdf-easytable-master/easyTable.php';
 include "../config/koneksi.php";
 include "../config/library.php";
 include "../config/fungsi_indotgl.php";
+
+
+
+
+
+ini_set('display_errors',0); 
+error_reporting(E_ALL);
+ob_start();
+
+
 /*$sqlasesi="SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
 $asesi=$conn->query($sqlasesi);
 $as=$asesi->fetch_assoc();*/

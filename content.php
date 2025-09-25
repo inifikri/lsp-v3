@@ -4467,6 +4467,7 @@ elseif ($_GET['module'] == 'jadwal') {
 			echo "<a href='?module=form-fr-ak-01&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Persetujuan Asesmen (FORM-AK-01)</a><br>";
 			echo "<a href='?module=form-fr-ak-02&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Persetujuan Rekaman Asesmen (FORM-AK-02)</a><br>";
 			echo "<a href='?module=form-fr-ak-04&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Banding Asesmen (FORM-AK-04)</a><br>";
+			echo "<a href='?module=form-fr-ak-07&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Ceklis Penyesuaian yang Wajar dan Berasalan (FORM-AK-07)</a><br>";
 			echo "<a href='asesor/form-fr-ia-02.php?ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Unduh Tugas Praktik Demonstrasi (FORM-IA-02)</a><br>";
 			echo "<a href='?module=form-ia-04A&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Form (FORM-IA-04A)</a><br>";
 			echo "<a href='?module=form-ia-04B&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Form (FORM-IA-04B)</a><br>";
@@ -4482,6 +4483,7 @@ elseif ($_GET['module'] == 'jadwal') {
 			echo "<a href='?module=form-fr-ak-01&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Persetujuan Asesmen (FORM-AK-01)</a><br>";
 			echo "<a href='?module=form-fr-ak-02&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Persetujuan Rekaman Asesmen (FORM-AK-02)</a><br>";
 			echo "<a href='?module=form-fr-ak-04&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Banding Asesmen (FORM-AK-04)</a><br>";
+			echo "<a href='?module=form-fr-ak-07&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Ceklis Penyesuaian yang Wajar dan Berasalan (FORM-AK-07)</a><br>";
 			echo "<a href='asesor/form-fr-ia-02.php?ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Unduh Tugas Praktik Demonstrasi (FORM-IA-02)</a><br>";
 			echo "<a href='?module=form-ia-04A&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Form (FORM-IA-04A)</a><br>";
 			echo "<a href='?module=form-ia-04B&ida=$_SESSION[namauser]&idj=$pm0[id_jadwal]' class='btn btn-success btn-xs btn-block'>Input Form (FORM-IA-04B)</a><br>";
@@ -7920,6 +7922,836 @@ $asr=$getasesordata->fetch_assoc(); */
     </section>
     <!-- /.content -->";
 }
+
+// Start ak07 23/09/2025 @wnp
+												
+													elseif ($_GET['module'] == 'form-fr-ak-07') {
+														$sqllogin = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_GET[ida]'";
+														$login = $conn->query($sqllogin);
+														$ketemu = $login->num_rows;
+														$rowAgen = $login->fetch_assoc();
+														$sqlgetjadwal = "SELECT * FROM `jadwal_asesmen` WHERE `id`='$_GET[idj]'";
+														$getjadwal = $conn->query($sqlgetjadwal);
+														$jd = $getjadwal->fetch_assoc();
+														$sqlgetskema = "SELECT * FROM `skema_kkni` WHERE `id`='$jd[id_skemakkni]'";
+														$getskema = $conn->query($sqlgetskema);
+														$sk = $getskema->fetch_assoc();
+														$sqlgetasesordata = "SELECT * FROM `asesor` WHERE `no_ktp`='$_SESSION[namauser]'";
+														$getasesordata = $conn->query($sqlgetasesordata);
+														$asr = $getasesordata->fetch_assoc();
+														$sqltuk = "SELECT * FROM `tuk` WHERE `id`='$jd[tempat_asesmen]'";
+														$tuk = $conn->query($sqltuk);
+														$tq = $tuk->fetch_assoc();
+														$sqltukjenis = "SELECT `jenis_tuk` FROM `tuk_jenis` WHERE `id`='$tq[jenis_tuk]'";
+														$tukjenis = $conn->query($sqltukjenis);
+														$tukjen = $tukjenis->fetch_assoc();
+														$noasr = 1;
+														$getasesor = $conn->query("SELECT * FROM `jadwal_asesor` WHERE `id_jadwal`='$_GET[idj]'");
+														while ($gas = $getasesor->fetch_assoc()) {
+															$sqlasesor = "SELECT * FROM `asesor` WHERE `id`='$gas[id_asesor]'";
+															$asesor = $conn->query($sqlasesor);
+															$asr = $asesor->fetch_assoc();
+															if (!empty($asr['gelar_depan'])) {
+																if (!empty($asr['gelar_blk'])) {
+																	$namaasesor = $asr['gelar_depan'] . " " . $asr['nama'] . ", " . $asr['gelar_blk'];
+																} else {
+																	$namaasesor = $asr['gelar_depan'] . " " . $asr['nama'];
+																}
+															} else {
+																if (!empty($asr['gelar_blk'])) {
+																	$namaasesor = $asr['nama'] . ", " . $asr['gelar_blk'];
+																} else {
+																	$namaasesor = $asr['nama'];
+																}
+															}
+															$noregasesor = $asr['no_induk'];
+															$namaasesor = $noasr . '. ' . $namaasesor;
+															$noregasesor = $noasr . '. ' . $noregasesor;
+															$noasr++;
+														}
+														echo "<!-- Content Header (Page header) -->
+			<section class='content-header'>
+				<h1>
+			Input FR.AK.07. CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN
+					<small>Skema $sk[judul]</small>
+				</h1>
+				<ol class='breadcrumb'>
+					<li><a href='media.php?module=home'><i class='fa fa-dashboard'></i> Home</a></li>
+					<li class='active'>FR.AK.07</li>
+				</ol>
+			</section>";
+													if (isset($_REQUEST['simpan'])) {
+															$sqlcekgetak07 = "SELECT * FROM `asesmen_ak07` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
+															$cekgetak07 = $conn->query($sqlcekgetak07);
+															$cekak07 = $cekgetak07->num_rows;
+															$tglsekarang = date("Y-m-d");
+															if ($cekak07 > 0) {
+																$folderPath = "foto_tandatangan/";
+																if (empty($_POST['signed'])) {
+																	
+																} else {
+																	$image_parts = explode(";base64,", $_POST['signed']);
+																	$image_type_aux = explode("image/", $image_parts[0]);
+																	$image_type = $image_type_aux[1];
+																	$image_base64 = base64_decode($image_parts[1]);
+																	$file = $folderPath . uniqid() . '.' . $image_type;
+																	file_put_contents($file, $image_base64);
+																	$url =  "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+																	$iddokumen = md5($url);
+																	$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+																	$alamatip = $_SERVER['REMOTE_ADDR'];
+																	$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.07.CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+																	$conn->query($sqlinputdigisign);
+																	echo "<div class='alert alert-success alert-dismissible'>
+					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+					<h4><i class='icon fa fa-check'></i> Ceklis penyesuaian yang wajar dan berasalan berhasil disimpan</h4>
+					Terimakasih, Anda telah melakukan <b>Ceklis penyesuaian untuk Skema $sk[judul], dan tanda tangan telah ditambahkan</b><br>
+					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>
+					<script>alert('Data berhasil disimpan'); window.location = '" . $base_url . "media.php?module=form-fr-ak-07&ida=$_GET[ida]&idj=$_GET[idj]'</script>";
+																if (isset($_POST['checkboxPA1'])) {
+																		$postPA1 = $_POST['checkboxPA1'];
+																	} else {
+																		$postPA1 = "0";
+																	}
+																		if (isset($_POST['checkboxPA2'])) {
+																		$postPA2 = $_POST['checkboxPA2'];
+																	} else {
+																		$postPA2 = "0";
+																	}
+																		if (isset($_POST['checkboxPA3'])) {
+																		$postPA3 = $_POST['checkboxPA3'];
+																	} else {
+																		$postPA3 = "0";
+																	}
+																		if (isset($_POST['checkboxPA4'])) {
+																		$postPA4 = $_POST['checkboxPA4'];
+																	} else {
+																		$postPA4 = "0";
+																	}
+																		if (isset($_POST['checkboxPA5'])) {
+																		$postPA5 = $_POST['checkboxPA5'];
+																	} else {
+																		$postPA5 = "0";
+																	}
+																		if (isset($_POST['checkboxKA1'])) {
+																		$postKA1 = $_POST['checkboxKA1'];
+																	} else {
+																		$postKA1 = "0";
+																	}
+																		if (isset($_POST['checkboxKET1_1'])) {
+																		$postKET1_1 = $_POST['checkboxKET1_1'];
+																	} else {
+																		$postKET1_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET1_2'])) {
+																		$postKET1_2 = $_POST['checkboxKET1_2'];
+																	} else {
+																		$postKET1_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET1_3'])) {
+																		$postKET1_3 = $_POST['checkboxKET1_3'];
+																	} else {
+																		$postKET1_3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET1_4'])) {
+																		$postKET1_4 = $_POST['checkboxKET1_4'];
+																	} else {
+																		$postKET1_4 = "0";
+																	}
+																	if (isset($_POST['checkboxKET1_5'])) {
+																		$postKET1_5 = $_POST['checkboxKET1_5'];
+																	} else {
+																		$postKET1_5 = "0";
+																	}
+																	if (isset($_POST['checkboxKET1_6'])) {
+																		$postKET1_6 = $_POST['checkboxKET1_6'];
+																	} else {
+																		$postKET1_6 = "0";
+																	}
+
+
+																	if (isset($_POST['checkboxKA2'])) {
+																		$postKA2 = $_POST['checkboxKA2'];
+																	} else {
+																		$postKA2 = "0";
+																	}
+																		if (isset($_POST['checkboxKET2_1'])) {
+																		$postKET2_1 = $_POST['checkboxKET2_1'];
+																	} else {
+																		$postKET2_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET2_2'])) {
+																		$postKET2_2 = $_POST['checkboxKET2_2'];
+																	} else {
+																		$postKET2_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET2_3'])) {
+																		$postKET2_3 = $_POST['checkboxKET2_3'];
+																	} else {
+																		$postKET2_3 = "0";
+																	}
+
+
+																	if (isset($_POST['checkboxKA3'])) {
+																		$postKA3 = $_POST['checkboxKA3'];
+																	} else {
+																		$postKA3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_1'])) {
+																		$postKET3_1 = $_POST['checkboxKET3_1'];
+																	} else {
+																		$postKET3_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_2'])) {
+																		$postKET3_2 = $_POST['checkboxKET3_2'];
+																	} else {
+																		$postKET3_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_3'])) {
+																		$postKET3_3 = $_POST['checkboxKET3_3'];
+																	} else {
+																		$postKET3_3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_4'])) {
+																		$postKET3_4 = $_POST['checkboxKET3_4'];
+																	} else {
+																		$postKET3_4 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_5'])) {
+																		$postKET3_5 = $_POST['checkboxKET3_5'];
+																	} else {
+																		$postKET3_5 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_6'])) {
+																		$postKET3_6 = $_POST['checkboxKET3_6'];
+																	} else {
+																		$postKET3_6 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_7'])) {
+																		$postKET3_7 = $_POST['checkboxKET3_7'];
+																	} else {
+																		$postKET3_7 = "0";
+																	}
+																	if (isset($_POST['checkboxKET3_8'])) {
+																		$postKET3_8 = $_POST['checkboxKET3_8'];
+																	} else {
+																		$postKET3_8 = "0";
+																	}
+
+
+																	if (isset($_POST['checkboxKA4'])) {
+																		$postKA4 = $_POST['checkboxKA4'];
+																	} else {
+																		$postKA4 = "0";
+																	}
+																	if (isset($_POST['checkboxKET4_1'])) {
+																		$postKET4_1 = $_POST['checkboxKET4_1'];
+																	} else {
+																		$postKET4_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET4_2'])) {
+																		$postKET4_2 = $_POST['checkboxKET4_2'];
+																	} else {
+																		$postKET4_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET4_3'])) {
+																		$postKET4_3 = $_POST['checkboxKET4_3'];
+																	} else {
+																		$postKET4_3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET4_4'])) {
+																		$postKET4_4 = $_POST['checkboxKET4_4'];
+																	} else {
+																		$postKET4_4 = "0";
+																	}
+																	if (isset($_POST['checkboxKET4_5'])) {
+																		$postKET4_5 = $_POST['checkboxKET4_5'];
+																	} else {
+																		$postKET4_5 = "0";
+																	}
+																	if (isset($_POST['checkboxKET4_6'])) {
+																		$postKET4_6 = $_POST['checkboxKET4_6'];
+																	} else {
+																		$postKET4_6 = "0";
+																	}
+
+
+																	
+																	if (isset($_POST['checkboxKA5'])) {
+																		$postKA5 = $_POST['checkboxKA5'];
+																	} else {
+																		$postKA5 = "0";
+																	}
+																		if (isset($_POST['checkboxKET5_1'])) {
+																		$postKET5_1 = $_POST['checkboxKET5_1'];
+																	} else {
+																		$postKET5_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET5_2'])) {
+																		$postKET5_2 = $_POST['checkboxKET5_2'];
+																	} else {
+																		$postKET5_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET5_3'])) {
+																		$postKET5_3 = $_POST['checkboxKET5_3'];
+																	} else {
+																		$postKET5_3 = "0";
+																	}
+
+
+																	if (isset($_POST['checkboxKA6'])) {
+																		$postKA6 = $_POST['checkboxKA6'];
+																	} else {
+																		$postKA6 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_1'])) {
+																		$postKET6_1 = $_POST['checkboxKET6_1'];
+																	} else {
+																		$postKET6_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_2'])) {
+																		$postKET6_2 = $_POST['checkboxKET6_2'];
+																	} else {
+																		$postKET6_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_3'])) {
+																		$postKET6_3 = $_POST['checkboxKET6_3'];
+																	} else {
+																		$postKET6_3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_4'])) {
+																		$postKET6_4 = $_POST['checkboxKET6_4'];
+																	} else {
+																		$postKET6_4 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_5'])) {
+																		$postKET6_5 = $_POST['checkboxKET6_5'];
+																	} else {
+																		$postKET6_5 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_6'])) {
+																		$postKET6_6 = $_POST['checkboxKET6_6'];
+																	} else {
+																		$postKET6_6 = "0";
+																	}
+																	if (isset($_POST['checkboxKET6_7'])) {
+																		$postKET6_7 = $_POST['checkboxKET6_7'];
+																	} else {
+																		$postKET6_7 = "0";
+																	}
+
+
+																	if (isset($_POST['checkboxKA7'])) {
+																		$postKA7= $_POST['checkboxKA7'];
+																	} else {
+																		$postKA7 = "0";
+																	}
+																	if (isset($_POST['checkboxKET7_1'])) {
+																		$postKET7_1 = $_POST['checkboxKET7_1'];
+																	} else {
+																		$postKET7_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET7_2'])) {
+																		$postKET7_2 = $_POST['checkboxKET7_2'];
+																	} else {
+																		$postKET7_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET7_3'])) {
+																		$postKET7_3 = $_POST['checkboxKET7_3'];
+																	} else {
+																		$postKET7_3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET7_4'])) {
+																		$postKET7_4 = $_POST['checkboxKET7_4'];
+																	} else {
+																		$postKET7_4 = "0";
+																	}
+																	if (isset($_POST['checkboxKET7_5'])) {
+																		$postKET7_5 = $_POST['checkboxKET7_5'];
+																	} else {
+																		$postKET7_5 = "0";
+																	}
+
+																	if (isset($_POST['checkboxKA8'])) {
+																		$postKA8= $_POST['checkboxKA8'];
+																	} else {
+																		$postKA8 = "0";
+																	}
+																	if (isset($_POST['checkboxKET8_1'])) {
+																		$postKET8_1 = $_POST['checkboxKET8_1'];
+																	} else {
+																		$postKET8_1 = "0";
+																	}
+																	if (isset($_POST['checkboxKET8_2'])) {
+																		$postKET8_2 = $_POST['checkboxKET8_2'];
+																	} else {
+																		$postKET8_2 = "0";
+																	}
+																	if (isset($_POST['checkboxKET8_3'])) {
+																		$postKET8_3 = $_POST['checkboxKET8_3'];
+																	} else {
+																		$postKET8_3 = "0";
+																	}
+																	if (isset($_POST['checkboxKET8_4'])) {
+																		$postKET8_4 = $_POST['checkboxKET8_4'];
+																	} else {
+																		$postKET8_4 = "0";
+																	}
+																	// if (isset($_POST['checkboxKET1_6'])) {
+																	// 	$postKET1_6 = $_POST['checkboxKET1_6'];
+																	// } else {
+																	// 	$postKET1_6 = "0";
+																	// }
+																	// $sqlinputak01 = "UPDATE `asesmen_ak01` SET `VP`='$postVP',`RP`='$postRP', `OL`='$postOL', `KT`='$postKT', `PL`='$postPL', `PT`='$postPT', `PW`='$postPW', `PK`='$postPK', `HL`='$postHL', `persetujuan`='" . $_POST['persetujuan'] . "',`tanggal`='$tglsekarang', `tanggal_asesittd`=NULL, `persetujuan_asesi`=NULL WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																	// $conn->query($sqlinputak01);
+
+																$sqlinputak07 = "UPDATE `asesmen_ak07` SET 
+																	`PA1`='$postPA1',
+																	`PA2`='$postPA2', 
+																	`PA3`='$postPA3', 
+																	`PA4`='$postPA4', 
+																	`PA5`='$postPA5', 
+																	`KA1`='$postKA1', 
+																	`KET1_1`='$postKET1_1', 
+																	`KET1_2`='$postKET1_2', 
+																	`KET1_3`='$postKET1_3', 
+																	`KET1_4`='$postKET1_4', 
+																	`KET1_5`='$postKET1_5',
+																	`KET1_6`='$postKET1_6',
+																	`KA2`='$postKA2', 
+																	`KET2_1`='$postKET2_1', 
+																	`KET2_2`='$postKET2_2', 
+																	`KET2_3`='$postKET2_3', 
+																	`KA3`='$postKA3', 
+																	`KET3_1`='$postKET3_1', 
+																	`KET3_2`='$postKET3_2', 
+																	`KET3_3`='$postKET3_3', 
+																	`KET3_4`='$postKET3_4', 
+																	`KET3_5`='$postKET3_5',
+																	`KET3_6`='$postKET3_6',
+																	`KET3_7`='$postKET3_7',
+																	`KET3_8`='$postKET3_8',
+																	`KA4`='$postKA4', 
+																	`KET4_1`='$postKET4_1', 
+																	`KET4_2`='$postKET4_2', 
+																	`KET4_3`='$postKET4_3', 
+																	`KET4_4`='$postKET4_4', 
+																	`KET4_5`='$postKET4_5',
+																	`KET4_6`='$postKET4_6',
+																	`KA5`='$postKA5', 
+																	`KET5_1`='$postKET5_1', 
+																	`KET5_2`='$postKET5_2', 
+																	`KET5_3`='$postKET5_3', 
+																	`KA6`='$postKA6', 
+																	`KET6_1`='$postKET6_1', 
+																	`KET6_2`='$postKET6_2', 
+																	`KET6_3`='$postKET6_3',
+																	`KET6_4`='$postKET6_4', 
+																	`KET6_5`='$postKET6_5', 
+																	`KET6_6`='$postKET6_6',
+																	`KET6_7`='$postKET6_7',
+																	`KA7`='$postKA7', 
+																	`KET7_1`='$postKET7_1', 
+																	`KET7_2`='$postKET7_2', 
+																	`KET7_3`='$postKET7_3',
+																	`KET7_4`='$postKET7_4', 
+																	`KET7_5`='$postKET7_5', 				
+																	`KA8`='$postKA8', 
+																	`KET8_1`='$postKET8_1', 
+																	`KET8_2`='$postKET8_2', 
+																	`KET8_3`='$postKET8_3',
+																	`KET8_4`='$postKET8_4',
+																	`acuan`='$_POST[acuan]',
+																	`metode`='$_POST[metode]',
+																	`instrumen`='$_POST[instrumen]',
+																	`tanggal`='$tglsekarang'
+																	WHERE `id_asesi`='$_GET[ida]' AND `id_skemakkni`='$jd[id_skemakkni]' AND `id_jadwal`='$_GET[idj]'";
+																	$conn->query($sqlinputak07);
+																}
+															} else {
+																$folderPath = "foto_tandatangan/";
+																if (empty($_POST['signed'])) {
+																	echo "<div class='alert alert-success alert-dismissible'>
+					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+					<h4><i class='icon fa fa-check'></i> Ceklis penyesuaian yang wajar dan beralasan berhasil disimpan</h4>
+					Terimakasih, Anda telah melakukan <b>Ceklis penyesuaian yang wajar dan beralasan untuk Skema $sk[judul].</b><br>
+					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>";
+																	
+																} else {
+
+
+																	
+																	$image_parts = explode(";base64,", $_POST['signed']);
+																	$image_type_aux = explode("image/", $image_parts[0]);
+																	$image_type = $image_type_aux[1];
+																	$image_base64 = base64_decode($image_parts[1]);
+																	$file = $folderPath . uniqid() . '.' . $image_type;
+																	file_put_contents($file, $image_base64);
+																	$url =  "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+																	$iddokumen = md5($url);
+																	$escaped_url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+																	$alamatip = $_SERVER['REMOTE_ADDR'];
+																	$sqlinputdigisign = "INSERT INTO `logdigisign`(`id_dokumen`, id_skema, id_asesi, `url_ditandatangani`, `nama_dokumen`, `penandatangan`, `file`, `ip`, `id_jadwal`) VALUES ('$iddokumen','$sk[id]','$_SESSION[namauser]','$escaped_url','FR.AK.07.CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN','$_SESSION[namalengkap]','$file','$alamatip','$_GET[idj]')";
+																	$conn->query($sqlinputdigisign);
+																	echo "<div class='alert alert-success alert-dismissible'>
+					<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+					<h4><i class='icon fa fa-check'></i> Ceklis penyesuaian yang wajar dan beralasan berhasil disimpan</h4>
+					Terimakasih, Anda telah melakukan <b>Persetujuan Asesmen dan Kerahasiaan untuk Skema $sk[judul], dan tanda tangan telah ditambahkan</b><br>
+					<a class='btn btn-warning form-control' href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a></div>";
+					
+																		
+																}
+															}
+														}
+					// 									
+														$sqlgetak07 = "SELECT * FROM `asesmen_ak07` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
+														$getak07 = $conn->query($sqlgetak07);
+														$jjw = $getak07->fetch_assoc();
+
+														echo "<!-- Main content -->
+			<section class='content'>
+				<div class='row'>
+					<div class='col-xs-12'>
+						<div class='box'>
+							<div class='box-body'>
+								<!-- form start -->
+								<div class='box-body'>
+						<h2>FR.AK.07. CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN</h2>
+						<form role='form' method='POST' enctype='multipart/form-data'>
+						<table id='example9' class='table table-bordered table-striped'>
+							<tr><td width='25%'>Nama Asesi</td><td colspan='2'>$rowAgen[nama]</td></tr>
+							<tr><td width='25%'>Nama Asesor</td><td colspan='2'>$namaasesor</td></tr>
+							<tr><td width='25%'>Skema Sertifikasi (bila tersedia)</td><td colspan='2'>$sk[judul]</td></tr>
+						</table>
+						<table id='example9' class='table table-bordered table-striped'> 
+						
+							<thead><tr><th>PANDUAN BAGI ASESOR :</th></tr></thead>
+							<tbody><tr><td><ol>
+								<li>Formulir ini dapat digunakan (sebelum pra asesmen, saat pelaksanaan pra asesmen, setelah pra asesmen)* jika ada asesi yang mempunyai keterbatasan sesuai karakteristik yang dimilikinya sehingga diperlukan penyesuaian yang wajar dan beralasan, jika rencana asesmen dan perangkat asesmen tidak sesuai dengan acuan pembanding, potensi asesi dan konteks asesi, jika asesi merasa keletihan, sakit, serta jika kondisi alam, listrik padam,..........</li>
+								<li>Coretlah pada tanda * yang tidak sesuai.</li>
+								<li>Berilah tanda ceklis pada kotak pada kolom potensi asesi</li>
+								<li>Berilah tanda ceklis Ya atau Tidak pada tanda ** sesuai pilihan, jika jawaban Ya selanjutanya pada kolom keterangan berilah tanda ceklis di kotak yang tersedia, pilihan boleh lebih dari satu.</li>
+							</ol></td></tr></tbody>
+						";
+														//Data Asesmen
+														// $sqlgetkeputusan = "SELECT * FROM `asesi_asesmen` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]'";
+														// $getkeputusan = $conn->query($sqlgetkeputusan);
+														// $getk = $getkeputusan->fetch_assoc();
+														// // 
+														// $tanggalasesmen = tgl_indo($jd['tgl_asesmen']);
+														// $tanggalasesmenakhir = tgl_indo($jd['tgl_asesmen_akhir']);
+														echo 
+														"</table>
+														<table id='example9' class='table table-bordered table-striped'>
+    <tr>
+        <td rowspan='5' width='25%'>Potensi Asesi</td><td>";
+            echo "<input type='checkbox' name='checkboxPA1' id='optionsPA1' value='1' disabled";
+            if ($jjw['PA1'] == '1') {
+                echo " checked";
+            } else {
+                echo "";
+            }
+            echo "> Hasil pelatihan dan / atau pendidikan, dimana Kurikulum dan fasilitas praktek mampu telusur terhadap standar kompetensi";
+        echo "</td>
+    </tr>
+    <tr><td>";
+            echo "<input type='checkbox' name='checkboxPA2' id='optionsPA2' value='1' disabled";
+            if ($jjw['PA2'] == '1') {
+                echo " checked";
+            } else {
+                echo "";
+            }
+            echo "> Hasil pelatihan dan / atau pendidikan, dimana kurikulum belum praktek mampu telusur terhadap standar kompetensi berbasis kompetensi.";
+        echo "</td>
+    </tr>
+    <tr><td>";
+            echo "<input type='checkbox' name='checkboxPA3' id='optionsPA3' value='1' disabled";
+            if ($jjw['PA3'] == '1') {
+                echo " checked";
+            } else {
+                echo "";
+            }
+            echo "> Pekerja berpengalaman, dimana berasal dari industri/tempat kerja yang dalam operasionalnya mampu telusur dengan standar kompetensi";
+        echo "</td>
+    </tr>
+    <tr><td>";
+            echo "<input type='checkbox' name='checkboxPA4' id='optionsPA4' value='1' disabled";
+            if ($jjw['PA4'] == '1') {
+                echo " checked";
+            } else {
+                echo "";
+            }
+            echo "> Pekerja berpengalaman, dimana berasal dari industri/tempat kerja yang dalam operasionalnya belum berbasis kompetensi.";
+        echo "</td>
+    </tr>
+    <tr><td>";
+            echo "<input type='checkbox' name='checkboxPA5' id='optionsPA5' value='1' disabled";
+            if ($jjw['PA5'] == '1') {
+                echo " checked";
+            } else {
+                echo "";
+            }
+            echo "> Pelatihan / belajar mandiri atau otodidak.";
+        echo "</td>
+    </tr>
+</table>
+						<table id='example9' class='table table-bordered table-striped'>
+    <thead>
+        <tr>
+            <th rowspan='2' style='text-align:center; vertical-align:middle; width:30%'>
+                Mengidentifikasi Persyaratan Modifikasi dan Kontekstualisasi<br>(Karakteristik Asesi)
+            </th>
+            <th colspan='2' style='text-align:center; width:10%'>
+                Diperlukan Penyesuaian**
+            </th>
+            <th rowspan='2' style='text-align:center; vertical-align:middle; width:60%'>
+                Keterangan
+            </th>
+        </tr>
+        <tr>
+            <th style='text-align:center; width:10%'>Ya</th>
+            <th style='text-align:center; width:10%'>Tidak</th>
+        </tr>
+";
+														// $sqlgetunitkompetensi2 = "SELECT * FROM `unit_kompetensi` WHERE `id_skemakkni`='$sk[id]'";
+														// $getunitkompetensi2 = $conn->query($sqlgetunitkompetensi2);
+														// //while unitkompetensi ==================================================================
+														// while ($unk2 = $getunitkompetensi2->fetch_assoc()) {
+														// 	$sqlgetak01 = "SELECT * FROM `asesmen_ak02` WHERE `id_asesi`='$_GET[ida]' AND `id_jadwal`='$_GET[idj]' AND `id_unitkompetensi`='$unk2[id]'";
+														// 	$getak01 = $conn->query($sqlgetak01);
+														// 	$jjw = $getak01->fetch_assoc();
+															echo "<tr>";
+echo "<td>Keterbatasan asesi terhadap persyaratan bahasa, literasi, numerasi.</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA1' value='1' " . ($jjw['KA1'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA1' value='0' " . ($jjw['KA1'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET1_1' value='1' " . ($jjw['KET1_1'] == '1' ? 'checked' : '') . " disabled> Memerlukan dukungan pembaca, penerjemah, pelayan, penulis untuk merekam jawaban asesi.<br>
+        <input type='checkbox' name='checkboxKET1_2' value='1' " . ($jjw['KET1_2'] == '1' ? 'checked' : '') . " disabled> Melakukan asesmen verbal (gunakan pertanyaan lisan/pertanyaan wawancara) dengan dilengkapi gambar diagram dan bentuk visual.<br>
+        <input type='checkbox' name='checkboxKET1_3' value='1' " . ($jjw['KET1_3'] == '1' ? 'checked' : '') . " disabled> Menggunakan Hasil produksi<br>
+        <input type='checkbox' name='checkboxKET1_4' value='1' " . ($jjw['KET1_4'] == '1' ? 'checked' : '') . " disabled> Menggunakan Ceklis observasi/demonstrasi<br>
+        <input type='checkbox' name='checkboxKET1_5' value='1' " . ($jjw['KET1_5'] == '1' ? 'checked' : '') . " disabled> Menggunakan pertanyaan lisan dengan dilengkapi gambar diagram dan bentuk-bentuk visual.
+      </td>";
+echo "</tr>";
+
+
+
+echo "<tr>";
+echo "<td>Penyediaan dukungan pembaca, penerjemah, pelayan, penulis.</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA2' value='1' " . ($jjw['KA2'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA2' value='0' " . ($jjw['KA2'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET2_1' value='1' " . ($jjw['KET2_1'] == '1' ? 'checked' : '') . " disabled> Menggunakan pertanyaan lisan dengan dilengkapi gambar diagram dan bentuk-bentuk visual.<br>
+        <input type='checkbox' name='checkboxKET2_2' value='1' " . ($jjw['KET2_2'] == '1' ? 'checked' : '') . " disabled> Menggunakan pertanyaan wawancara dengan dilengkapi gambar diagram dan bentuk-bentuk visual.<br>
+        <input type='checkbox' name='checkboxKET2_3' value='1' " . ($jjw['KET2_3'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+
+echo "<tr>";
+echo "<td>Penggunaan teknologi adaptif atau peralatan khusus. (Tidak dapat menggunakan teknologi adaptif, misal: mengoperasikan komputer dan printer, peralatan digital dsb).</td>";
+
+echo "<td><input type='radio' name='checkboxKA3' value='1' " . ($jjw['KA3'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA3' value='0' " . ($jjw['KA3'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET3_1' value='1' " . ($jjw['KET3_1'] == '1' ? 'checked' : '') . " disabled> Ceklis observasi/demonstrasi<br>
+        <input type='checkbox' name='checkboxKET3_2' value='1' " . ($jjw['KET3_2'] == '1' ? 'checked' : '') . " disabled> Pertanyaan lisan<br>
+        <input type='checkbox' name='checkboxKET3_3' value='1' " . ($jjw['KET3_3'] == '1' ? 'checked' : '') . " disabled> Pertanyaan tertulis<br>
+        <input type='checkbox' name='checkboxKET3_4' value='1' " . ($jjw['KET3_4'] == '1' ? 'checked' : '') . " disabled> Pertanyaan wawancara<br>
+        <input type='checkbox' name='checkboxKET3_5' value='1' " . ($jjw['KET3_5'] == '1' ? 'checked' : '') . " disabled> Daftar instruksi terstruktur<br>
+        <input type='checkbox' name='checkboxKET3_6' value='1' " . ($jjw['KET3_6'] == '1' ? 'checked' : '') . " disabled> Ceklis verifikasi portofolio<br>
+        <input type='checkbox' name='checkboxKET3_7' value='1' " . ($jjw['KET3_7'] == '1' ? 'checked' : '') . " disabled> Menggunakan dukungan operator komputer<br>
+        <input type='checkbox' name='checkboxKET3_8' value='1' " . ($jjw['KET3_8'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+
+echo "<tr>";
+echo "<td>Pelaksanaan asesmen secara fleksibel karena alasan keletihan atau keperluan pengobatan.</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA4' value='1' " . ($jjw['KA4'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA4' value='0' " . ($jjw['KA4'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET4_1' value='1' " . ($jjw['KET4_1'] == '1' ? 'checked' : '') . " disabled> Menggunakan juru tulis.<br>
+        <input type='checkbox' name='checkboxKET4_2' value='1' " . ($jjw['KET4_2'] == '1' ? 'checked' : '') . " disabled> Menggunakan kameramen perekam vidio/atau audio.<br>
+        <input type='checkbox' name='checkboxKET4_3' value='1' " . ($jjw['KET4_3'] == '1' ? 'checked' : '') . " disabled> Memperbolehkan periode waktu yang lebih panjang untuk menyelesaikan tugas pekerjaan dalam asesmen.<br>
+        <input type='checkbox' name='checkboxKET4_4' value='1' " . ($jjw['KET4_4'] == '1' ? 'checked' : '') . " disabled> Melakukan tugas pekerjaan dalam asesmen dengan waktu lebih pendek.<br>
+        <input type='checkbox' name='checkboxKET4_5' value='1' " . ($jjw['KET4_5'] == '1' ? 'checked' : '') . " disabled> Menggunakan intruksi-instruksi spesifik pada proyek yang dapat dilakukan pada berbagai tingkatan.<br>
+        <input type='checkbox' name='checkboxKET4_6' value='1' " . ($jjw['KET4_6'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+
+echo "<tr>";
+echo "<td>Penyediaan peralatan asesmen berupa braillie, audio/video-tape.</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA5' value='1' " . ($jjw['KA5'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA5' value='0' " . ($jjw['KA5'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET5_1' value='1' " . ($jjw['KET5_1'] == '1' ? 'checked' : '') . " disabled> Menggunakan pertanyaan lisan.<br>
+        <input type='checkbox' name='checkboxKET5_2' value='1' " . ($jjw['KET5_2'] == '1' ? 'checked' : '') . " disabled> Menggunaka pertanyaan wawancara.<br>
+        <input type='checkbox' name='checkboxKET5_3' value='1' " . ($jjw['KET5_3'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+
+echo "<tr>";
+echo "<td>Penyesuaian tempat fisik/lingkungan asesmen</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA6' value='1' " . ($jjw['KA6'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA6' value='0' " . ($jjw['KA6'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET6_1' value='1' " . ($jjw['KET6_1'] == '1' ? 'checked' : '') . " disabled> Pertanyaan lisan.<br>
+        <input type='checkbox' name='checkboxKET6_2' value='1' " . ($jjw['KET6_2'] == '1' ? 'checked' : '') . " disabled> Pertanyaan tulis.<br>
+        <input type='checkbox' name='checkboxKET6_3' value='1' " . ($jjw['KET6_3'] == '1' ? 'checked' : '') . " disabled> Pertanyaan wawancara.<br>
+        <input type='checkbox' name='checkboxKET6_4' value='1' " . ($jjw['KET6_4'] == '1' ? 'checked' : '') . " disabled> Ceklis Verifikasi portofolio.<br>
+        <input type='checkbox' name='checkboxKET6_5' value='1' " . ($jjw['KET6_5'] == '1' ? 'checked' : '') . " disabled> Ceklis reviu produk.<br>
+        <input type='checkbox' name='checkboxKET6_6' value='1' " . ($jjw['KET6_6'] == '1' ? 'checked' : '') . " disabled> Daftar instruksi terstruktur.<br>
+        <input type='checkbox' name='checkboxKET6_7' value='1' " . ($jjw['KET6_7'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+echo "<tr>";
+echo "<td>Pertimbangan umur/usia lanjut/gender asesi. (Adanya perbedaan usia dengan asesor yang lebih muda).</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA7' value='1' " . ($jjw['KA7'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA7' value='0' " . ($jjw['KA7'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET7_1' value='1' " . ($jjw['KET7_1'] == '1' ? 'checked' : '') . " disabled> Menggunakan studi kasus/daftar instruksi terstruktur<br>
+        <input type='checkbox' name='checkboxKET7_2' value='1' " . ($jjw['KET7_2'] == '1' ? 'checked' : '') . " disabled> Menggunakan instrumen asesmen dengan huruf normal jangan terlalu kecil<br>
+        <input type='checkbox' name='checkboxKET7_3' value='1' " . ($jjw['KET7_3'] == '1' ? 'checked' : '') . " disabled> Menggunakan asesor dengan jenis kemanin yang sama dengan asesi<br>
+        <input type='checkbox' name='checkboxKET7_4' value='1' " . ($jjw['KET7_4'] == '1' ? 'checked' : '') . " disabled> Menggunakan instrumen asesmen yang sama walaupun berbeda jenis kelamin (tidak boleh memberi tanda tambahan pada instrumen asesmen yang digunakan dengan tujuan untuk membedakan jenis kelamin).<br>
+        <input type='checkbox' name='checkboxKET7_5' value='1' " . ($jjw['KET7_5'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+echo "<tr>";
+echo "<td>Pertimbangan budaya/tradisi/agama.</td>";
+
+// Kolom Diperlukan Penyesuaian
+echo "<td><input type='radio' name='checkboxKA8' value='1' " . ($jjw['KA8'] == '1' ? 'checked' : '') . " disabled> Ya</td>";
+echo "<td><input type='radio' name='checkboxKA8' value='0' " . ($jjw['KA8'] == '0' ? 'checked' : '') . " disabled> Tidak</td>";
+
+echo "<td>
+        <input type='checkbox' name='checkboxKET8_1' value='1' " . ($jjw['KET8_1'] == '1' ? 'checked' : '') . " disabled> Menggunakan studi kasus daftar instruksi terstruktur<br>
+        <input type='checkbox' name='checkboxKET8_2' value='1' " . ($jjw['KET8_2'] == '1' ? 'checked' : '') . " disabled> Menggunakan asesor tanpa pertimbangan budaya/tradisi/agama.<br>
+        <input type='checkbox' name='checkboxKET8_3' value='1' " . ($jjw['KET8_3'] == '1' ? 'checked' : '') . " disabled> Menggunakan instrumen asesmen yang sama walaupun berbeda budaya/tradisi/agama.<br>
+        <input type='checkbox' name='checkboxKET8_4' value='1' " . ($jjw['KET8_4'] == '1' ? 'checked' : '') . " disabled> ..............................................
+      </td>";
+echo "</tr>";
+
+
+
+
+
+// 	echo "<tr>";
+// echo "<td>Keterbatasan asesi terhadap persyaratan bahasa, literasi, numerasi.</td>";
+
+// // Kolom Diperlukan Penyesuaian
+// echo "<td><input type='radio' class='flat-red' name='CL_PILIH' value='1' " . ($jjw['CL_YA'] == '1' ? 'checked' : '') . "> Ya</td>";
+// echo "<td><input type='radio' class='flat-red' name='CL_PILIH' value='0' " . ($jjw['CL_TIDAK'] == '1' ? 'checked' : '') . "> Tidak</td>";
+
+// // Kolom Keterangan (5 ceklis)
+// echo "<td>
+//         <input type='checkbox' class='flat-red' name='CL_KET1' value='1' " . ($jjw['CL_KET1'] == '1' ? 'checked' : '') . "> Pilihan 1<br>
+//         <input type='checkbox' class='flat-red' name='CL_KET2' value='1' " . ($jjw['CL_KET2'] == '1' ? 'checked' : '') . "> Pilihan 2<br>
+//         <input type='checkbox' class='flat-red' name='CL_KET3' value='1' " . ($jjw['CL_KET3'] == '1' ? 'checked' : '') . "> Pilihan 3<br>
+//         <input type='checkbox' class='flat-red' name='CL_KET4' value='1' " . ($jjw['CL_KET4'] == '1' ? 'checked' : '') . "> Pilihan 4<br>
+//         <input type='checkbox' class='flat-red' name='CL_KET5' value='1' " . ($jjw['CL_KET5'] == '1' ? 'checked' : '') . "> Pilihan 5
+//       </td>";
+// echo "</tr>";
+														echo "</table>
+						
+					
+						
+									<table id='example9' class='table table-bordered table-striped'>
+						<thead><tr><th>Hasil Penyesuaian yang wajar dan beralasan disepakati menggunakan : </th></tr></thead>
+							<tr><td width='25%'>Acuan Pembanding Asesmen : </td><td colspan='2'><textarea name='acuan' class='form-control' disabled>$jjw[acuan]</textarea></td></tr>
+							<tr><td width='25%'>Metode Asesmen : </td><td colspan='2'><textarea name='metode' class='form-control' disabled>$jjw[metode]</textarea></td></tr>
+							<tr><td width='25%'>Instrumen Asesmen : </td><td colspan='2'><textarea name='instrumen' class='form-control' disabled>$jjw[instrumen]</textarea></td></tr>
+						</table>
+						
+						<p><b>Asesor :</b>
+						</p>";
+														// cek tandatangan digital
+														$url = "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+														$iddokumen = md5($url);
+														$sqlcektandatangan = "SELECT * FROM `logdigisign` WHERE `id_dokumen`= '$iddokumen' AND `id_skema`= '$sk[id]' AND `id_asesi`= '$_SESSION[namauser]' AND `nama_dokumen` = 'FR.AK.07.CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN' AND `penandatangan` = '$_SESSION[namalengkap]' AND `id_jadwal`= '$_GET[idj]' ORDER BY `id` DESC";
+														$cektandatangan = $conn->query($sqlcektandatangan);
+														$jumttd = $cektandatangan->num_rows;
+														$ttdx = $cektandatangan->fetch_assoc();
+														if ($jumttd > 0) {
+															echo "<div class='col-md-12'>
+									<label class='' for=''>Persetujuan/ Tanda Tangan yang telah Anda berikan:</label>
+									<br/>
+									
+									<img src='$ttdx[file]' width='400px'/>
+									<br/>
+								</div>";
+														} else {
+															echo "<div class='col-md-12'>
+							<label class='' for=''>Tanda Tangan:</label>
+							<br/>
+							<div id='sig' ></div>
+							<br/>
+							<button id='clear'>Hapus Tanda Tangan</button>
+							<textarea id='signature64' name='signed' style='display: none'></textarea>
+						</div>
+						<script type='text/javascript'>
+							var sig = $('#sig').signature({syncField: '#signature64', syncFormat: 'PNG', color: '#58009F'});
+							$('#clear').click(function(e) {
+								e.preventDefault();
+								sig.signature('clear');
+								$('#signature64').val('');
+							});
+						</script></div>";
+														}
+														echo "<div class='box-footer'>
+						<div class='col-md-4 col-sm-12 col-xs-12'>
+								<a class='btn btn-danger form-control' id=reset-validate-form href='?module=pesertaasesmen&idj=$_GET[idj]'>Kembali</a>
+						</div>
+						<div class='col-md-4 col-sm-12 col-xs-12'>
+								<a href='asesor/form-fr-ak-07.php?ida=$_GET[ida]&idj=$_GET[idj]' class='btn btn-primary form-control' target='_blank'>Unduh Formulir</a>
+						</div>
+						<div class='col-md-4 col-sm-12 col-xs-12'>
+								<button type='submit' class='btn btn-success form-control' name='simpan'>Simpan Jawaban</button>
+						</div>
+					</div>
+				</form>			
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</section>
+			<!-- /.content -->";
+													}
+
+													// End ak07 23/09/2025 @wnp
+
 elseif ($_GET['module'] == 'form-fr-ak-04') {
 	$sqllogin = "SELECT * FROM `asesi` WHERE `no_pendaftaran`='$_SESSION[namauser]'";
 	$login = $conn->query($sqllogin);

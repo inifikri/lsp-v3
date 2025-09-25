@@ -3926,6 +3926,7 @@ if( isset( $_REQUEST['aktifkan'] ))
 								  <li><a href='../asesor/master-form-fr-ak-02.php?idsk=$pm[id]' title='FORMULIR REKAMAN ASESMEN KOMPETENSI'>Unduh Master FR-AK-02</a></li>
 								  <li><a href='../asesor/master-form-fr-ak-03.php?idsk=$pm[id]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN'>Unduh Master FR-AK-03</a></li>
 								  <li><a href='../asesor/master-form-fr-ak-04.php?idsk=$pm[id]' title='FORMULIR BANDING ASESMEN'>Unduh Master FR-AK-04</a></li>
+								  <li><a href='../asesor/master-form-fr-ak-07.php?idsk=$pm[id]' title='CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN'>Unduh Master FR-AK-07</a></li>
 								  <li><a href='../asesor/master-form-fr-ia-01.php?idsk=$pm[id]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Unduh Master FR-IA-01</a></li>
 								  <li><a href='../asesor/master-form-fr-ia-02.php?idsk=$pm[id]' title='TUGAS PRAKTIK DEMONSTRASI'>Unduh Master FR-IA-02</a></li>
 								  <li><a href='../asesor/master-form-fr-ia-03.php?idsk=$pm[id]' title='PERTANYAAN UNTUK MENDUKUNG OBSERVASI'>Unduh Master FR-IA-03</a></li>
@@ -3973,6 +3974,7 @@ if( isset( $_REQUEST['aktifkan'] ))
 								  <li><a href='../asesor/master-form-fr-ak-02.php?idsk=$pm[id]' title='FORMULIR REKAMAN ASESMEN KOMPETENSI'>Unduh Master FR-AK-02</a></li>
 								  <li><a href='../asesor/master-form-fr-ak-03.php?idsk=$pm[id]' title='FORMULIR UMPAN BALIK DAN CATATAN ASESMEN'>Unduh Master FR-AK-03</a></li>
 								  <li><a href='../asesor/master-form-fr-ak-04.php?idsk=$pm[id]' title='FORMULIR BANDING ASESMEN'>Unduh Master FR-AK-04</a></li>
+								  <li><a href='../asesor/master-form-fr-ak-07.php?idsk=$pm[id]' title='CEKLIS PENYESUAIAN YANG WAJAR DAN BERALASAN'>Unduh Master FR-AK-07</a></li>
 								  <li><a href='../asesor/master-form-fr-ia-01.php?idsk=$pm[id]' title='FORMULIR CEKLIS OBSERVASI AKTIVITAS DI TEMPAT KERJA ATAU TEMPAT KERJA SIMULASI'>Unduh Master FR-IA-01</a></li>
 								  <li><a href='../asesor/master-form-fr-ia-02.php?idsk=$pm[id]' title='TUGAS PRAKTIK DEMONSTRASI'>Unduh Master FR-IA-02</a></li>
 								  <li><a href='../asesor/master-form-fr-ia-03.php?idsk=$pm[id]' title='PERTANYAAN UNTUK MENDUKUNG OBSERVASI'>Unduh Master FR-IA-03</a></li>
